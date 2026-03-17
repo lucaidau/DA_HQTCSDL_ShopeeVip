@@ -1,0 +1,13 @@
+B1: Mở folder chứa đồ án
+B2: Chuột phải mở terminal 
+B3: Gõ git clone https://github.com/lucaidau/DA_HQTCSDL_ShopeeVip.git
+B4: Gõ git remote add origin https://github.com/lucaidau/DA_HQTCSDL_ShopeeVip.git
+
+Flow work:
+B1: Gõ git pull origin main
+B2: Code trên trời dưới đất
+B3: git checkout -b <tên nhánh>
+B4: Muốn kiểm tra trên máy có nhánh gì git branch
+B5: git add .
+B6: git commit -m "Add how to use git"
+B7: git push -u origin <tên nhánh>
