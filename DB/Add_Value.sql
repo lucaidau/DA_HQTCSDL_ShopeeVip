@@ -1,0 +1,49 @@
+USE ShopeeVipDB; -- Thay bằng tên DB của bạn
+GO
+-- =============================================
+-- 1. XÓA DỮ LIỆU CŨ (Để tránh lỗi trùng khóa)
+-- =============================================
+DELETE FROM GIO_HANG;
+DELETE FROM CHI_TIET_DON_HANG;
+DELETE FROM DON_HANG;
+DELETE FROM BAN_SAO_SAN_PHAM;
+DELETE FROM SAN_PHAM;
+DELETE FROM DANH_MUC;
+DELETE FROM SHOP;
+DELETE FROM NGUOI_MUA;
+DELETE FROM TAI_KHOAN;
+
+-- Reset lại các cột ID tự tăng về 1
+DBCC CHECKIDENT ('TAL_KHOAN', RESEED, 0);
+DBCC CHECKIDENT ('NGUOI_MUA', RESEED, 0);
+DBCC CHECKIDENT ('SHOP', RESEED, 0);
+DBCC CHECKIDENT ('SAN_PHAM', RESEED, 0);
+DBCC CHECKIDENT ('BAN_SAO_SAN_PHAM', RESEED, 0);
+DBCC CHECKIDENT ('DON_HANG', RESEED, 0);
+DBCC CHECKIDENT ('CHI_TIET_DON_HANG', RESEED, 0);
+GO
+-- Tài khoản
+INSERT INTO TAI_KHOAN VALUES ('user1', N'Nguyễn Văn A', '09123', 'a@gmail.com', 1, '123');
+INSERT INTO TAI_KHOAN VALUES ('shop1', N'Cửa Hàng Thời Trang', '09888', 'shop@gmail.com', 1, '123');
+
+-- Vai trò
+INSERT INTO NGUOI_MUA (IDTaiKhoan, TrangThai) VALUES (1, 1);
+INSERT INTO SHOP (IDTaiKhoan, TrangThai) VALUES (2, 1);
+
+-- Sản phẩm & Biến thể
+INSERT INTO DANH_MUC VALUES (N'Điện thoại');
+INSERT INTO SAN_PHAM VALUES (1,1, N'iPhone 15', N'Siêu phẩm 2024', 'ip15.jpg');
+INSERT INTO BAN_SAO_SAN_PHAM VALUES (1, 10, 25000000, N'Hồng - 128GB', 'ip15_pink.jpg', 1);
+
+-- Giỏ hàng
+INSERT INTO GIO_HANG VALUES (1, 1, 1, GETDATE());
+
+-- Bước 1: Tạo Đơn hàng tổng (Của người mua ID = 1)
+INSERT INTO DON_HANG (IDNguoiMua) VALUES (1); 
+
+-- Bước 2: Tạo Chi tiết đơn hàng (Giả sử đơn hàng trên có ID = 1)
+-- Khách mua 1 chiếc Titan 128GB (IDBanSao = 1) và 1 chiếc Màu Xanh (IDBanSao = 2)
+INSERT INTO CHI_TIET_DON_HANG (IDDonHang, IDBanSao, TongTien, GhiChu, SoLuong, TrangThai)
+VALUES 
+(1, 1, 25000000, N'Giao hàng nhanh nhé', 1, 1)
+

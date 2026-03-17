@@ -1,0 +1,79 @@
+-- 1. Bảng Tài khoản
+CREATE TABLE TAI_KHOAN (
+    IDTaiKhoan INT IDENTITY(1,1) PRIMARY KEY,
+    TenDangNhap VARCHAR(30) UNIQUE,
+    Ten NVARCHAR(50),
+    SDT VARCHAR(10),
+    Email VARCHAR(255),
+    GioiTinh INT,
+    MatKhau VARCHAR(100)
+);
+
+-- 2. Bảng Người Mua
+CREATE TABLE NGUOI_MUA (
+    IDNguoiMua INT IDENTITY(1,1) PRIMARY KEY,
+    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan),
+    TrangThai INT
+);
+
+-- 3. Bảng Shop
+CREATE TABLE SHOP (
+    IDShop INT IDENTITY(1,1) PRIMARY KEY,
+    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan),
+    TrangThai INT
+);
+
+-- 4. Bảng Danh Mục
+CREATE TABLE DANH_MUC (
+    IDDanhMuc INT IDENTITY(1,1) PRIMARY KEY,
+    TenLoai NVARCHAR(50)
+);
+
+-- 5. Bảng Sản Phẩm
+CREATE TABLE SAN_PHAM (
+    IDSanPham INT IDENTITY(1,1) PRIMARY KEY,
+    IDShop INT FOREIGN KEY REFERENCES SHOP(IDShop),
+    IDDanhMuc INT FOREIGN KEY REFERENCES DANH_MUC(IDDanhMuc),
+    TenSanPham NVARCHAR(50),
+    MoTa NVARCHAR(200),
+    HinhAnh VARCHAR(255)
+);
+
+-- 6. Bảng Bản Sao Sản Phẩm (Biến thể)
+CREATE TABLE BAN_SAO_SAN_PHAM (
+    IDBanSao INT IDENTITY(1,1) PRIMARY KEY,
+    IDSanPham INT FOREIGN KEY REFERENCES SAN_PHAM(IDSanPham),
+    SoLuongTonKho INT,
+    GiaBan DECIMAL(18,2),
+    BienThe NVARCHAR(50), -- Ví dụ: Màu Đỏ, Size L
+    HinhAnh VARCHAR(255),
+    TrangThai INT
+);
+
+-- 7. Bảng Đơn Hàng
+CREATE TABLE DON_HANG (
+    IDDonHang INT IDENTITY(1,1) PRIMARY KEY,
+    IDNguoiMua INT FOREIGN KEY REFERENCES NGUOI_MUA(IDNguoiMua)
+);
+
+-- 8. Bảng Chi Tiết Đơn Hàng
+CREATE TABLE CHI_TIET_DON_HANG (
+    IDChiTiet INT IDENTITY(1,1) PRIMARY KEY,
+    IDDonHang INT FOREIGN KEY REFERENCES DON_HANG(IDDonHang),
+    IDBanSao INT FOREIGN KEY REFERENCES BAN_SAO_SAN_PHAM(IDBanSao),
+    TongTien DECIMAL(18,2), -- Nên hiểu là Giá tại thời điểm mua
+    GhiChu NVARCHAR(200),
+    SoLuong INT,
+    TrangThai INT
+);
+
+-- 9. Bảng Giỏ Hàng (PK phức hợp theo ảnh của bạn)
+CREATE TABLE GIO_HANG (
+    IDNguoiMua INT,
+    IDBanSao INT,
+    SoLuongMua INT,
+    NgayThem DATETIME DEFAULT GETDATE(),
+    PRIMARY KEY (IDNguoiMua, IDBanSao),
+    FOREIGN KEY (IDNguoiMua) REFERENCES NGUOI_MUA(IDNguoiMua),
+    FOREIGN KEY (IDBanSao) REFERENCES BAN_SAO_SAN_PHAM(IDBanSao)
+);
