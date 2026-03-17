@@ -11,3 +11,8 @@ B4: Muốn kiểm tra trên máy có nhánh gì git branch
 B5: git add .
 B6: git commit -m "Add how to use git"
 B7: git push -u origin <tên nhánh>
+
+
+
+alooo
+
