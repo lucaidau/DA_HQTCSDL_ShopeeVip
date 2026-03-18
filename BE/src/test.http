@@ -1,0 +1,22 @@
+POST http://localhost:3000/dangKi
+content-type: application/json
+
+{
+    "name": "Phạm Tiến",
+    "username": "tien1234",
+    "password": "123456",
+    "phone": "0122",
+    "email": "tien@gmail.com",
+    "gender": "1",
+    "role": "1"
+}
+
+###
+
+POST http://localhost:3000/
+Content-Type: application/json
+
+{
+    "username": "tien1234",
+    "password": "123456"
+}

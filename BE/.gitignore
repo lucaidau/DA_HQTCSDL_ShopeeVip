@@ -1,0 +1,32 @@
+# Dependency folders (Cực kỳ quan trọng, không bao giờ upload cái này)
+node_modules/
+jspm_packages/
+
+# Environment variables (Chứa mật khẩu Database, phải giấu đi)
+.env
+.env.local
+
+# Operating System files (File rác của hệ điều hành)
+Thumbs.db
+.DS_Store
+
+# IDEs and Editors (Cấu hình riêng của máy mỗi bạn)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Backup files (Các bản backup database nặng nề)
+*.bak
+*.sql.bak
+/database/backups/
+
+# Log files (File ghi nhật ký lỗi)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
