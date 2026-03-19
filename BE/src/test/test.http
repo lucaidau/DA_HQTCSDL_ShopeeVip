@@ -1,3 +1,4 @@
+### POST Đăng kí
 POST http://localhost:3000/dangKi
 content-type: application/json
 
@@ -11,7 +12,7 @@ content-type: application/json
     "role": "1"
 }
 
-###
+### POST Đăng nhập
 
 POST http://localhost:3000/
 Content-Type: application/json
@@ -20,3 +21,9 @@ Content-Type: application/json
     "username": "tien1234",
     "password": "123456"
 }
+
+### GET Danh sách sản phẩm
+GET http://localhost:3000/home
+Content-Type: application/json
+
+{}
