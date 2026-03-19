@@ -1,0 +1,105 @@
+#auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ee4d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+.auth-box {
+  background: white;
+  width: 450px;
+  padding: 30px;
+  border-radius: 4px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.auth-box h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #222;
+}
+
+.auth-box input[type="text"],
+.auth-box input[type="password"],
+.auth-box input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #dbdbdb;
+  outline: none;
+  border-radius: 2px;
+}
+
+.gender-row {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.gender-row label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.auth-box .btn-main {
+  width: 100%;
+  padding: 12px;
+  background: #ee4d2d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.auth-box .divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #dbdbdb;
+  position: relative;
+  font-size: 12px;
+}
+
+.auth-box .divider::before,
+.auth-box .divider::after {
+  content: "";
+  position: absolute;
+  width: 37%;
+  height: 1px;
+  background: #dbdbdb;
+  top: 50%;
+}
+
+.auth-box .divider::before {
+  left: 0;
+}
+
+.auth-box .divider::after {
+  right: 0;
+}
+
+.auth-box .switch-auth {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+.auth-box .switch-auth span {
+  color: #ee4d2d;
+  cursor: pointer;
+  font-weight: 500;
+}

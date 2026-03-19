@@ -1,945 +1,1075 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopee Clone - Bản Hoàn Thiện</title>
     <style>
-        /* ============================================================
+      /* ============================================================
            1. PHẦN THÊM MỚI: CSS CHO LỚP PHỦ ĐĂNG NHẬP/ĐĂNG KÝ
            ============================================================ */
-        #auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ee4d2d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10001;
-        }
+      #auth-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ee4d2d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10001;
+      }
 
-        .auth-box {
-            background: white;
-            width: 450px;
-            padding: 30px;
-            border-radius: 4px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        }
+      .auth-box {
+        background: white;
+        width: 450px;
+        padding: 30px;
+        border-radius: 4px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
 
-            .auth-box h2 {
-                font-size: 20px;
-                margin-bottom: 20px;
-                font-weight: 500;
-                color: #222;
-            }
+      .auth-box h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        color: #222;
+      }
 
-            .auth-box input[type="text"],
-            .auth-box input[type="password"],
-            .auth-box input[type="email"] {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 12px;
-                border: 1px solid #dbdbdb;
-                outline: none;
-                border-radius: 2px;
-            }
+      .auth-box input[type="text"],
+      .auth-box input[type="password"],
+      .auth-box input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #dbdbdb;
+        outline: none;
+        border-radius: 2px;
+      }
 
-        .gender-row {
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+      .gender-row {
+        margin-bottom: 15px;
+        font-size: 14px;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
 
-            .gender-row label {
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
+      .gender-row label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-        .auth-box .btn-main {
-            width: 100%;
-            padding: 12px;
-            background: #ee4d2d;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
+      .auth-box .btn-main {
+        width: 100%;
+        padding: 12px;
+        background: #ee4d2d;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
 
-        .auth-box .divider {
-            text-align: center;
-            margin: 20px 0;
-            color: #dbdbdb;
-            position: relative;
-            font-size: 12px;
-        }
+      .auth-box .divider {
+        text-align: center;
+        margin: 20px 0;
+        color: #dbdbdb;
+        position: relative;
+        font-size: 12px;
+      }
 
-            .auth-box .divider::before,
-            .auth-box .divider::after {
-                content: "";
-                position: absolute;
-                width: 37%;
-                height: 1px;
-                background: #dbdbdb;
-                top: 50%;
-            }
+      .auth-box .divider::before,
+      .auth-box .divider::after {
+        content: "";
+        position: absolute;
+        width: 37%;
+        height: 1px;
+        background: #dbdbdb;
+        top: 50%;
+      }
 
-            .auth-box .divider::before {
-                left: 0;
-            }
+      .auth-box .divider::before {
+        left: 0;
+      }
 
-            .auth-box .divider::after {
-                right: 0;
-            }
+      .auth-box .divider::after {
+        right: 0;
+      }
 
-        .auth-box .switch-auth {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888;
-        }
+      .auth-box .switch-auth {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #888;
+      }
 
-            .auth-box .switch-auth span {
-                color: #ee4d2d;
-                cursor: pointer;
-                font-weight: 500;
-            }
+      .auth-box .switch-auth span {
+        color: #ee4d2d;
+        cursor: pointer;
+        font-weight: 500;
+      }
 
-        /* ============================================================
+      /* ============================================================
            2. CSS CHO USER INFO & MENU (SỬA LỖI DI CHUỘT XA)
            ============================================================ */
-        .user-info {
-            display: none;
-            align-items: center;
-            gap: 5px;
-            font-weight: 500;
-            position: relative;
-            cursor: pointer;
-            padding: 10px 0;
-            /* Tăng padding để tạo vùng hover rộng hơn */
-        }
+      .user-info {
+        display: none;
+        align-items: center;
+        gap: 5px;
+        font-weight: 500;
+        position: relative;
+        cursor: pointer;
+        padding: 10px 0;
+        /* Tăng padding để tạo vùng hover rộng hơn */
+      }
 
-            /* LỚP CẦU NỐI ẢO: Giúp chuột đi từ tên xuống menu không bị mất */
-            .user-info::after {
-                content: "";
-                position: absolute;
-                width: 120%;
-                /* Rộng hơn một chút */
-                height: 20px;
-                /* Độ cao lấp đầy khoảng trống */
-                bottom: -15px;
-                left: -10%;
-                display: block;
-            }
+      /* LỚP CẦU NỐI ẢO: Giúp chuột đi từ tên xuống menu không bị mất */
+      .user-info::after {
+        content: "";
+        position: absolute;
+        width: 120%;
+        /* Rộng hơn một chút */
+        height: 20px;
+        /* Độ cao lấp đầy khoảng trống */
+        bottom: -15px;
+        left: -10%;
+        display: block;
+      }
 
-        .user-avatar {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+      .user-avatar {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
 
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            /* Đặt ngay sát dưới user-info */
-            right: 0;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0 1px 3.125rem 0 rgba(0, 0, 0, 0.2);
-            border-radius: 2px;
-            display: none;
-            z-index: 1000;
-            /* Cao nhất để không bị đè */
-            margin-top: 5px;
-        }
+      .user-dropdown {
+        position: absolute;
+        top: 100%;
+        /* Đặt ngay sát dưới user-info */
+        right: 0;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 1px 3.125rem 0 rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        display: none;
+        z-index: 1000;
+        /* Cao nhất để không bị đè */
+        margin-top: 5px;
+      }
 
-            /* Mũi tên nhọn phía trên menu */
-            .user-dropdown::before {
-                content: "";
-                position: absolute;
-                right: 15px;
-                top: -10px;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                border-bottom: 10px solid white;
-            }
+      /* Mũi tên nhọn phía trên menu */
+      .user-dropdown::before {
+        content: "";
+        position: absolute;
+        right: 15px;
+        top: -10px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid white;
+      }
 
-            .user-dropdown a {
-                color: #333;
-                padding: 12px 15px;
-                text-decoration: none;
-                display: block;
-                font-size: 14px;
-                font-weight: 400;
-                border-bottom: 1px solid #fafafa;
-            }
+      .user-dropdown a {
+        color: #333;
+        padding: 12px 15px;
+        text-decoration: none;
+        display: block;
+        font-size: 14px;
+        font-weight: 400;
+        border-bottom: 1px solid #fafafa;
+      }
 
-                .user-dropdown a:hover {
-                    background-color: #fafafa;
-                    color: #00bfa5;
-                }
+      .user-dropdown a:hover {
+        background-color: #fafafa;
+        color: #00bfa5;
+      }
 
-                .user-dropdown a.logout-link {
-                    color: #00bfa5;
-                    border-bottom: none;
-                }
+      .user-dropdown a.logout-link {
+        color: #00bfa5;
+        border-bottom: none;
+      }
 
-        /* Hiện menu khi hover */
-        .user-info:hover .user-dropdown {
-            display: block;
-        }
+      /* Hiện menu khi hover */
+      .user-info:hover .user-dropdown {
+        display: block;
+      }
 
-        /* ============================================================
+      /* ============================================================
            3. GIỮ NGUYÊN TOÀN BỘ CSS GỐC
            ============================================================ */
-        :root {
-            --shopee-orange: #ee4d2d;
-            --shopee-bg: #f5f5f5;
-            --white: #ffffff;
-        }
+      :root {
+        --shopee-orange: #ee4d2d;
+        --shopee-bg: #f5f5f5;
+        --white: #ffffff;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
 
-        body {
-            background-color: var(--shopee-bg);
-        }
+      body {
+        background-color: var(--shopee-bg);
+      }
 
-        /* TOP BAR */
-        .top-bar {
-            background: #f53d2d;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 10%;
-            font-size: 13px;
-            position: sticky;
-            top: 0px;
-            z-index: 9999;
-        }
+      /* TOP BAR */
+      .top-bar {
+        background: #f53d2d;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10%;
+        font-size: 13px;
+        position: sticky;
+        top: 0px;
+        z-index: 9999;
+      }
 
-            .top-bar span {
-                margin-right: 15px;
-                cursor: pointer;
-            }
+      .top-bar span {
+        margin-right: 15px;
+        cursor: pointer;
+      }
 
-        /* HEADER & SEARCH */
-        .header {
-            background: linear-gradient(-180deg, #f53d2d, #f63);
-            padding: 15px 10% 10px 10%;
-            color: white;
-            position: sticky;
-            position: sticky;
-            top: 40px;
-            z-index: 99;
-        }
+      /* HEADER & SEARCH */
+      .header {
+        background: linear-gradient(-180deg, #f53d2d, #f63);
+        padding: 15px 10% 10px 10%;
+        color: white;
+        position: sticky;
+        position: sticky;
+        top: 40px;
+        z-index: 99;
+      }
 
-        .header-main {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
+      .header-main {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
 
-        .logo {
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+      .logo {
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+      }
 
-        .search-box {
-            flex: 1;
-            display: flex;
-            background: var(--white);
-            padding: 3px;
-            border-radius: 2px;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-        }
+      .search-box {
+        flex: 1;
+        display: flex;
+        background: var(--white);
+        padding: 3px;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      }
 
-            .search-box input {
-                flex: 1;
-                padding: 10px;
-                border: none;
-                outline: none;
-                font-size: 14px;
-            }
+      .search-box input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+      }
 
-            .search-box button {
-                width: 60px;
-                background: #fb5533;
-                border: none;
-                color: white;
-                border-radius: 2px;
-                cursor: pointer;
-                font-size: 18px;
-            }
+      .search-box button {
+        width: 60px;
+        background: #fb5533;
+        border: none;
+        color: white;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 18px;
+      }
 
-        .cart {
-            font-size: 26px;
-            cursor: pointer;
-            padding: 0 10px;
-        }
+      .cart {
+        font-size: 26px;
+        cursor: pointer;
+        padding: 0 10px;
+      }
 
-        /* MENU DƯỚI SEARCH */
-        .header-menu {
-            margin-top: 5px;
-            margin-left: 175px;
-            /* Căn lề theo ô search */
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-        }
+      /* MENU DƯỚI SEARCH */
+      .header-menu {
+        margin-top: 5px;
+        margin-left: 175px;
+        /* Căn lề theo ô search */
+        display: flex;
+        gap: 15px;
+        font-size: 12px;
+      }
 
-        /* BANNER SECTION */
-        .container {
-            width: 80%;
-            margin: 20px auto;
-        }
+      /* BANNER SECTION */
+      .container {
+        width: 80%;
+        margin: 20px auto;
+      }
 
-        .banner-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 10px;
-        }
+      .banner-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 10px;
+      }
 
-        .banner-left img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 2px;
-        }
+      .banner-left img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 2px;
+      }
 
-        .banner-right {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+      .banner-right {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-            .banner-right img {
-                width: 100%;
-                height: 120px;
-                object-fit: cover;
-                border-radius: 2px;
-            }
+      .banner-right img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 2px;
+      }
 
-        /* ICONS DỊCH VỤ */
-        .service-icons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            background: var(--white);
-            padding: 20px 0;
-            margin-top: 10px;
-            text-align: center;
-        }
+      /* ICONS DỊCH VỤ */
+      .service-icons {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        background: var(--white);
+        padding: 20px 0;
+        margin-top: 10px;
+        text-align: center;
+      }
 
-        .service-item img {
-            width: 45px;
-            height: 45px;
-            margin-bottom: 8px;
-        }
+      .service-item img {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 8px;
+      }
 
-        .service-item p {
-            font-size: 13px;
-            color: #333;
-        }
+      .service-item p {
+        font-size: 13px;
+        color: #333;
+      }
 
-        /* DANH MỤC (10 cột như ảnh image_f1b709) */
-        .category-section {
-            background: var(--white);
-            margin-top: 20px;
-        }
+      /* DANH MỤC (10 cột như ảnh image_f1b709) */
+      .category-section {
+        background: var(--white);
+        margin-top: 20px;
+      }
 
-        .category-header {
-            padding: 15px;
-            color: #888;
-            font-size: 16px;
-            border-bottom: 1px solid #f2f2f2;
-        }
+      .category-header {
+        padding: 15px;
+        color: #888;
+        font-size: 16px;
+        border-bottom: 1px solid #f2f2f2;
+      }
 
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-        }
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+      }
 
-        .cat-item {
-            border: 0.5px solid #f5f5f5;
-            padding: 20px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+      .cat-item {
+        border: 0.5px solid #f5f5f5;
+        padding: 20px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+      }
 
-            .cat-item:hover {
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-                z-index: 1;
-            }
+      .cat-item:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
 
-            .cat-item img {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 10px;
-            }
+      .cat-item img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+      }
 
-            .cat-item p {
-                font-size: 12px;
-                color: #333;
-            }
+      .cat-item p {
+        font-size: 12px;
+        color: #333;
+      }
 
-        /* Gợi ý hôm nay */
-        .suggest-title {
-            background: var(--white);
-            color: var(--shopee-orange);
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: 4px solid var(--shopee-orange);
-            position: sticky;
-            top: 130px;
-            /* Nằm ngay dưới header khi cuộn */
-            z-index: 99;
-        }
+      /* Gợi ý hôm nay */
+      .suggest-title {
+        background: var(--white);
+        color: var(--shopee-orange);
+        padding: 15px;
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-bottom: 4px solid var(--shopee-orange);
+        position: sticky;
+        top: 130px;
+        /* Nằm ngay dưới header khi cuộn */
+        z-index: 99;
+      }
 
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      /* Product Card */
+      .card {
+        background: var(--white);
+        text-decoration: none;
+        color: #212121;
+        border: 1px solid transparent;
+        transition: 0.1s;
+        position: relative;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .card:hover {
+        border: 1px solid var(--shopee-orange);
+        transform: translateY(-2px);
+        z-index: 2;
+      }
+
+      .card-img {
+        width: 100%;
+        padding-top: 100%;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+
+      .badge-mall {
+        position: absolute;
+        top: 5px;
+        left: -3px;
+        background: #d0011b;
+        color: #fff;
+        font-size: 10px;
+        padding: 0 4px;
+        border-radius: 2px;
+      }
+
+      .card-info {
+        padding: 8px;
+      }
+
+      .card-name {
+        font-size: 12px;
+        line-height: 14px;
+        height: 28px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-bottom: 10px;
+      }
+
+      .card-price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+
+      .card-price {
+        color: var(--shopee-orange);
+        font-size: 16px;
+      }
+
+      .card-sold {
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.5);
+      }
+
+      /* Nút xem thêm */
+      .view-more-box {
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      .btn-more {
+        background: var(--white);
+        border: 1px solid rgba(0, 0, 0, 0.09);
+        padding: 10px 100px;
+        cursor: pointer;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .btn-more:hover {
+        background: #f8f8f8;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-top: 10px;
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
 
-        /* Product Card */
-        .card {
-            background: var(--white);
-            text-decoration: none;
-            color: #212121;
-            border: 1px solid transparent;
-            transition: 0.1s;
-            position: relative;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        .cat-grid {
+          grid-template-columns: repeat(5, 1fr);
         }
 
-            .card:hover {
-                border: 1px solid var(--shopee-orange);
-                transform: translateY(-2px);
-                z-index: 2;
-            }
-
-        .card-img {
-            width: 100%;
-            padding-top: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
+        .logo span {
+          display: none;
         }
+      }
 
-        .badge-mall {
-            position: absolute;
-            top: 5px;
-            left: -3px;
-            background: #d0011b;
-            color: #fff;
-            font-size: 10px;
-            padding: 0 4px;
-            border-radius: 2px;
+      /* FOOTER */
+      .footer {
+        margin-top: 50px;
+        border-top: 4px solid var(--shopee-orange);
+        background: var(--white);
+        padding: 40px 10%;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      /* Header Gợi ý hôm nay */
+      .section-header {
+        background: #fff;
+        padding: 15px;
+        text-align: center;
+        border-bottom: 4px solid var(--shopee-orange);
+        color: var(--shopee-orange);
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        position: sticky;
+        top: 114px;
+        z-index: 99;
+      }
+
+      /* Lưới sản phẩm */
+      .product-grid {
+        display: grid;
+        /* Mặc định 6 cột trên desktop */
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+      }
+
+      /* Thẻ sản phẩm */
+      .product-card {
+        background: #fff;
+        text-decoration: none;
+        color: var(--text-color);
+        position: relative;
+        border: 1px solid transparent;
+        transition: all 0.1s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .product-card:hover {
+        transform: translateY(-2px);
+        border: 1px solid var(--shopee-orange);
+        box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
+        z-index: 2;
+      }
+
+      /* Khung ảnh sản phẩm */
+      .image-box {
+        width: 100%;
+        padding-top: 100%;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+
+      /* Nhãn giảm giá Shopee */
+      .discount-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 36px;
+        height: 32px;
+        background-color: rgba(255, 212, 36, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 500;
+      }
+
+      .discount-badge .percent {
+        color: var(--shopee-orange);
+        font-weight: bold;
+      }
+
+      .discount-badge .text {
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 9px;
+      }
+
+      .discount-badge::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        border-width: 0 18px 4px;
+        border-style: solid;
+        border-color: transparent rgba(255, 212, 36, 0.9);
+      }
+
+      /* Nhãn Yêu thích / Mall */
+      .label-special {
+        position: absolute;
+        top: 4px;
+        left: -3px;
+        background-color: var(--shopee-orange);
+        color: #fff;
+        font-size: 10px;
+        padding: 0 4px;
+        border-radius: 2px;
+      }
+
+      /* Chi tiết sản phẩm */
+      .product-details {
+        padding: 8px;
+      }
+
+      .product-name {
+        font-size: 12px;
+        line-height: 14px;
+        height: 28px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        margin-bottom: 8px;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+      .currency {
+        font-size: 10px;
+        vertical-align: top;
+        margin-right: 1px;
+      }
+
+      .price {
+        color: var(--shopee-orange);
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .sold-count {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 10px;
+      }
+
+      /* Responsive cho Mobile & Tablet */
+      @media (max-width: 1024px) {
+        .product-grid {
+          grid-template-columns: repeat(4, 1fr);
         }
+      }
 
-        .card-info {
-            padding: 8px;
-        }
-
-        .card-name {
-            font-size: 12px;
-            line-height: 14px;
-            height: 28px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            margin-bottom: 10px;
-        }
-
-        .card-price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .card-price {
-            color: var(--shopee-orange);
-            font-size: 16px;
-        }
-
-        .card-sold {
-            font-size: 10px;
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        /* Nút xem thêm */
-        .view-more-box {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .btn-more {
-            background: var(--white);
-            border: 1px solid rgba(0, 0, 0, 0.09);
-            padding: 10px 100px;
-            cursor: pointer;
-            color: #555;
-            font-size: 14px;
-        }
-
-            .btn-more:hover {
-                background: #f8f8f8;
-            }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cat-grid {
-                grid-template-columns: repeat(5, 1fr);
-            }
-
-            .logo span {
-                display: none;
-            }
-        }
-
-        /* FOOTER */
-        .footer {
-            margin-top: 50px;
-            border-top: 4px solid var(--shopee-orange);
-            background: var(--white);
-            padding: 40px 10%;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
 
         .container {
-            width: 100%;
-            max-width: 1200px;
+          padding: 0 5px;
         }
-
-        /* Header Gợi ý hôm nay */
-        .section-header {
-            background: #fff;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 4px solid var(--shopee-orange);
-            color: var(--shopee-orange);
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            position: sticky;
-            top: 114px;
-            z-index: 99;
-        }
-
-        /* Lưới sản phẩm */
-        .product-grid {
-            display: grid;
-            /* Mặc định 6 cột trên desktop */
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-        }
-
-        /* Thẻ sản phẩm */
-        .product-card {
-            background: #fff;
-            text-decoration: none;
-            color: var(--text-color);
-            position: relative;
-            border: 1px solid transparent;
-            transition: all 0.1s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-            .product-card:hover {
-                transform: translateY(-2px);
-                border: 1px solid var(--shopee-orange);
-                box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
-                z-index: 2;
-            }
-
-        /* Khung ảnh sản phẩm */
-        .image-box {
-            width: 100%;
-            padding-top: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        /* Nhãn giảm giá Shopee */
-        .discount-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 36px;
-            height: 32px;
-            background-color: rgba(255, 212, 36, 0.9);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 500;
-        }
-
-            .discount-badge .percent {
-                color: var(--shopee-orange);
-                font-weight: bold;
-            }
-
-            .discount-badge .text {
-                color: #fff;
-                text-transform: uppercase;
-                font-size: 9px;
-            }
-
-            .discount-badge::after {
-                content: "";
-                position: absolute;
-                left: 0;
-                bottom: -4px;
-                border-width: 0 18px 4px;
-                border-style: solid;
-                border-color: transparent rgba(255, 212, 36, 0.9);
-            }
-
-        /* Nhãn Yêu thích / Mall */
-        .label-special {
-            position: absolute;
-            top: 4px;
-            left: -3px;
-            background-color: var(--shopee-orange);
-            color: #fff;
-            font-size: 10px;
-            padding: 0 4px;
-            border-radius: 2px;
-        }
-
-        /* Chi tiết sản phẩm */
-        .product-details {
-            padding: 8px;
-        }
-
-        .product-name {
-            font-size: 12px;
-            line-height: 14px;
-            height: 28px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            margin-bottom: 8px;
-        }
-
-        .price-row {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-        }
-
-        .currency {
-            font-size: 10px;
-            vertical-align: top;
-            margin-right: 1px;
-        }
-
-        .price {
-            color: var(--shopee-orange);
-            font-size: 16px;
-            font-weight: 400;
-        }
-
-        .sold-count {
-            color: rgba(0, 0, 0, 0.54);
-            font-size: 10px;
-        }
-
-        /* Responsive cho Mobile & Tablet */
-        @media (max-width: 1024px) {
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .container {
-                padding: 0 5px;
-            }
-        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <div id="auth-overlay">
-        <form action="" method="" class="auth-box" id="login-box">
-            <h2>Đăng nhập</h2>
-            <input type="text" id="login-user" placeholder="Tên đăng nhập">
-            <input type="password" placeholder="Mật khẩu">
-            <button type="button" class="btn-main" onclick="enterSite('login')">Đăng nhập</button>
-            <div class="divider">HOẶC</div>
-            <div class="switch-auth">Bạn mới biết đến Shopee? <span onclick="toggleAuth()">Đăng ký</span></div>
-        </form>
+      <form action="" method="" class="auth-box" id="login-box">
+        <h2>Đăng nhập</h2>
+        <input type="text" id="login-user" placeholder="Tên đăng nhập" />
+        <input type="password" placeholder="Mật khẩu" />
+        <button type="button" class="btn-main" onclick="enterSite('login')">
+          Đăng nhập
+        </button>
+        <div class="divider">HOẶC</div>
+        <div class="switch-auth">
+          Bạn mới biết đến Shopee? <span onclick="toggleAuth()">Đăng ký</span>
+        </div>
+      </form>
 
-        <form action="" method="" class="auth-box" id="register-box" style="display:none;">
-            <h2>Đăng ký</h2>
-            <input type="text" placeholder="Tên đăng nhập">
-            <input type="text" id="reg-name" placeholder="Họ và Tên">
-            <input type="text" placeholder="Số điện thoại">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Mật khẩu">
+      <form
+        action=""
+        method=""
+        class="auth-box"
+        id="register-box"
+        style="display: none"
+      >
+        <h2>Đăng ký</h2>
+        <input type="text" placeholder="Tên đăng nhập" />
+        <input type="text" id="reg-name" placeholder="Họ và Tên" />
+        <input type="text" placeholder="Số điện thoại" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Mật khẩu" />
 
-            <div class="gender-row">
-                <span>Vai trò:</span>
-                <select style="padding: 6px 10px; border: 1px solid #dbdbdb; border-radius: 2px; outline: none; flex: 1; cursor: pointer;">
-                    <option value="Người dùng">Người dùng</option>
-                    <option value="Người bán">Người bán</option>
-                </select>
-            </div>
+        <div class="gender-row">
+          <span>Vai trò:</span>
+          <select
+            style="
+              padding: 6px 10px;
+              border: 1px solid #dbdbdb;
+              border-radius: 2px;
+              outline: none;
+              flex: 1;
+              cursor: pointer;
+            "
+          >
+            <option value="Người dùng">Người dùng</option>
+            <option value="Người bán">Người bán</option>
+          </select>
+        </div>
 
-            <div class="gender-row">
-                <span>Giới tính:</span>
-                <select style="padding: 6px 10px; border: 1px solid #dbdbdb; border-radius: 2px; outline: none; flex: 1; cursor: pointer;">
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                </select>
-            </div>
+        <div class="gender-row">
+          <span>Giới tính:</span>
+          <select
+            style="
+              padding: 6px 10px;
+              border: 1px solid #dbdbdb;
+              border-radius: 2px;
+              outline: none;
+              flex: 1;
+              cursor: pointer;
+            "
+          >
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+          </select>
+        </div>
 
-            <button type="button" class="btn-main" onclick="enterSite('register')">Đăng ký ngay</button>
-            <div class="divider">HOẶC</div>
-            <div class="switch-auth">Bạn đã có tài khoản? <span onclick="toggleAuth()">Đăng nhập</span></div>
-        </form>
+        <button type="button" class="btn-main" onclick="enterSite('register')">
+          Đăng ký ngay
+        </button>
+        <div class="divider">HOẶC</div>
+        <div class="switch-auth">
+          Bạn đã có tài khoản? <span onclick="toggleAuth()">Đăng nhập</span>
+        </div>
+      </form>
     </div>
 
     <div class="top-bar">
-        <div></div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span>🔔 Thông Báo</span><span>❓ Hỗ Trợ</span><span>Tiếng Việt ▼</span>
+      <div></div>
+      <div style="display: flex; align-items: center; gap: 15px">
+        <span>🔔 Thông Báo</span><span>❓ Hỗ Trợ</span><span>Tiếng Việt ▼</span>
 
-            <div id="auth-buttons"><span><strong>Đăng Ký</strong></span><span><strong>Đăng Nhập</strong></span></div>
-
-            <div id="user-display" class="user-info">
-                <img src="https://down-vn.img.susercontent.com/file/vn-11134233-7r98o-lltwn8k6j7m613_tn"
-                     class="user-avatar">
-                <span id="display-name">Username</span>
-                <div class="user-dropdown">
-                    <a href="#">Tài Khoản Của Tôi</a>
-                    <a href="#">Đơn Mua</a>
-                    <a href="javascript:location.reload()" class="logout-link">Đăng Xuất</a>
-                </div>
-            </div>
+        <div id="auth-buttons">
+          <span><strong>Đăng Ký</strong></span
+          ><span><strong>Đăng Nhập</strong></span>
         </div>
+
+        <div id="user-display" class="user-info">
+          <img
+            src="https://down-vn.img.susercontent.com/file/vn-11134233-7r98o-lltwn8k6j7m613_tn"
+            class="user-avatar"
+          />
+          <span id="display-name">Username</span>
+          <div class="user-dropdown">
+            <a href="#">Tài Khoản Của Tôi</a>
+            <a href="#">Đơn Mua</a>
+            <a href="javascript:location.reload()" class="logout-link"
+              >Đăng Xuất</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
 
-
-
     <header class="header">
-        <div class="header-main">
-            <div class="logo">Shopee</div>
-            <div class="search-box">
-                <input type="text" placeholder="Săn iPhone 0Đ - Đăng ký ngay!">
-                <button>🔍</button>
-            </div>
-            <div class="cart">🛒</div>
+      <div class="header-main">
+        <div class="logo">Shopee</div>
+        <div class="search-box">
+          <input type="text" placeholder="Săn iPhone 0Đ - Đăng ký ngay!" />
+          <button>🔍</button>
         </div>
-        <div class="header-menu">
-            <span>Săn iPhone 0 Đồng</span>
-            <span>Đồ Ngủ Ở Nhà</span>
-            <span>Bình Nước Giữ Nhiệt</span>
-            <span>Áo Hè</span>
-            <span>Váy Đẹp</span>
-        </div>
+        <div class="cart">🛒</div>
+      </div>
+      <div class="header-menu">
+        <span>Săn iPhone 0 Đồng</span>
+        <span>Đồ Ngủ Ở Nhà</span>
+        <span>Bình Nước Giữ Nhiệt</span>
+        <span>Áo Hè</span>
+        <span>Váy Đẹp</span>
+      </div>
     </header>
 
     <div class="container">
-        <div class="banner-grid">
-            <div class="banner-left">
-                <img src="https://picsum.photos/800/250?random=1" alt="Main Banner">
-            </div>
-            <div class="banner-right">
-                <img src="https://picsum.photos/400/120?random=2" alt="Sub Banner 1">
-                <img src="https://picsum.photos/400/120?random=3" alt="Sub Banner 2">
-            </div>
+      <div class="banner-grid">
+        <div class="banner-left">
+          <img src="https://picsum.photos/800/250?random=1" alt="Main Banner" />
         </div>
+        <div class="banner-right">
+          <img
+            src="https://picsum.photos/400/120?random=2"
+            alt="Sub Banner 1"
+          />
+          <img
+            src="https://picsum.photos/400/120?random=3"
+            alt="Sub Banner 2"
+          />
+        </div>
+      </div>
 
-        <div class="service-icons">
-            <div class="service-item">
-                <img src="https://picsum.photos/50/50?random=4">
-                <p>Deal Từ 1.000Đ</p>
-            </div>
-            <div class="service-item">
-                <img src="https://picsum.photos/50/50?random=5">
-                <p>Shopee Xu</p>
-            </div>
-            <div class="service-item">
-                <img src="https://picsum.photos/50/50?random=6">
-                <p>Voucher 30%</p>
-            </div>
-            <div class="service-item">
-                <img src="https://picsum.photos/50/50?random=7">
-                <p>Khách Hàng Thân Thiết</p>
-            </div>
-            <div class="service-item">
-                <img src="https://picsum.photos/50/50?random=8">
-                <p>Mã Giảm Giá</p>
-            </div>
+      <div class="service-icons">
+        <div class="service-item">
+          <img src="https://picsum.photos/50/50?random=4" />
+          <p>Deal Từ 1.000Đ</p>
         </div>
+        <div class="service-item">
+          <img src="https://picsum.photos/50/50?random=5" />
+          <p>Shopee Xu</p>
+        </div>
+        <div class="service-item">
+          <img src="https://picsum.photos/50/50?random=6" />
+          <p>Voucher 30%</p>
+        </div>
+        <div class="service-item">
+          <img src="https://picsum.photos/50/50?random=7" />
+          <p>Khách Hàng Thân Thiết</p>
+        </div>
+        <div class="service-item">
+          <img src="https://picsum.photos/50/50?random=8" />
+          <p>Mã Giảm Giá</p>
+        </div>
+      </div>
 
-        <div class="category-section">
-            <div class="category-header">DANH MỤC</div>
-            <div class="category-grid">
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=10">
-                    <p>Thời Trang Nam</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=11">
-                    <p>Điện Thoại</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=12">
-                    <p>Thiết Bị Điện Tử</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=13">
-                    <p>Máy Tính</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=14">
-                    <p>Máy Ảnh</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=15">
-                    <p>Đồng Hồ</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=16">
-                    <p>Giày Dép Nam</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=17">
-                    <p>Gia Dụng</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=18">
-                    <p>Thể Thao</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=19">
-                    <p>Ô Tô & Xe Máy</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=20">
-                    <p>Thời Trang Nữ</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=21">
-                    <p>Mẹ & Bé</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=22">
-                    <p>Nhà Cửa</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=23">
-                    <p>Sắc Đẹp</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=24">
-                    <p>Sức Khỏe</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=25">
-                    <p>Giày Dép Nữ</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=26">
-                    <p>Túi Ví Nữ</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=27">
-                    <p>Trang Sức</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=28">
-                    <p>Bách Hóa</p>
-                </div>
-                <div class="cat-item">
-                    <img src="https://picsum.photos/60/60?random=29">
-                    <p>Nhà Sách</p>
-                </div>
-            </div>
+      <div class="category-section">
+        <div class="category-header">DANH MỤC</div>
+        <div class="category-grid">
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=10" />
+            <p>Thời Trang Nam</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=11" />
+            <p>Điện Thoại</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=12" />
+            <p>Thiết Bị Điện Tử</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=13" />
+            <p>Máy Tính</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=14" />
+            <p>Máy Ảnh</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=15" />
+            <p>Đồng Hồ</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=16" />
+            <p>Giày Dép Nam</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=17" />
+            <p>Gia Dụng</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=18" />
+            <p>Thể Thao</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=19" />
+            <p>Ô Tô & Xe Máy</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=20" />
+            <p>Thời Trang Nữ</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=21" />
+            <p>Mẹ & Bé</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=22" />
+            <p>Nhà Cửa</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=23" />
+            <p>Sắc Đẹp</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=24" />
+            <p>Sức Khỏe</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=25" />
+            <p>Giày Dép Nữ</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=26" />
+            <p>Túi Ví Nữ</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=27" />
+            <p>Trang Sức</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=28" />
+            <p>Bách Hóa</p>
+          </div>
+          <div class="cat-item">
+            <img src="https://picsum.photos/60/60?random=29" />
+            <p>Nhà Sách</p>
+          </div>
         </div>
-        <div class="suggest-title">Gợi Ý Hôm Nay</div>
-        <div class="product-grid" id="productGrid">
-        </div>
+      </div>
+      <div class="suggest-title">Gợi Ý Hôm Nay</div>
+      <div class="product-grid" id="productGrid"></div>
 
-        <div class="view-more-box">
-            <button class="btn-more" onclick="loadMore()">Xem thêm</button>
-        </div>
+      <div class="view-more-box">
+        <button class="btn-more" onclick="loadMore()">Xem thêm</button>
+      </div>
     </div>
 
     <script>
-        const data = [
-            { name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng", price: "134.406", sold: "2,1k", img: "1" },
-            { name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc", price: "119.777", sold: "850", img: "2" },
-            { name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng", price: "13.000", sold: "12k", img: "3" },
-            { name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại", price: "9.900", sold: "50k", img: "4" },
-            { name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex", price: "89.000", sold: "1,2k", img: "5" },
-            { name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình", price: "17.100", sold: "3k", img: "6" },
+      const data = [
+        {
+          name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng",
+          price: "134.406",
+          sold: "2,1k",
+          img: "1",
+        },
+        {
+          name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc",
+          price: "119.777",
+          sold: "850",
+          img: "2",
+        },
+        {
+          name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng",
+          price: "13.000",
+          sold: "12k",
+          img: "3",
+        },
+        {
+          name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại",
+          price: "9.900",
+          sold: "50k",
+          img: "4",
+        },
+        {
+          name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex",
+          price: "89.000",
+          sold: "1,2k",
+          img: "5",
+        },
+        {
+          name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình",
+          price: "17.100",
+          sold: "3k",
+          img: "6",
+        },
 
-            { name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng", price: "134.406", sold: "2,1k", img: "1" },
-            { name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc", price: "119.777", sold: "850", img: "2" },
-            { name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng", price: "13.000", sold: "12k", img: "3" },
-            { name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại", price: "9.900", sold: "50k", img: "4" },
-            { name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex", price: "89.000", sold: "1,2k", img: "5" },
-            { name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình", price: "17.100", sold: "3k", img: "6" },
+        {
+          name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng",
+          price: "134.406",
+          sold: "2,1k",
+          img: "1",
+        },
+        {
+          name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc",
+          price: "119.777",
+          sold: "850",
+          img: "2",
+        },
+        {
+          name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng",
+          price: "13.000",
+          sold: "12k",
+          img: "3",
+        },
+        {
+          name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại",
+          price: "9.900",
+          sold: "50k",
+          img: "4",
+        },
+        {
+          name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex",
+          price: "89.000",
+          sold: "1,2k",
+          img: "5",
+        },
+        {
+          name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình",
+          price: "17.100",
+          sold: "3k",
+          img: "6",
+        },
 
-            { name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng", price: "134.406", sold: "2,1k", img: "1" },
-            { name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc", price: "119.777", sold: "850", img: "2" },
-            { name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng", price: "13.000", sold: "12k", img: "3" },
-            { name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại", price: "9.900", sold: "50k", img: "4" },
-            { name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex", price: "89.000", sold: "1,2k", img: "5" },
-            { name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình", price: "17.100", sold: "3k", img: "6" }
-        ];
+        {
+          name: "Áo Khoác Cardigan Lovito Dệt Kim Túi Vá Phẳng",
+          price: "134.406",
+          sold: "2,1k",
+          img: "1",
+        },
+        {
+          name: "Chân Váy Dài Xẻ Tà Lovito Phong Cách Hàn Quốc",
+          price: "119.777",
+          sold: "850",
+          img: "2",
+        },
+        {
+          name: "Bông Tai Ngọc Trai Nhân Tạo Đính Đá Sang Trọng",
+          price: "13.000",
+          sold: "12k",
+          img: "3",
+        },
+        {
+          name: "Khăn Giấy Ướt Gấu Dâu 80 Tờ Siêu Mềm Mại",
+          price: "9.900",
+          sold: "50k",
+          img: "4",
+        },
+        {
+          name: "Áo Sơ Mi Nam Kẻ Caro Form Rộng Unisex",
+          price: "89.000",
+          sold: "1,2k",
+          img: "5",
+        },
+        {
+          name: "Ghế Nhựa Gấp Gọn Đa Năng Cho Gia Đình",
+          price: "17.100",
+          sold: "3k",
+          img: "6",
+        },
+      ];
 
-        const grid = document.getElementById('productGrid');
+      const grid = document.getElementById("productGrid");
 
-        function createProductHTML(item) {
-            return `
+      function createProductHTML(item) {
+        return `
                     <a href="#" class="card">
                         <div class="card-img" style="background-image: url('https://picsum.photos/300/300?random=${Math.random()}')">
                             <span class="badge-mall">Mall</span>
@@ -953,65 +1083,67 @@
                         </div>
                     </a>
                 `;
-        }
+      }
 
-        // Load 12 sản phẩm ban đầu (2 hàng)
-        function init() {
-            let html = "";
-            for (let i = 0; i < 2; i++) {
-                data.forEach(item => html += createProductHTML(item));
-            }
-            grid.innerHTML = html;
+      // Load 12 sản phẩm ban đầu (2 hàng)
+      function init() {
+        let html = "";
+        for (let i = 0; i < 2; i++) {
+          data.forEach((item) => (html += createProductHTML(item)));
         }
+        grid.innerHTML = html;
+      }
 
-        // Hàm khi nhấn nút "Xem thêm"
-        function loadMore() {
-            let moreHtml = "";
-            data.forEach(item => moreHtml += createProductHTML(item));
-            grid.insertAdjacentHTML('beforeend', moreHtml);
-        }
-        function toggleAuth() {
-            const loginBox = document.getElementById('login-box');
-            const registerBox = document.getElementById('register-box');
-            let isLogin = loginBox.style.display !== 'none';
-            loginBox.style.display = isLogin ? 'none' : 'block';
-            registerBox.style.display = isLogin ? 'block' : 'none';
-        }
+      // Hàm khi nhấn nút "Xem thêm"
+      function loadMore() {
+        let moreHtml = "";
+        data.forEach((item) => (moreHtml += createProductHTML(item)));
+        grid.insertAdjacentHTML("beforeend", moreHtml);
+      }
+      function toggleAuth() {
+        const loginBox = document.getElementById("login-box");
+        const registerBox = document.getElementById("register-box");
+        let isLogin = loginBox.style.display !== "none";
+        loginBox.style.display = isLogin ? "none" : "block";
+        registerBox.style.display = isLogin ? "block" : "none";
+      }
 
-        function enterSite(type) {
-            let name = type === 'login' ? document.getElementById('login-user').value : document.getElementById('reg-name').value;
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('auth-buttons').style.display = 'none';
-            document.getElementById('user-display').style.display = 'flex';
-            document.getElementById('display-name').innerText = name || "khanghoan123";
-            renderContent();
-        }
+      function enterSite(type) {
+        let name =
+          type === "login"
+            ? document.getElementById("login-user").value
+            : document.getElementById("reg-name").value;
+        document.getElementById("auth-overlay").style.display = "none";
+        document.getElementById("auth-buttons").style.display = "none";
+        document.getElementById("user-display").style.display = "flex";
+        document.getElementById("display-name").innerText =
+          name || "khanghoan123";
+        renderContent();
+      }
 
-        function renderContent() {
-            const catGrid = document.getElementById('categoryGrid');
-            if (catGrid) {
-                for (let i = 0; i < 10; i++) {
-                    catGrid.innerHTML += `<div class="cat-item"><img src="https://picsum.photos/60/60?random=${i}"><p>Danh mục ${i + 1}</p></div>`;
-                }
-            }
-            const prodGrid = document.getElementById('productGrid');
-            if (prodGrid) {
-                for (let i = 0; i < 12; i++) {
-                    prodGrid.innerHTML += `<div class="product-card"><div class="image-box" style="background-image: url('https://picsum.photos/300/300?random=${i + 20}')"></div><div class="product-details"><p>Sản phẩm chất lượng ${i + 1}</p><p style="color:#ee4d2d">₫250.000</p></div></div>`;
-                }
-            }
+      function renderContent() {
+        const catGrid = document.getElementById("categoryGrid");
+        if (catGrid) {
+          for (let i = 0; i < 10; i++) {
+            catGrid.innerHTML += `<div class="cat-item"><img src="https://picsum.photos/60/60?random=${i}"><p>Danh mục ${i + 1}</p></div>`;
+          }
         }
+        const prodGrid = document.getElementById("productGrid");
+        if (prodGrid) {
+          for (let i = 0; i < 12; i++) {
+            prodGrid.innerHTML += `<div class="product-card"><div class="image-box" style="background-image: url('https://picsum.photos/300/300?random=${i + 20}')"></div><div class="product-details"><p>Sản phẩm chất lượng ${i + 1}</p><p style="color:#ee4d2d">₫250.000</p></div></div>`;
+          }
+        }
+      }
 
-        init();
+      init();
     </script>
     <footer class="footer">
-        <p>© 2026 Shopee. Tất cả các quyền được bảo lưu.</p>
-        <p style="font-size: 12px; margin-top: 10px;">
-            Quốc gia & Khu vực: Việt Nam | Singapore | Indonesia | Thái Lan |
-            Malaysia...
-        </p>
+      <p>© 2026 Shopee. Tất cả các quyền được bảo lưu.</p>
+      <p style="font-size: 12px; margin-top: 10px">
+        Quốc gia & Khu vực: Việt Nam | Singapore | Indonesia | Thái Lan |
+        Malaysia...
+      </p>
     </footer>
-
-</body>
-
+  </body>
 </html>

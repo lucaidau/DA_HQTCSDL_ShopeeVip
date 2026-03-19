@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopee Vip</title>
+    <link rel="stylesheet" href="../CSS/index.css" />
+  </head>
+  <body>
+    <div id="auth-overlay">
+      <form action="" method="" class="auth-box" id="login-box">
+        <h2>Đăng nhập</h2>
+        <input type="text" id="login-user" placeholder="Tên đăng nhập" />
+        <input type="password" placeholder="Mật khẩu" />
+        <button type="button" class="btn-main" onclick="enterSite('login')">
+          Đăng nhập
+        </button>
+        <div class="divider">HOẶC</div>
+        <div class="switch-auth">
+          Bạn mới biết đến Shopee? <span onclick="toggleAuth()">Đăng ký</span>
+        </div>
+      </form>
+
+      <form
+        action=""
+        method=""
+        class="auth-box"
+        id="register-box"
+        style="display: none"
+      >
+        <h2>Đăng ký</h2>
+        <input type="text" placeholder="Tên đăng nhập" />
+        <input type="text" id="reg-name" placeholder="Họ và Tên" />
+        <input type="text" placeholder="Số điện thoại" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Mật khẩu" />
+
+        <div class="gender-row">
+          <span>Vai trò:</span>
+          <select
+            style="
+              padding: 6px 10px;
+              border: 1px solid #dbdbdb;
+              border-radius: 2px;
+              outline: none;
+              flex: 1;
+              cursor: pointer;
+            "
+          >
+            <option value="Người dùng">Người dùng</option>
+            <option value="Người bán">Người bán</option>
+          </select>
+        </div>
+
+        <div class="gender-row">
+          <span>Giới tính:</span>
+          <select
+            style="
+              padding: 6px 10px;
+              border: 1px solid #dbdbdb;
+              border-radius: 2px;
+              outline: none;
+              flex: 1;
+              cursor: pointer;
+            "
+          >
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn-main" onclick="enterSite('register')">
+          Đăng ký ngay
+        </button>
+        <div class="divider">HOẶC</div>
+        <div class="switch-auth">
+          Bạn đã có tài khoản? <span onclick="toggleAuth()">Đăng nhập</span>
+        </div>
+      </form>
+    </div>
+
+    <script src="../JS/index.js"></script>
+  </body>
+</html>
