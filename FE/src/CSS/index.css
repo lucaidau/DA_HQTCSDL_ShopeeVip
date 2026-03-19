@@ -11,6 +11,29 @@
   z-index: 10001;
 }
 
+.box{
+  margin-right: 5%;
+}
+
+.login-btn{
+  width: 105%;
+  
+  background: #ee4d2d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 10px;
+  display: flex;
+
+}
+.auth-box .btn-main{
+  padding: 0%;
+  text-align: center;
+  text-decoration: none;
+}
+
 .auth-box {
   background: white;
   width: 450px;

@@ -8,26 +8,24 @@
   </head>
   <body>
     <div id="auth-overlay">
-      <form action="" method="" class="auth-box" id="login-box">
+      <form class="auth-box" id="login-box">
         <h2>Đăng nhập</h2>
-        <input type="text" id="login-user" placeholder="Tên đăng nhập" />
-        <input type="password" placeholder="Mật khẩu" />
-        <button type="button" class="btn-main" onclick="enterSite('login')">
-          Đăng nhập
-        </button>
+        <div class="box">
+          <input type="text" id="login-username" placeholder="Tên đăng nhập" />
+          <input type="password" id="login-password" placeholder="Mật khẩu" />
+
+          <div class="login-btn">
+            <a href="#" type="button" class="btn-main"> Đăng nhập </a>
+          </div>
+        </div>
+
         <div class="divider">HOẶC</div>
         <div class="switch-auth">
           Bạn mới biết đến Shopee? <span onclick="toggleAuth()">Đăng ký</span>
         </div>
       </form>
 
-      <form
-        action=""
-        method=""
-        class="auth-box"
-        id="register-box"
-        style="display: none"
-      >
+      <form class="auth-box" id="register-box" style="display: none">
         <h2>Đăng ký</h2>
         <input type="text" placeholder="Tên đăng nhập" />
         <input type="text" id="reg-name" placeholder="Họ và Tên" />
@@ -69,7 +67,7 @@
           </select>
         </div>
 
-        <button type="button" class="btn-main" onclick="enterSite('register')">
+        <button type="button" class="btn-main" onclick="backToLogin()">
           Đăng ký ngay
         </button>
         <div class="divider">HOẶC</div>

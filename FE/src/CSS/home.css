@@ -1,22 +1,22 @@
 :root {
-        --shopee-orange: #ee4d2d;
-        --shopee-bg: #f5f5f5;
-        --white: #ffffff;
-      }
+  --shopee-orange: #ee4d2d;
+  --shopee-bg: #f5f5f5;
+  --white: #ffffff;
+}
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
-      body {
-        background-color: var(--shopee-bg);
-      }
+body {
+  background-color: var(--shopee-bg);
+}
 
 .user-info {
-  display: none;
+  display: block;
   align-items: center;
   gap: 5px;
   font-weight: 500;
@@ -123,7 +123,7 @@
   color: white;
   position: sticky;
   position: sticky;
-  top: 40px;
+  top: 28px;
   z-index: 99;
 }
 
@@ -287,14 +287,14 @@
   text-transform: uppercase;
   border-bottom: 4px solid var(--shopee-orange);
   position: sticky;
-  top: 130px;
+  top: 118px;
   /* Nằm ngay dưới header khi cuộn */
   z-index: 99;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
   margin-top: 10px;
 }
@@ -405,3 +405,173 @@
     display: none;
   }
 }
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Header Gợi ý hôm nay */
+.section-header {
+  background: #fff;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 4px solid var(--shopee-orange);
+  color: var(--shopee-orange);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  position: sticky;
+  top: 114px;
+  z-index: 99;
+}
+
+/* Lưới sản phẩm */
+.product-grid {
+  display: grid;
+  /* Mặc định 6 cột trên desktop */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+/* Thẻ sản phẩm */
+.product-card {
+  background: #fff;
+  text-decoration: none;
+  color: var(--text-color);
+  position: relative;
+  border: 1px solid transparent;
+  transition: all 0.1s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  border: 1px solid var(--shopee-orange);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.05);
+  z-index: 2;
+}
+
+/* Khung ảnh sản phẩm */
+.image-box {
+  width: 100%;
+  padding-top: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Nhãn giảm giá Shopee */
+.discount-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 32px;
+  background-color: rgba(255, 212, 36, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.discount-badge .percent {
+  color: var(--shopee-orange);
+  font-weight: bold;
+}
+
+.discount-badge .text {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+
+.discount-badge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  border-width: 0 18px 4px;
+  border-style: solid;
+  border-color: transparent rgba(255, 212, 36, 0.9);
+}
+
+/* Nhãn Yêu thích / Mall */
+.label-special {
+  position: absolute;
+  top: 4px;
+  left: -3px;
+  background-color: var(--shopee-orange);
+  color: #fff;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+/* Chi tiết sản phẩm */
+.product-details {
+  padding: 8px;
+}
+
+.product-name {
+  font-size: 12px;
+  line-height: 14px;
+  height: 28px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin-bottom: 8px;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.currency {
+  font-size: 10px;
+  vertical-align: top;
+  margin-right: 1px;
+}
+
+.price {
+  color: var(--shopee-orange);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.sold-count {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 10px;
+}
+
+/* Responsive cho Mobile & Tablet */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .container {
+    padding: 0 5px;
+  }
+}
+
+.footer {
+        margin-top: 50px;
+        border-top: 4px solid var(--shopee-orange);
+        background: var(--white);
+        padding: 40px 10%;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
