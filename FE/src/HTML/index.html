@@ -27,15 +27,15 @@
 
       <form class="auth-box" id="register-box" style="display: none">
         <h2>Đăng ký</h2>
-        <input type="text" placeholder="Tên đăng nhập" />
+        <input type="text" id="reg-username" placeholder="Tên đăng nhập" />
         <input type="text" id="reg-name" placeholder="Họ và Tên" />
-        <input type="text" placeholder="Số điện thoại" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Mật khẩu" />
+        <input type="text" id="reg-phone" placeholder="Số điện thoại" />
+        <input type="email" id="reg-mail" placeholder="Email" />
+        <input type="password" id="reg-pass" placeholder="Mật khẩu" />
 
         <div class="gender-row">
           <span>Vai trò:</span>
-          <select
+          <select id="reg-role"
             style="
               padding: 6px 10px;
               border: 1px solid #dbdbdb;
@@ -45,14 +45,15 @@
               cursor: pointer;
             "
           >
-            <option value="Người dùng">Người dùng</option>
-            <option value="Người bán">Người bán</option>
+            <option value="1">Người dùng</option>
+            <option value="2">Người bán</option>
           </select>
         </div>
 
         <div class="gender-row">
           <span>Giới tính:</span>
           <select
+          id="reg-gender"
             style="
               padding: 6px 10px;
               border: 1px solid #dbdbdb;
@@ -62,12 +63,12 @@
               cursor: pointer;
             "
           >
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
+            <option value="1">Nam</option>
+            <option value="2">Nữ</option>
           </select>
         </div>
 
-        <button type="button" class="btn-main" onclick="backToLogin()">
+        <button type="button" class="btn-main" onclick="register()">
           Đăng ký ngay
         </button>
         <div class="divider">HOẶC</div>

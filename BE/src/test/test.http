@@ -33,3 +33,20 @@ GET  http://localhost:3000/sanpham/3
 Content-Type: application/json
 
 {}
+
+
+### [GET] Lấy giỏ hàng
+GET http://localhost:3000/giohang/1
+Content-Type: application/json
+
+{}
+
+### [POST] Thêm vào giỏ hàng
+POST http://localhost:3000/giohang/themsanpham
+Content-Type: application/json
+
+{
+    "userID": "1",
+    "copyID": "2",
+    "quantity": "1"
+}
