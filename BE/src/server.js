@@ -9,6 +9,8 @@ app.use(cors())
 const route = require("./routers/index");
 route(app);
 
-app.listen(port, () => {
-  console.log("App is running on http://localhost:3000");
-});
+// app.listen(port, () => {
+//   console.log("App is running on http://localhost:3000");
+// });
+
+module.exports = app
