@@ -52,8 +52,8 @@ const login = () => {
     })
     .then((data) => {
       console.log("Đăng nhập thành công: ", data);
-      localStorage.setItem("userID",data.user.IDTaiKhoan)
-      window.location = "home.html"
+      localStorage.setItem("userID", data.user.IDTaiKhoan);
+      window.location = "home.html";
     })
     .catch((err) => {
       console.log("Lỗi hệ thống: ", err);

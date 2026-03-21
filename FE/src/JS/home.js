@@ -131,13 +131,13 @@ function createProductHTML(item) {
 }
 
 // Load 12 sản phẩm ban đầu (2 hàng)
-window.onload =  function () {
+window.onload = function () {
   let html = "";
   for (let i = 0; i < 2; i++) {
     data.forEach((item) => (html += createProductHTML(item)));
   }
   grid.innerHTML = html;
-}
+};
 
 // Hàm khi nhấn nút "Xem thêm"
 function loadMore() {
@@ -146,3 +146,6 @@ function loadMore() {
   grid.insertAdjacentHTML("beforeend", moreHtml);
 }
 
+document.querySelector(".logout-link").addEventListener("click", () => {
+  localStorage.clear();
+});
