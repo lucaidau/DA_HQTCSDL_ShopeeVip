@@ -16,3 +16,8 @@ route(app);
 // });
 
 module.exports = app
+
+if(!process.env.VERCEL)
+{
+    app.listen(port, ()=>console.log(`App is running on http://localhost:${port}`))
+}

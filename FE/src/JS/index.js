@@ -35,7 +35,7 @@ const login = () => {
   const usernameInput = document.getElementById("login-username");
   const passwordInput = document.getElementById("login-password");
 
-  fetch("http://localhost:3000", {
+  fetch(`${API_URL}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -62,7 +62,13 @@ const login = () => {
 
 document.querySelector(".login-btn .btn-main").addEventListener("click", login);
 
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/dangKi' // URL khi bạn chạy máy nhà
+    : 'https://sv-da-hqtcsdl-shopee-vip.vercel.app/'; // URL sau khi bạn deploy BE lên Vercel
+
 const register = () => {
+
+
   const userName = document.getElementById("reg-username").value;
   const fullName = document.getElementById("reg-name").value;
   const password = document.getElementById("reg-pass").value;
@@ -84,7 +90,7 @@ const register = () => {
     role: role,
   };
 
-  fetch("http://localhost:3000/dangKi", {
+  fetch(`${REG_API_URL}/dangKi`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
