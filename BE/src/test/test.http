@@ -50,3 +50,13 @@ Content-Type: application/json
     "copyID": "2",
     "quantity": "1"
 }
+
+### [POST] Cập nhật giỏ hàng
+POST http://localhost:3000/giohang/capnhatgiohang
+Content-Type: application/json
+
+{
+    "userID": "1",
+    "copyID": "1",
+    "newQuantity": "2"
+}
