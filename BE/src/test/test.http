@@ -18,8 +18,8 @@ POST http://localhost:3000/
 Content-Type: application/json
 
 {
-    "username": "tien1234",
-    "password": "123456"
+    "username": "toan123",
+    "password": "01234"
 }
 
 ### GET Danh sách sản phẩm
@@ -29,7 +29,7 @@ Content-Type: application/json
 {}
 
 ### [GET] Lấy chi tiết sản phẩm 
-GET  http://localhost:3000/sanpham/3
+GET  http://localhost:3000/sanpham/1
 Content-Type: application/json
 
 {}
@@ -47,7 +47,7 @@ Content-Type: application/json
 
 {
     "userID": "1",
-    "copyID": "2",
+    "copyID": "1",
     "quantity": "1"
 }
 

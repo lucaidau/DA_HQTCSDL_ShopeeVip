@@ -10,6 +10,7 @@ AS
             bs.BienThe,
             bs.GiaBan,
             bs.HinhAnh,
+            gh.SoLuongMua,
             (gh.SoLuongMua * bs.GiaBan) AS ThanhTien
 
         FROM GIO_HANG gh
