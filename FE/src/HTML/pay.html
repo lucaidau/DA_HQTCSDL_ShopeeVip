@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán | Shopee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../CSS/pay.css">
+</head>
+<body>
+
+   <div class="header-top">
+
+        <div class="header-top-left">
+
+            <span>Kênh Người Bán</span> | <span>Tải ứng dụng</span> | <span>Kết nối <i class="fab fa-facebook"></i></span>
+
+        </div>
+
+        <div class="header-top-right">
+
+            <span><i class="far fa-bell"></i> Thông Báo</span>
+
+            <span><i class="far fa-question-circle"></i> Hỗ Trợ</span>
+
+            <div class="user-info-header">
+
+                <img src="https://i.pravatar.cc/150?img=32" class="user-avatar">
+
+                <span>My</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="header-main">
+
+        <div class="logo-section"><i class="fas fa-shopping-bag"></i><div>Shopee <span>Thanh Toán</span></div></div>
+
+    </div>
+
+
+    <div class="container">
+        <div class="section address-section">
+            <div class="addr-title"><i class="fas fa-map-marker-alt"></i> Địa Chỉ Nhận Hàng</div>
+            <div class="addr-flex">
+                <b id="display-name">Nguyễn Văn Sương (+84) 333 887 655</b> 
+                <div id="display-address" class="detail-address">
+                    11/2, Đông Hưng Thuận 15, Quận 11, TP. Hồ Chí Minh <span class="badge">Mặc định</span>
+                </div>
+                <div class="btn-link" onclick="openModal()">Thay Đổi</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalList">
+        <div class="modal-box">
+            <div class="modal-header">Địa Chỉ Của Tôi</div>
+            <div class="modal-body">
+                <div id="addr-items-container"></div>
+                <button class="btn-add-new" onclick="openNewAddrModal()">+ Thêm Địa Chỉ Mới</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('modalList')">Hủy</button>
+                <button class="btn-orange" onclick="confirmAddrSelection()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalNew">
+        <div class="modal-box">
+            <div class="modal-header">Địa chỉ mới (dùng thông tin trước sáp nhập)</div>
+            <div class="modal-body" style="padding-top: 20px;">
+                <div class="form-group">
+                    <input type="text" class="form-input" id="new-name" placeholder="Họ và tên">
+                    <input type="text" class="form-input" id="new-phone" placeholder="Số điện thoại">
+                </div>
+                <input type="text" class="form-input full-width" id="new-city" placeholder="Tỉnh/Thành phố, Quận/Huyện, Phường/Xã">
+                <textarea class="form-input full-width" id="new-detail" style="height: 80px;" placeholder="Địa chỉ cụ thể"></textarea>
+                
+                <p style="color: #888; font-size: 14px;">Loại địa chỉ:</p>
+                <div class="type-btns">
+                    <button class="btn-type active" onclick="setType(this)">Nhà Riêng</button>
+                    <button class="btn-type" onclick="setType(this)">Văn Phòng</button>
+                </div>
+                
+                <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" id="new-default"> Đặt làm địa chỉ mặc định
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('modalNew')">Trở Lại</button>
+                <button class="btn-orange" onclick="addNewAddress()">Hoàn thành</button>
+            </div>
+        </div>
+    </div>
+
+        <div class="section">
+
+            <div class="product-header">
+
+                <div>Sản phẩm</div><div>Đơn giá</div><div>Số lượng</div><div style="text-align:right">Thành tiền</div>
+
+            </div>
+
+            <div class="product-item">
+
+                <div style="display:flex; gap:10px">
+
+                    <img src="https://picsum.photos/40" width="40" height="40">
+
+                    <div>[BANILA CO] Smudging Lip Pencil<br><small style="color:#888">Loại: BE03 Salmon</small></div>
+
+                </div>
+
+                <div>₫235.400</div>
+
+                <div>1</div>
+
+                <div style="text-align:right">₫235.400</div>
+
+            </div>
+
+
+
+            <div class="shipping-box">
+
+                <div>
+
+                    <span style="color: #00bfa5; font-weight: bold;">Phương thức vận chuyển:</span>
+
+                    <span>Nhanh (Đảm bảo nhận hàng vào 27 Th03 - 01 Th04)</span>
+
+                </div>
+
+                <div style="text-align:right">
+
+                    <span class="btn-link" style="margin-right:20px">THAY ĐỔI</span>
+
+                    <span>₫17.000</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="section" style="padding:0">
+
+            <div class="voucher-section">
+
+                <div><i class="fas fa-ticket-alt icon-orange"></i> Shopee Voucher</div>
+
+                <div class="btn-link">Chọn hoặc nhập mã</div>
+
+            </div>
+
+            <div class="xu-section">
+
+                <div><i class="fas fa-coins" style="color:#f6bc3e; margin-right:10px"></i> Shopee Xu <small style="margin-left:10px">Không thể sử dụng Xu</small></div>
+
+                <input type="checkbox" disabled>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="section" style="padding:0">
+
+            <div class="payment-method">
+
+                <div style="font-size: 18px;">Phương thức thanh toán</div>
+
+                <div style="text-align:right">
+
+                    <span>Thanh toán khi nhận hàng</span>
+
+                    <span class="btn-link" style="margin-left:20px">THAY ĐỔI</span>
+
+                </div>
+
+            </div>
+
+           
+
+            <div class="summary-box">
+
+                <div class="summary-row"><span>Tổng tiền hàng</span> <span>₫235.400</span></div>
+
+                <div class="summary-row"><span>Phí vận chuyển</span> <span>₫17.000</span></div>
+
+                <div class="summary-row" style="align-items: center;">
+
+                    <span style="font-size: 18px; color: #222;">Tổng thanh toán</span>
+
+                    <span class="total-final">₫252.400</span>
+
+                </div>
+
+                <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+
+                    <small style="color:#888; display:block; margin-bottom:15px">Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Shopee</small>
+
+                    <button class="btn-orange" onclick="processOrder()">Đặt Hàng</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="modal-overlay" id="modal">
+
+        <div class="modal-box">
+
+            <div style="padding: 20px 30px; font-size: 20px; border-bottom: 1px solid #eee;">Địa Chỉ Của Tôi</div>
+
+            <div class="modal-body" id="list" style="padding: 0 30px; overflow-y: auto; flex: 1;"></div>
+
+            <div style="padding: 20px 30px; border-top: 1px solid #eee; text-align: right;">
+
+                <button onclick="closeModal()" style="background:none; border:none; margin-right:15px; cursor:pointer">Hủy</button>
+
+                <button class="btn-orange" onclick="confirmAddr()" style="padding: 10px 30px;">Xác nhận</button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-overlay" id="modalSuccess">
+    <div class="modal-box" style="width: 400px;">
+        <div class="success-content">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2>Đặt hàng thành công!</h2>
+            <p>Cảm ơn bạn đã mua sắm tại Shopee.</p>
+            <div class="countdown-text">
+                Tự động chuyển trang sau <span id="seconds">5</span> giây...
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="../JS/pay.js">
+      
+    </script>
+</body>
+</html>

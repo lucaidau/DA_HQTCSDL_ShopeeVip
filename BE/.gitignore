@@ -12,6 +12,7 @@ Thumbs.db
 
 # IDEs and Editors (Cấu hình riêng của máy mỗi bạn)
 .vscode/
+.vscode/settings.json
 .idea/
 *.suo
 *.ntvs*
