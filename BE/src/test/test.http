@@ -29,7 +29,7 @@ Content-Type: application/json
 {}
 
 ### [GET] Lấy chi tiết sản phẩm 
-GET  http://localhost:3000/sanpham/1
+GET  http://localhost:3000/sanpham/3
 Content-Type: application/json
 
 {}

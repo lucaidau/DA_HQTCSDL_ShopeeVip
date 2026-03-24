@@ -1,4 +1,5 @@
 let data = [];
+
 const getProduct = async()=>{
   try {
     const res = await fetch("http://localhost:3000/sanpham")
@@ -12,6 +13,8 @@ const getProduct = async()=>{
     
   }
 }
+
+
 
 
 const grid = document.getElementById("productGrid");
@@ -28,8 +31,8 @@ const renderItem = () =>
 function createProductHTML(item) {
   const formattedPrice = item.Gia? Number(item.Gia).toLocaleString('vi-VN') : "0"
   return `
-                    <a href="#" class="card">
-                        <div class="card-img" style="background-image: url('https://picsum.photos/300/300?random=${Math.random()}')">
+                    <a href="../HTML/chitietcart.html?id=${item.IDSanPham}" class="card">
+                        <div class="card-img" style="background-image: url('${item.HinhAnh}')">
                             <span class="badge-mall">Mall</span>
                         </div>
                         <div class="card-info">
