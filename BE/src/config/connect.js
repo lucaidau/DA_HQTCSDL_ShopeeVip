@@ -20,7 +20,7 @@ const poolPromise = new sql.ConnectionPool(sqlConfig)
     return pool;
   })
   .catch((err) => {
-    console.log("Kết nối thất bại");
+    console.log("Kết nối thất bại: ", err);
   });
 
 module.exports = { sql, poolPromise };
