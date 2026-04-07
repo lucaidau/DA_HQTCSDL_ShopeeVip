@@ -1,35 +1,31 @@
 let data = [];
 
-const getProduct = async()=>{
+const getProduct = async () => {
   try {
-    const res = await fetch("http://localhost:3000/sanpham")
+    const res = await fetch("http://localhost:3000/sanpham");
     const dt = await res.json();
 
-    data = dt.danhSachSanPham[0]
+    data = dt.danhSachSanPham[0];
 
     renderItem();
   } catch (error) {
     console.error("Lỗi lấy sản phẩm");
-    
   }
-}
-
-
-
+};
 
 const grid = document.getElementById("productGrid");
 
-const renderItem = () => 
-{
-  if(!data || data.length === 0) return;
-  let html = data.map(item=>createProductHTML(item)).join("")
+const renderItem = () => {
+  if (!data || data.length === 0) return;
+  let html = data.map((item) => createProductHTML(item)).join("");
 
-  
   grid.innerHTML = html;
-}
+};
 
 function createProductHTML(item) {
-  const formattedPrice = item.Gia? Number(item.Gia).toLocaleString('vi-VN') : "0"
+  const formattedPrice = item.Gia
+    ? Number(item.Gia).toLocaleString("vi-VN")
+    : "0";
   return `
                     <a href="../HTML/chitietcart.html?id=${item.IDSanPham}" class="card">
                         <div class="card-img" style="background-image: url('${item.HinhAnh}')">
@@ -46,18 +42,8 @@ function createProductHTML(item) {
                 `;
 }
 
-// Load 12 sản phẩm ban đầu (2 hàng)
-
-
-// Hàm khi nhấn nút "Xem thêm"
-// function loadMore() {
-//   let moreHtml = "";
-//   data.forEach((item) => (moreHtml += createProductHTML(item)));
-//   grid.insertAdjacentHTML("beforeend", moreHtml);
-// }
-
 document.querySelector(".logout-link").addEventListener("click", () => {
   localStorage.clear();
 });
 
-window.onload = getProduct
+window.onload = getProduct;
