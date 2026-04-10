@@ -57,9 +57,20 @@ function hideToast() {
   document.getElementById("cartToast").classList.remove("show");
 }
 
+const qtyTxt = document.getElementById("qtyInput");
+let qty = parseInt(document.getElementById("qtyInput").value) || 1;
+
+const updateQty = (sigma)=>
+{
+  qty += sigma;
+  
+  qtyTxt.value = qty;
+}
+
 function addToCart() {
-  const qty = parseInt(document.getElementById("qtyInput").value) || 1;
+  qty = (qty <= 0) ? 1: qty;
   cartCount += qty;
+
   updateCartBadge(cartCount);
   showToast(qty);
 
@@ -104,3 +115,11 @@ window.onload = async () => {
   price.innerText = "₫"+formatPrice;
   discount.innerText = "₫" + formatDiscount
 };
+
+const updateUI = () =>
+  {
+    const txtDanhMuc =  document.getElementById("danhMuc");
+    const txtSanPham = document.getElementById("tenSP");
+    const txtTonKho = document.getElementById("tonKho")
+    const txtMoTa = document.getElementById("description")
+  }

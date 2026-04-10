@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản Phẩm - Shopee</title>
+    <!-- Use Google Fonts (Roboto) to match Shopee's typographic style -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../CSS/detailproduct.css" />
+    <style></style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="container">
+        <div class="header-top">
+          <div class="header-top-nav">
+            <a href="#">Kênh Người Bán</a>
+            <a href="#">Trở thành Người bán Shopee</a>
+            <a href="#">Tải ứng dụng</a>
+            <a href="#"
+              >Kết nối <i class="fab fa-facebook" style="margin-left: 3px"></i>
+              <i class="fab fa-instagram"></i
+            ></a>
+          </div>
+          <div class="header-top-nav">
+            <a href="#"><i class="far fa-bell"></i> Thông Báo</a>
+            <a href="#"><i class="far fa-question-circle"></i> Hỗ Trợ</a>
+            <a href="#"
+              ><i class="fas fa-globe"></i> Tiếng Việt
+              <i class="fas fa-chevron-down" style="font-size: 10px"></i
+            ></a>
+            <a href="#" style="font-weight: 500; margin-left: 10px">Đăng Ký</a>
+            <a href="#" style="font-weight: 500">Đăng Nhập</a>
+          </div>
+        </div>
+
+        <div class="header-main">
+          <a href="#" class="logo">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Shopee</span>
+          </a>
+
+          <div class="cart-icon">
+            <a href="../HTML/cart.html"><i class="fas fa-shopping-cart"></i></a>
+            <span class="cart-badge"></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+
+
+      <!-- PRODUCT BRIEFING BACKGROUND -->
+      <div class="box product-briefing" style="margin-top: 60px;">
+        <!-- Left: Gallery -->
+        <div class="product-gallery">
+          <img
+            src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=450"
+            class="main-img"
+            id="mainImg"
+          />
+          <div class="thumb-list" id="thumbList">
+            <img
+              src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=82"
+              class="thumb-img active"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1580402427914-a6cc60d7d44f?w=82"
+              class="thumb-img"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1475180098004-ca77a66827be?w=82"
+              class="thumb-img"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1604176354204-9268737828e4?w=82"
+              class="thumb-img"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1598522325074-042db73aa4e6?w=82"
+              class="thumb-img"
+            />
+          </div>
+          <div class="gallery-social">
+            <div class="social-item">
+              <span style="color: #222">Chia sẻ:</span>
+              <i
+                class="fab fa-facebook"
+                style="color: #3b5999; font-size: 20px"
+              ></i>
+              <i
+                class="fab fa-facebook-messenger"
+                style="color: #1a92da; font-size: 20px"
+              ></i>
+              <i
+                class="fab fa-pinterest"
+                style="color: #bf2127; font-size: 20px"
+              ></i>
+            </div>
+            <div
+              style="border-left: 1px solid rgba(0, 0, 0, 0.09); height: 20px"
+            ></div>
+            <div class="social-item">
+              <i class="far fa-heart text-orange" style="font-size: 20px"></i>
+              <span>Đã thích (1,2k)</span>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- Right: Info -->
+        <div class="product-info">
+          <div class="title-wrapper">
+            <span class="badge-favorite">Yêu Thích</span>
+            <h1 class="title" id="prodTitle"></h1>
+          </div>
+
+          <div class="stats">
+            <div class="stats-item">
+              <span class="stats-val rating" id="prodRating">4.9</span>
+              <div class="stars" id="prodStars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i
+                ><i class="fas fa-star"></i><i class="fas fa-star"></i
+                ><i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+            <div class="stats-item">
+              <span class="stats-val" id="prodReviews">1,2k</span>
+              <span class="stats-label">Đánh Giá</span>
+            </div>
+            <div class="stats-item">
+              <span class="stats-val" id="prodSold" style="border: none"
+                >4,5k</span
+              >
+              <span class="stats-label">Đã Bán</span>
+            </div>
+            <div
+              class="stats-item"
+              style="border: none; margin-left: auto; cursor: pointer"
+            >
+              <span class="stats-label">Tố cáo</span>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="old-price" id="prodOldPrice">₫250.000</div>
+            <div class="new-price" id="prodNewPrice">₫129.000</div>
+            <div class="discount-badge" id="prodDiscount">48% GIẢM</div>
+          </div>
+
+          <!-- Attributes -->
+          <div class="form-row">
+            <div class="form-label">Màu Sắc</div>
+            <div class="form-content">
+              <button
+                class="btn-attr active"
+                onclick="selectColor(this)"
+                data-color-key="xanh-dam"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=82"
+                />
+                Xanh Đậm
+              </button>
+              <button
+                class="btn-attr"
+                onclick="selectColor(this)"
+                data-color-key="xanh-nhat"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=82"
+                />
+                Xanh Nhạt
+              </button>
+              <button
+                class="btn-attr"
+                onclick="selectColor(this)"
+                data-color-key="den"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1584370848010-d7fe6bc767eb?w=82"
+                />
+                Đen
+              </button>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="form-row">
+            <div class="form-label">Số Lượng</div>
+            <div class="form-content">
+              <div class="qty-control">
+                <button class="qty-btn" id="btnMinus" onclick="updateQty(-1)">
+                  -
+                </button>
+                <input type="text" class="qty-input" id="qtyInput" value="1" />
+                <button class="qty-btn" id="btnPlus" onclick="updateQty(1)">
+                  +
+                </button>
+              </div>
+              <div
+                id="tonKho"
+                style="color: var(--text-gray); margin-left: 15px"
+              >
+                1234 sản phẩm có sẵn
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-group">
+            <button class="btn-add-cart" onclick="addToCart()">
+              <i class="fas fa-cart-plus" style="font-size: 18px"></i>
+              Thêm Vào Giỏ Hàng
+            </button>
+            <a href="../HTML/pay.html">
+              <button class="btn-buy-now">Mua Ngay</button>
+            </a>
+          </div>
+
+          <!-- Shopee Guarantee -->
+          <div class="main-description" style="margin-top: 40px">
+            <h1>Mô Tả Sản Phẩm</h1>
+            <p id="description" style="margin: 10px 0px 0px 20px">
+              flkdsafjasdklfjasdlkfjasdlkfjskladfjadlskfjasdklfjkl
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOP INFO PANEL -->
+      <!-- <div class="box shop-info-wrap">
+            <div class="shop-left">
+                <div class="shop-avatar">
+                    <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=78">
+                    <span class="shop-mall-badge" style="background: var(--shopee-orange);">Yêu Thích+</span>
+                </div>
+                <div class="shop-name-col">
+                    <div class="shop-name">ONKIM SHOP - THỜI TRANG NỮ</div>
+                    <div class="shop-status">Online 5 giờ trước</div>
+                    <div class="shop-actions">
+                        <button class="btn-chat"><i class="fas fa-comments"></i> Chat Ngay</button>
+                        <button class="btn-view-shop"><i class="fas fa-store"></i> Xem Shop</button>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-right">
+                <div>Đánh Giá <span class="shop-stat-val">101,8k</span></div>
+                <div>Tỉ Lệ Phản Hồi <span class="shop-stat-val">99%</span></div>
+                <div>Tham Gia <span class="shop-stat-val">4 năm trước</span></div>
+                <div>Sản Phẩm <span class="shop-stat-val">1,2k</span></div>
+                <div>Thời Gian Phản Hồi <span class="shop-stat-val">trong vài giờ</span></div>
+                <div>Người Theo Dõi <span class="shop-stat-val">342,3k</span></div>
+            </div>
+        </div> -->
+
+      <!-- PRODUCT DETAILS SECTION -->
+      <!-- <div class="details-wrapper">
+            <div class="main-col">
+                <div class="box details-container">
+                    <div class="section-header">Chi tiết sản phẩm</div>
+                    <div class="detail-row">
+                        <div class="detail-label">Danh Mục</div>
+                        <div class="detail-val">
+                            <a href="#">Shopee</a> &gt; <a href="#">Thời Trang Nữ</a> &gt; <a href="#">Quần Jeans</a>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Thương hiệu</div>
+                        <div class="detail-val">No Brand</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Chiều dài quần</div>
+                        <div class="detail-val">Chiều dài đầy đủ</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Kiểu dáng</div>
+                        <div class="detail-val" id="detailStyle">Ống suông rộng</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Chất liệu</div>
+                        <div class="detail-val" id="detailMaterial">Denim</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Kho hàng</div>
+                        <div class="detail-val" id="detailStock">1234</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Gửi từ</div>
+                        <div class="detail-val">Hà Nội</div>
+                    </div>
+
+                    <div class="section-header" style="margin-top: 40px;">Mô tả sản phẩm</div>
+                    <div class="desc-content" id="prodDesc">Kích thước Quần jean ống rộng đứng Unisex:
+                        - Size S: Cân nặng 40-45kg, Cao 1m50 - 1m55, Eo 60-64cm
+                        - Size M: Cân nặng 46-50kg, Cao 1m53 - 1m58, Eo 65-68cm
+                        - Size L: Cân nặng 51-55kg, Cao 1m55 - 1m62, Eo 69-73cm
+                        - Size XL: Cân nặng 56-60kg, Cao 1m58 - 1m65, Eo 74-78cm
+
+                        🌟 THÔNG TIN SẢN PHẨM:
+                        - Quần jean ống rộng đứng phong cách retro cực chất.
+                        - Chất liệu: Denim dày dặn, thấm hút mồ hôi tốt, không bị nhăn, xù.
+                        - Đường may sắc nét, chuẩn form, dễ phối đồ với áo thun, croptop, áo sơ mi...
+                        - Phù hợp đi chơi, đi học, dạo phố.
+
+                        📌 HƯỚNG DẪN BẢO QUẢN:
+                        - Giặt máy ở chế độ nhẹ, ưu tiên giặt tay.
+                        - Không sử dụng thuốc tẩy.
+                        - Phơi trong bóng râm.
+
+                        🛡 CHÍNH SÁCH ĐỔI TRẢ CHỈ CÓ TẠI SHOP:
+                        - Cam kết đổi trả hàng miễn phí nếu hàng bị lỗi do nhà sản xuất.
+                        - Hỗ trợ đổi size nếu mặc không vừa.</div>
+                </div>
+            </div> -->
+
+      <!-- RIGHT SIDEBAR: TOP SELLING -->
+      <!-- <div class="sidebar">
+                <div class="box" style="padding: 15px;">
+                    <div class="sidebar-title">Top Sản Phẩm Bán Chạy</div>
+
+                    <a href="#" class="sidebar-item">
+                        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200">
+                        <div class="sidebar-item-title">Quần jeans boyfriend ống túm sành điệu</div>
+                        <div class="sidebar-item-price">₫159.000</div>
+                    </a>
+
+                    <a href="#" class="sidebar-item">
+                     
+                        <div class="sidebar-item-title">Quần short jeans nữ xanh nhạt basic</div>
+                        <div class="sidebar-item-price">₫99.000</div>
+                    </a>
+
+                    <a href="#" class="sidebar-item">
+                        <img src="https://images.unsplash.com/photo-1623330188314-8f4645626731?w=200">
+                        <div class="sidebar-item-title">Quần jean nữ ống loe cạp cao tôn dáng</div>
+                        <div class="sidebar-item-price">₫189.000</div>
+                    </a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div
+        class="container"
+        style="text-align: center; color: rgba(0, 0, 0, 0.54); font-size: 14px"
+      >
+        <p>Shopee UI Clone - Giao diện được thiết kế để học tập & tham khảo.</p>
+      </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="cartToast">
+      <div class="toast-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="toast-msg">
+        <div class="toast-title">Đã thêm vào Giỏ hàng!</div>
+        <div class="toast-sub" id="toastSub">
+          1 sản phẩm được thêm thành công.
+        </div>
+      </div>
+      <span class="toast-close" onclick="hideToast()">&#x2715;</span>
+    </div>
+
+    <script src="../JS/detailproduct.js"></script>
+  </body>
+</html>
