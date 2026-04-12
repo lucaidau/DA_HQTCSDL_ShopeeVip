@@ -9,7 +9,6 @@ CREATE PROCEDURE sp_DangKi
 AS
     BEGIN
         SET NOCOUNT ON;
-
         IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap)
         BEGIN
             RAISERROR(N'Tên đăng nhập đã tồn tại!!',16,1);
@@ -43,6 +42,12 @@ AS
         END TRY
 
         BEGIN CATCH
-            ROLLBACK TRANSACTION;
+            IF @@TRANCOUNT > 0
+            BEGIN
+                ROLLBACK TRANSACTION;
+                DECLARE @ERR NVARCHAR(100) = ERROR_MESSAGE();
+
+                THROW 50000,@ERR,1;
+            END  
         END CATCH
     END

@@ -1,5 +1,3 @@
-
-
 const toggleAuth = () => {
   const loginBox = document.getElementById("login-box");
   const registerBox = document.getElementById("register-box");
@@ -37,7 +35,7 @@ const login = () => {
   const usernameInput = document.getElementById("login-username");
   const passwordInput = document.getElementById("login-password");
 
-  fetch(`${CONFIG.API_URL}`, {
+  fetch("http://localhost:3000", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,49 +63,63 @@ const login = () => {
 document.querySelector(".login-btn .btn-main").addEventListener("click", login);
 
 const register = () => {
-
-
-  const userName = document.getElementById("reg-username").value;
-  const fullName = document.getElementById("reg-name").value;
-  const password = document.getElementById("reg-pass").value;
-  const phone = document.getElementById("reg-phone").value;
-  const email = document.getElementById("reg-mail").value;
-  const role = document.getElementById("reg-role").value;
-  const gender = document.getElementById("reg-gender").value;
+  const userName = document.getElementById("reg-username");
+  const fullName = document.getElementById("reg-name");
+  const password = document.getElementById("reg-pass");
+  const phone = document.getElementById("reg-phone");
+  const email = document.getElementById("reg-mail");
+  const role = document.getElementById("reg-role");
+  const gender = document.getElementById("reg-gender");
 
   const registerBox = document.getElementById("register-box");
   const loginBox = document.getElementById("login-box");
 
   const regData = {
-    name: fullName,
-    username: userName,
-    email: email,
-    phone: phone,
-    gender: gender,
-    password: password,
-    role: role,
+    name: fullName.value,
+    username: userName.value,
+    email: email.value,
+    phone: phone.value,
+    gender: gender.value,
+    password: password.value,
+    role: role.value,
   };
 
-  fetch(`${CONFIG.API_URL}/dangKi`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(regData),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        for (let i = 0; i < 5; i++) {
-          registerBox[i].style.borderColor = "red";
-        }
-        throw new Error("Tài khoản đã tồn tại!");
-      }
-      registerBox.style.display = "none";
-      loginBox.style.display = "block";
-      return res.json();
+  const validate =
+    fullName.value === "" ||
+    userName.value === "" ||
+    email.value === "" ||
+    phone.value === "" ||
+    password.value === "";
+
+  if (validate) {
+    for (let i = 0; i < 5; i++) {
+      registerBox[i].style.borderColor = "red";
+    }
+    console.log("Đăng kí không hợp lệ!");
+  } else {
+    fetch(`http://localhost:3000/dangKi`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(regData),
     })
-    .then((data) => console.log("Đăng kí thành công!", data))
-    .catch((err) => {
-      console.log("Lỗi Server!", err);
-    });
+      .then((res) => {
+        if (!res.ok) {
+          for (let i = 0; i < 5; i++) {
+            registerBox[i].style.borderColor = "red";
+          }
+          throw new Error("Tài khoản đã tồn tại!");
+        }
+        registerBox.style.display = "none";
+        loginBox.style.display = "block";
+        return res.json();
+      })
+      .then((data) => console.log("Đăng kí thành công!", data))
+      .catch((err) => {
+        console.log("Lỗi Server!", err);
+      });
+
+
+  }
 };

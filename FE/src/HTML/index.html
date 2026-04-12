@@ -8,14 +8,14 @@
   </head>
   <body>
     <div id="auth-overlay">
-      <form class="auth-box" id="login-box">
+      <form class="auth-box" onsubmit="event.preventDefault();" id="login-box">
         <h2>Đăng nhập</h2>
         <div class="box">
           <input type="text" id="login-username" placeholder="Tên đăng nhập" />
           <input type="password" id="login-password" placeholder="Mật khẩu" />
 
           <div class="login-btn">
-            <a href="#" type="button" class="btn-main"> Đăng nhập </a>
+            <button type="submit" class="btn-main"> Đăng nhập </button>
           </div>
         </div>
 
@@ -25,7 +25,7 @@
         </div>
       </form>
 
-      <form class="auth-box" id="register-box" style="display: none">
+      <form class="auth-box"  onsubmit="event.preventDefault();" id="register-box" style="display: none">
         <h2>Đăng ký</h2>
         <input type="text" id="reg-username" placeholder="Tên đăng nhập" />
         <input type="text" id="reg-name" placeholder="Họ và Tên" />
@@ -68,7 +68,7 @@
           </select>
         </div>
 
-        <button type="button" class="btn-main" onclick="register()">
+        <button type="submit" class="btn-main" onclick="register()">
           Đăng ký ngay
         </button>
         <div class="divider">HOẶC</div>
