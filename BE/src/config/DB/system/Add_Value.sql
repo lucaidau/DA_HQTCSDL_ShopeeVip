@@ -57,4 +57,3 @@ INSERT INTO DON_HANG (IDNguoiMua) VALUES (1);
 INSERT INTO CHI_TIET_DON_HANG (IDDonHang, IDBanSao, TongTien, GhiChu, SoLuong, TrangThai)
 VALUES 
 (1, 1, 25000000, N'Giao hàng nhanh nhé', 1, 1)
-

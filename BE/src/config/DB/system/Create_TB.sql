@@ -35,7 +35,7 @@ CREATE TABLE SAN_PHAM (
     IDShop INT FOREIGN KEY REFERENCES SHOP(IDShop),
     IDDanhMuc INT FOREIGN KEY REFERENCES DANH_MUC(IDDanhMuc),
     TenSanPham NVARCHAR(50),
-    MoTa NVARCHAR(200),
+    MoTa NVARCHAR(MAX),
     HinhAnh VARCHAR(255)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE BAN_SAO_SAN_PHAM (
     SoLuongTonKho INT,
     GiaBan DECIMAL(18,2),
     BienThe NVARCHAR(50), -- Ví dụ: Màu Đỏ, Size L
-    HinhAnh VARCHAR(255),
+    HinhAnh VARCHAR(MAX),
     TrangThai INT
 );
 

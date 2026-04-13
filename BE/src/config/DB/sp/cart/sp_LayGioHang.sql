@@ -16,5 +16,5 @@ AS
         FROM GIO_HANG gh
         JOIN BAN_SAO_SAN_PHAM bs ON gh.IDBanSao = bs.IDBanSao
         JOIN SAN_PHAM sp ON sp.IDSanPham = bs.IDSanPham
-        WHERE gh.IDNguoiMua = @IDNguoiDung
+        WHERE gh.IDTaiKhoan = @IDNguoiDung
     END

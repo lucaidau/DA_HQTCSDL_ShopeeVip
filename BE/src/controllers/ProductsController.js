@@ -41,7 +41,7 @@ class ProductsController {
       //   return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
       // }
 
-      return res.status(200).json({ san_pham: result.recordset[0] });
+      return res.status(200).json({ san_pham: result.recordsets });
     } catch (error) {
       console.log("Err: ", error);
       return res.status(500).json({ message: "Lỗi Server!" });

@@ -4,6 +4,8 @@ class CartController {
   //[GET] /giohang/:id
   async layGioHang(req, res) {
     try {
+      console.log("Đã vào API");
+      
       const userID = parseInt(req.params.id);
       const pool = await poolPromise;
       const result = await pool

@@ -7,12 +7,12 @@ AS
         IF @SoLuongMoi <= 0
             BEGIN
                 DELETE FROM GIO_HANG
-                WHERE IDBanSao = @IDBanSao AND IDNguoiMua = @IDNguoiMua
+                WHERE IDBanSao = @IDBanSao AND IDTaiKhoan = @IDNguoiMua
             END
         ELSE
             BEGIN
                 UPDATE GIO_HANG
                 SET SoLuongMua = @SoLuongMoi, NgayThem = GETDATE()
-                WHERE @IDNguoiMua = IDNguoiMua AND IDBanSao = @IDBanSao
+                WHERE @IDNguoiMua = IDTaiKhoan AND IDBanSao = @IDBanSao
             END
     END
