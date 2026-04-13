@@ -52,8 +52,12 @@ const login = () => {
     })
     .then((data) => {
       console.log("Đăng nhập thành công: ", data);
-      localStorage.setItem("userID", data.user.IDTaiKhoan);
-      window.location = "home.html";
+      localStorage.setItem("user", data.user);
+  
+      if(data.user.IDShop === null)
+        window.location="home.html";
+      else
+        window.location = "kenhbanhang.html";
     })
     .catch((err) => {
       console.log("Lỗi hệ thống: ", err);
