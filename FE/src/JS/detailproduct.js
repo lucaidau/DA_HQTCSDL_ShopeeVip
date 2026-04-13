@@ -63,6 +63,7 @@ let qty = parseInt(document.getElementById("qtyInput").value) || 1;
 const updateQty = (sigma)=>
 {
   qty += sigma;
+  if(qty <1) qty = 1;
   
   qtyTxt.value = qty;
 }

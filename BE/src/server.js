@@ -4,11 +4,10 @@ const port = 3000;
 const cors = require("cors");
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors()
-);
+
 
 // Router
 const route = require("./routers/index");
