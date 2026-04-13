@@ -11,18 +11,15 @@ CREATE TABLE TAI_KHOAN (
 
 -- 2. Bảng Người Mua
 CREATE TABLE NGUOI_MUA (
-    IDNguoiMua INT IDENTITY(1,1) PRIMARY KEY,
-    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan),
+    IDNguoiMua INT IDENTITY(1,1) PRIMARY KEY ,
+    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
     TrangThai INT
 );
-
-ALTER TABLE NGUOI_MUA
-ADD CONSTRAINT U_IDTaiKhoan UNIQUE(IDTaiKhoan)
 
 -- 3. Bảng Shop
 CREATE TABLE SHOP (
     IDShop INT IDENTITY(1,1) PRIMARY KEY,
-    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan),
+    IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
     TrangThai INT
 );
 
@@ -67,16 +64,17 @@ CREATE TABLE CHI_TIET_DON_HANG (
     TongTien DECIMAL(18,2), -- Nên hiểu là Giá tại thời điểm mua
     GhiChu NVARCHAR(200),
     SoLuong INT,
-    TrangThai INT
+    TrangThai INT,
+    GiaTien DECIMAL(18,2)
 );
 
 -- 9. Bảng Giỏ Hàng (PK phức hợp theo ảnh của bạn)
 CREATE TABLE GIO_HANG (
-    IDNguoiMua INT,
+    IDTaiKhoan INT,
     IDBanSao INT,
     SoLuongMua INT,
     NgayThem DATETIME DEFAULT GETDATE(),
-    PRIMARY KEY (IDNguoiMua, IDBanSao),
-    FOREIGN KEY (IDNguoiMua) REFERENCES NGUOI_MUA(IDNguoiMua),
+    PRIMARY KEY (IDTaiKhoan, IDBanSao),
+    FOREIGN KEY (IDTaiKhoan) REFERENCES TAI_KHOAN(IDTaiKhoan),
     FOREIGN KEY (IDBanSao) REFERENCES BAN_SAO_SAN_PHAM(IDBanSao)
 );
