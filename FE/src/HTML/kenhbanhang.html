@@ -1,209 +1,312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kênh Người Bán Shopee - Dashboard</title>
-    <link rel="stylesheet" href="/FE/src/CSS/kenhbanhang.css">
-</head>
+    <link rel="stylesheet" href="/FE/src/CSS/kenhbanhang.css" />
+  </head>
 
-<body>
-
+  <body>
     <header class="header">
-        <div class="header-left">
-            <a href="#" class="logo-text">Shopee</a>
-            <span class="header-title">Đăng ký trở thành Người bán Shopee</span>
+      <div class="header-left">
+        <a href="#" class="logo-text">Shopee</a>
+        <span class="header-title">Đăng ký trở thành Người bán Shopee</span>
+      </div>
+      <div class="header-right">
+        <div class="icon-btn" onclick="togglePanel('chat-panel')">💬 Chat</div>
+        <div class="icon-btn" onclick="togglePanel('noti-panel')">
+          🔔 Thông báo
         </div>
-        <div class="header-right">
-            <div class="icon-btn" onclick="togglePanel('chat-panel')">
-                💬 Chat
-            </div>
-            <div class="icon-btn" onclick="togglePanel('noti-panel')">
-                🔔 Thông báo
-            </div>
-            <div class="icon-btn" onclick="togglePanel('user-panel')">
-                <div class="user-avatar">👤</div> 8swm6o_n4c ▾
-            </div>
-
-            <div id="user-panel" class="panel">
-                <div class="user-panel-header">
-                    <div class="avatar-large"></div>
-                    <strong>8swm6o_n4c</strong>
-                </div>
-                <div class="dropdown-item" onclick="location.reload()">↪ Đăng xuất</div>
-            </div>
-
-            <div id="noti-panel" class="panel">
-                <div class="noti-header">
-                    <span onclick="toggleNotiTab(this)">Cập nhật Shopee</span>
-                    <span onclick="toggleNotiTab(this)">Marketing</span>
-                    <span class="active" onclick="toggleNotiTab(this)">Shop</span>
-                </div>
-                <div class="noti-pills" id="noti-pills-container">
-                    <div class="noti-pill active" onclick="togglePill(this)">Tất cả</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Đơn hàng</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Đánh giá</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Trả hàng/Hoàn tiền</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Sản phẩm</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Số dư TK Shopee</div>
-                    <div class="noti-pill" onclick="togglePill(this)">Hiệu quả hoạt động</div>
-                </div>
-                <div class="noti-body">
-                    <div class="noti-icon-empty">🔕</div>
-                    <p>Bạn không nhận được bất kỳ thông báo nào</p>
-                </div>
-            </div>
-
-            <div id="chat-panel" class="panel">
-                <div class="chat-header">
-                    <strong style="color: #ee4d2d;">Chat</strong>
-                    <span style="font-size: 12px; color: #0055aa; cursor:pointer;">Webchat >></span>
-                </div>
-                <div class="chat-tabs">
-                    <span class="active" onclick="toggleChatTab(this)">Chat vs Khách hàng</span>
-                    <span onclick="toggleChatTab(this)">Chat với KOL</span>
-                </div>
-                <div class="noti-body" style="padding: 30px 20px;">Không Tìm Thấy Cuộc Hội Thoại Nào.</div>
-            </div>
+        <div class="icon-btn" onclick="togglePanel('user-panel')">
+          <div class="user-avatar">👤</div>
+          8swm6o_n4c ▾
         </div>
+
+        <div id="user-panel" class="panel">
+          <div class="user-panel-header">
+            <div class="avatar-large"></div>
+            <strong>8swm6o_n4c</strong>
+          </div>
+          <div class="dropdown-item" onclick="location.reload()">
+            ↪ Đăng xuất
+          </div>
+        </div>
+
+        <div id="noti-panel" class="panel">
+          <div class="noti-header">
+            <span onclick="toggleNotiTab(this)">Cập nhật Shopee</span>
+            <span onclick="toggleNotiTab(this)">Marketing</span>
+            <span class="active" onclick="toggleNotiTab(this)">Shop</span>
+          </div>
+          <div class="noti-pills" id="noti-pills-container">
+            <div class="noti-pill active" onclick="togglePill(this)">
+              Tất cả
+            </div>
+            <div class="noti-pill" onclick="togglePill(this)">Đơn hàng</div>
+            <div class="noti-pill" onclick="togglePill(this)">Đánh giá</div>
+            <div class="noti-pill" onclick="togglePill(this)">
+              Trả hàng/Hoàn tiền
+            </div>
+            <div class="noti-pill" onclick="togglePill(this)">Sản phẩm</div>
+            <div class="noti-pill" onclick="togglePill(this)">
+              Số dư TK Shopee
+            </div>
+            <div class="noti-pill" onclick="togglePill(this)">
+              Hiệu quả hoạt động
+            </div>
+          </div>
+          <div class="noti-body">
+            <div class="noti-icon-empty">🔕</div>
+            <p>Bạn không nhận được bất kỳ thông báo nào</p>
+          </div>
+        </div>
+
+        <div id="chat-panel" class="panel">
+          <div class="chat-header">
+            <strong style="color: #ee4d2d">Chat</strong>
+            <span style="font-size: 12px; color: #0055aa; cursor: pointer"
+              >Webchat >></span
+            >
+          </div>
+          <div class="chat-tabs">
+            <span class="active" onclick="toggleChatTab(this)"
+              >Chat vs Khách hàng</span
+            >
+            <span onclick="toggleChatTab(this)">Chat với KOL</span>
+          </div>
+          <div class="noti-body" style="padding: 30px 20px">
+            Không Tìm Thấy Cuộc Hội Thoại Nào.
+          </div>
+        </div>
+      </div>
     </header>
 
     <div class="main-content">
-        <div id="welcome-section">
-            
-            <h2>Chào mừng đến với Shopee!</h2>
-            <p style="color: #888; margin: 15px 0 30px 0;">Vui lòng cung cấp thông tin để thành lập tài khoản người bán.
+      <div id="welcome-section">
+        <h2>Chào mừng đến với Shopee!</h2>
+        <p style="color: #888; margin: 15px 0 30px 0">
+          Vui lòng cung cấp thông tin để thành lập tài khoản người bán.
+        </p>
+        <button class="btn-primary" onclick="showForm()">
+          Bắt đầu đăng ký
+        </button>
+      </div>
+
+      <div id="form-section">
+        <div class="stepper">
+          <div class="step active">
+            <div class="step-dot"></div>
+            Thông tin Shop
+          </div>
+          <div class="step">
+            <div class="step-dot"></div>
+            Cài đặt vận chuyển
+          </div>
+          <div class="step">
+            <div class="step-dot"></div>
+            Hoàn tất
+          </div>
+        </div>
+
+        <form onsubmit="return completeRegistration(event);">
+          <div class="form-row">
+            <label class="form-label"
+              ><span style="color: red">*</span> Tên Shop</label
+            >
+            <div class="form-input-wrap">
+              <input
+                type="text"
+                id="shop-name-input"
+                class="form-input"
+                value="8swm6o_n4c"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label"
+              ><span style="color: red">*</span> Địa chỉ lấy hàng</label
+            >
+            <div class="form-input-wrap">
+              <button type="button" class="btn-outline" onclick="openModal()">
+                + Thêm
+              </button>
+              <span
+                id="saved-address"
+                style="
+                  margin-left: 10px;
+                  color: #2e7d32;
+                  font-size: 14px;
+                  display: none;
+                "
+                >✓ Đã lưu địa chỉ</span
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label"
+              ><span style="color: red">*</span> Số điện thoại</label
+            >
+            <div class="form-input-wrap">
+              <input
+                type="tel"
+                id="phone-input"
+                class="form-input"
+                placeholder="Nhập số điện thoại..."
+                required
+              />
+            </div>
+          </div>
+
+          <div style="text-align: right; margin-top: 40px">
+            <button type="submit" class="btn-primary">
+              Tiếp theo (Hoàn tất)
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="dashboard-section">
+        <div class="dash-header">
+          <span style="color: #666">Cập nhật hôm nay</span>
+        </div>
+
+        <div class="revenue-container">
+          <div class="stat-card">
+            <h3>Tổng Doanh Thu (VNĐ)</h3>
+            <div class="revenue-amount" id="revenue-text">0</div>
+            <p style="color: #888; font-size: 14px">
+              Đã hoàn thành <b id="total-orders">0</b> đơn hàng
             </p>
-            <button class="btn-primary" onclick="showForm()">Bắt đầu đăng ký</button>
+          </div>
         </div>
 
-        <div id="form-section">
-            <div class="stepper">
-                <div class="step active">
-                    <div class="step-dot"></div>Thông tin Shop
-                </div>
-                <div class="step">
-                    <div class="step-dot"></div>Cài đặt vận chuyển
-                </div>
-                <div class="step">
-                    <div class="step-dot"></div>Hoàn tất
-                </div>
+        <div class="order-system">
+          <div class="order-controls">
+            <h3>Quản Lý Đơn Hàng</h3>
+            <button class="btn-outline" onclick="generateRandomOrder()">
+              + Nhận Đơn Khách Đặt
+            </button>
+          </div>
+          <div class="order-list" id="order-list-container">
+            <div style="text-align: center; color: #999; padding: 20px">
+              Chưa có đơn hàng nào chờ xử lý
             </div>
-
-            <form onsubmit="return completeRegistration(event)">
-                <div class="form-row">
-                    <label class="form-label"><span style="color:red">*</span> Tên Shop</label>
-                    <div class="form-input-wrap">
-                        <input type="text" id="shop-name-input" class="form-input" value="8swm6o_n4c" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <label class="form-label"><span style="color:red">*</span> Địa chỉ lấy hàng</label>
-                    <div class="form-input-wrap">
-                        <button type="button" class="btn-outline" onclick="openModal()">+ Thêm</button>
-                        <span id="saved-address"
-                            style="margin-left: 10px; color: #2e7d32; font-size: 14px; display: none;">✓ Đã lưu địa
-                            chỉ</span>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <label class="form-label"><span style="color:red">*</span> Số điện thoại</label>
-                    <div class="form-input-wrap">
-                        <input type="tel" id="phone-input" class="form-input" placeholder="Nhập số điện thoại..."
-                            required>
-                    </div>
-                </div>
-
-                <div style="text-align: right; margin-top: 40px;">
-                    <button type="submit" class="btn-primary">Tiếp theo (Hoàn tất)</button>
-                </div>
-            </form>
+          </div>
         </div>
-
-        <div id="dashboard-section">
-            <div class="dash-header">
-                <span style="color: #666;">Cập nhật hôm nay</span>
-            </div>
-
-            <div class="revenue-container">
-
-
-                <div class="stat-card">
-                    <h3>Tổng Doanh Thu (VNĐ)</h3>
-                    <div class="revenue-amount" id="revenue-text">0</div>
-                    <p style="color:#888; font-size:14px;">Đã hoàn thành <b id="total-orders">0</b> đơn hàng</p>
-                </div>
-            </div>
-
-            <div class="order-system">
-                <div class="order-controls">
-                    <h3>Quản Lý Đơn Hàng</h3>
-                    <button class="btn-outline" onclick="generateRandomOrder()">+ Nhận Đơn Khách Đặt</button>
-                </div>
-                <div class="order-list" id="order-list-container">
-                    <div style="text-align:center; color:#999; padding:20px;">Chưa có đơn hàng nào chờ xử lý</div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
 
     <div id="address-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="font-weight: 500;">Thêm Địa Chỉ Mới</h3>
-                <span style="cursor: pointer; font-size: 24px; color: #999;" onclick="closeModal()">×</span>
-            </div>
-            <div class="modal-body">
-                <div class="input-group-row">
-                    <div class="input-group-col">
-                        <label style="font-size: 13px; color: #555; margin-bottom: 5px;">Họ & Tên</label>
-                        <input type="text" id="address-name" class="form-input" placeholder="Nhập vào">
-                    </div>
-                    <div class="input-group-col">
-                        <label style="font-size: 13px; color: #555; margin-bottom: 5px;">Số điện thoại</label>
-                        <input type="text" id="address-phone" class="form-input" placeholder="Nhập vào">
-                    </div>
-                </div>
-
-                <div class="input-group-col" style="margin-bottom: 15px; position: relative;">
-                    <label style="font-size: 13px; color: #555; margin-bottom: 5px;">Tỉnh/Thành
-                        phố/Quận/Huyện/Phường/Xã</label>
-                    <div class="loc-selector-box" onclick="toggleLocationDropdown(event)">
-                        <span id="loc-selected-text" style="color:#999;">Chọn</span>
-                        <span>▾</span>
-                    </div>
-
-                    <div class="loc-dropdown-container" id="loc-dropdown" onclick="event.stopPropagation()">
-                        <div class="loc-tabs">
-                            <div class="loc-tab active" id="tab-province" onclick="clickLocTab('p')">Tỉnh/Thành phố
-                            </div>
-                            <div class="loc-tab" id="tab-district" onclick="clickLocTab('d')">Quận/Huyện</div>
-                            <div class="loc-tab" id="tab-ward" onclick="clickLocTab('w')">Phường/Xã</div>
-                        </div>
-                        <div class="loc-list" id="loc-list-items">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group-col">
-                    <label style="font-size: 13px; color: #555; margin-bottom: 5px;">Địa chỉ chi tiết</label>
-                    <textarea id="address-detail" class="form-input" placeholder="Số nhà, tên đường.v.v.."
-                        style="height: 80px; resize: none;"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-outline" style="margin-right: 10px; border-color: #ddd; color: #555;"
-                    onclick="closeModal()">Hủy</button>
-                <button type="button" class="btn-primary" onclick="saveAddress()">Lưu</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="font-weight: 500">Thêm Địa Chỉ Mới</h3>
+          <span
+            style="cursor: pointer; font-size: 24px; color: #999"
+            onclick="closeModal()"
+            >×</span
+          >
         </div>
+        <div class="modal-body">
+          <div class="input-group-row">
+            <div class="input-group-col">
+              <label style="font-size: 13px; color: #555; margin-bottom: 5px"
+                >Họ & Tên</label
+              >
+              <input
+                type="text"
+                id="address-name"
+                class="form-input"
+                placeholder="Nhập vào"
+              />
+            </div>
+            <div class="input-group-col">
+              <label style="font-size: 13px; color: #555; margin-bottom: 5px"
+                >Số điện thoại</label
+              >
+              <input
+                type="text"
+                id="address-phone"
+                class="form-input"
+                placeholder="Nhập vào"
+              />
+            </div>
+          </div>
+
+          <div
+            class="input-group-col"
+            style="margin-bottom: 15px; position: relative"
+          >
+            <label style="font-size: 13px; color: #555; margin-bottom: 5px"
+              >Tỉnh/Thành phố/Quận/Huyện/Phường/Xã</label
+            >
+            <div
+              class="loc-selector-box"
+              onclick="toggleLocationDropdown(event)"
+            >
+              <span id="loc-selected-text" style="color: #999">Chọn</span>
+              <span>▾</span>
+            </div>
+
+            <div
+              class="loc-dropdown-container"
+              id="loc-dropdown"
+              onclick="event.stopPropagation()"
+            >
+              <div class="loc-tabs">
+                <div
+                  class="loc-tab active"
+                  id="tab-province"
+                  onclick="clickLocTab('p')"
+                >
+                  Tỉnh/Thành phố
+                </div>
+                <div
+                  class="loc-tab"
+                  id="tab-district"
+                  onclick="clickLocTab('d')"
+                >
+                  Quận/Huyện
+                </div>
+                <div class="loc-tab" id="tab-ward" onclick="clickLocTab('w')">
+                  Phường/Xã
+                </div>
+              </div>
+              <div class="loc-list" id="loc-list-items"></div>
+            </div>
+          </div>
+
+          <div class="input-group-col">
+            <label style="font-size: 13px; color: #555; margin-bottom: 5px"
+              >Địa chỉ chi tiết</label
+            >
+            <textarea
+              id="address-detail"
+              class="form-input"
+              placeholder="Số nhà, tên đường.v.v.."
+              style="height: 80px; resize: none"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-outline"
+            style="margin-right: 10px; border-color: #ddd; color: #555"
+            onclick="closeModal()"
+          >
+            Hủy
+          </button>
+          <button type="button" class="btn-primary" onclick="saveAddress()">
+            Lưu
+          </button>
+        </div>
+      </div>
     </div>
 
     <script src="/FE/src/JS/kenhbanhang.js"></script>
-</body>
-
+  </body>
 </html>

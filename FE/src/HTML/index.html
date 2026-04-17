@@ -8,14 +8,14 @@
   </head>
   <body>
     <div id="auth-overlay">
-      <form class="auth-box" onsubmit="event.preventDefault();" id="login-box">
+      <form class="auth-box" onsubmit="event.preventDefault()" id="login-box">
         <h2>Đăng nhập</h2>
         <div class="box">
           <input type="text" id="login-username" placeholder="Tên đăng nhập" />
           <input type="password" id="login-password" placeholder="Mật khẩu" />
 
           <div class="login-btn">
-            <button type="submit" class="btn-main"> Đăng nhập </button>
+            <button type="submit" class="btn-main">Đăng nhập</button>
           </div>
         </div>
 
@@ -25,7 +25,12 @@
         </div>
       </form>
 
-      <form class="auth-box"  onsubmit="event.preventDefault();" id="register-box" style="display: none">
+      <form
+        class="auth-box"
+        onsubmit="event.preventDefault()"
+        id="register-box"
+        style="display: none"
+      >
         <h2>Đăng ký</h2>
         <input type="text" id="reg-username" placeholder="Tên đăng nhập" />
         <input type="text" id="reg-name" placeholder="Họ và Tên" />
@@ -35,7 +40,8 @@
 
         <div class="gender-row">
           <span>Vai trò:</span>
-          <select id="reg-role"
+          <select
+            id="reg-role"
             style="
               padding: 6px 10px;
               border: 1px solid #dbdbdb;
@@ -53,7 +59,7 @@
         <div class="gender-row">
           <span>Giới tính:</span>
           <select
-          id="reg-gender"
+            id="reg-gender"
             style="
               padding: 6px 10px;
               border: 1px solid #dbdbdb;
