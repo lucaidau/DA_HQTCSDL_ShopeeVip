@@ -11,13 +11,13 @@
   z-index: 10001;
 }
 
-.box{
+.box {
   margin-right: 5%;
 }
 
-.login-btn{
+.login-btn {
   width: 100%;
-  
+
   background: #ee4d2d;
   color: white;
   border: none;
@@ -26,9 +26,8 @@
   text-transform: uppercase;
   margin-top: 10px;
   display: flex;
-
 }
-.auth-box .btn-main{
+.auth-box .btn-main {
   padding: 0%;
   text-align: center;
   text-decoration: none;

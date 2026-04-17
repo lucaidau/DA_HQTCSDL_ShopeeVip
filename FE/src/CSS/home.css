@@ -567,11 +567,11 @@ body {
 }
 
 .footer {
-        margin-top: 50px;
-        border-top: 4px solid var(--shopee-orange);
-        background: var(--white);
-        padding: 40px 10%;
-        text-align: center;
-        color: #666;
-        font-size: 14px;
-      }
+  margin-top: 50px;
+  border-top: 4px solid var(--shopee-orange);
+  background: var(--white);
+  padding: 40px 10%;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
