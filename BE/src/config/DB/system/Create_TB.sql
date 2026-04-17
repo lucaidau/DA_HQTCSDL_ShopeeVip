@@ -1,3 +1,5 @@
+USE ShopeeVipDB
+GO
 -- 1. Bảng Tài khoản
 CREATE TABLE TAI_KHOAN (
     IDTaiKhoan INT IDENTITY(1,1) PRIMARY KEY,

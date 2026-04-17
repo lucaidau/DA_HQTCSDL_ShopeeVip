@@ -13,7 +13,7 @@ AS
                 SELECT 1
                 FROM GIO_HANG gh 
                 JOIN BAN_SAO_SAN_PHAM bs ON bs.IDBanSao = gh.IDBanSao 
-                WHERE gh.IDNguoiMua = @IDNguoiMua AND gh.SoLuongMua > bs.SoLuongTonKho) 
+                WHERE gh.IDTaiKhoan = @IDNguoiMua AND gh.SoLuongMua > bs.SoLuongTonKho) 
 
                 BEGIN  
                     RAISERROR(N'Số lượng tồn kho không đủ!', 16,1);
@@ -39,18 +39,18 @@ AS
                             1
                         FROM BAN_SAO_SAN_PHAM bs
                         JOIN GIO_HANG gh ON bs.IDBanSao = gh.IDBanSao
-                        WHERE @IDNguoiMua = gh.IDNguoiMua AND gh.IDBanSao IN(SELECT value FROM STRING_SPLIT(@ListID, ','));
+                        WHERE @IDNguoiMua = gh.IDTaiKhoan AND gh.IDBanSao IN(SELECT value FROM STRING_SPLIT(@ListID, ','));
 
                     --4. Cập nhật tồn kho
                         UPDATE bs
                         SET bs.SoLuongTonKho = bs.SoLuongTonKho - gh.SoLuongMua
                         FROM BAN_SAO_SAN_PHAM bs
                         JOIN GIO_HANG gh ON gh.IDBanSao = bs.IDBanSao
-                        WHERE @IDNguoiMua = gh.IDNguoiMua AND gh.IDBanSao IN (SELECT value FROM STRING_SPLIT(@ListID, ','))
+                        WHERE @IDNguoiMua = gh.IDTaiKhoan AND gh.IDBanSao IN (SELECT value FROM STRING_SPLIT(@ListID, ','))
 
                     --5. Xóa các sản phẩm đã mua ra khỏi GIO_HANG
                         DELETE FROM GIO_HANG
-                        WHERE @IDNguoiMua = IDNguoiMua AND IDBanSao IN (SELECT value FROM STRING_SPLIT(@ListID,','))
+                        WHERE @IDNguoiMua = IDTaiKhoan AND IDBanSao IN (SELECT value FROM STRING_SPLIT(@ListID,','))
 
                         COMMIT TRANSACTION;
 
