@@ -7,7 +7,7 @@ const getProduct = async () => {
 
     data = dt.danhSachSanPham[0];
     console.log(dt);
-    
+
     renderItem();
   } catch (error) {
     console.error("Lỗi lấy sản phẩm");

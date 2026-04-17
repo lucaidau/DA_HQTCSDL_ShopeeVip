@@ -53,11 +53,9 @@ const login = () => {
     .then((data) => {
       console.log("Đăng nhập thành công: ", data);
       localStorage.setItem("user", data.user);
-  
-      if(data.user.IDShop === null)
-        window.location="home.html";
-      else
-        window.location = "kenhbanhang.html";
+
+      if (data.user.IDShop === null) window.location = "home.html";
+      else window.location = "kenhbanhang.html";
     })
     .catch((err) => {
       console.log("Lỗi hệ thống: ", err);
@@ -123,7 +121,5 @@ const register = () => {
       .catch((err) => {
         console.log("Lỗi Server!", err);
       });
-
-
   }
 };

@@ -165,26 +165,22 @@ const CreateCopyProduct = (detail) => {
   });
 
   let thumbList = document.getElementById("thumbList");
-  let htmlThumList = ""
+  let htmlThumList = "";
 
-  for(let i = 0; i < detail.length; i++)
-  {
-    htmlThumList += 
-    `
+  for (let i = 0; i < detail.length; i++) {
+    htmlThumList += `
       <img class="thumb-img" src="${detail[i].HinhAnh[1] || detail[i].HinhAnh[0]}">
-    `
+    `;
   }
   thumbList.innerHTML = htmlThumList;
 
   const mainImg = document.getElementById("mainImg");
   const allImg = thumbList.querySelectorAll(".thumb-img");
-  allImg.forEach(item=>{
-    item.addEventListener("click", function(e){
+  allImg.forEach((item) => {
+    item.addEventListener("click", function (e) {
       mainImg.src = this.src;
-    })
-  })
-
-
+    });
+  });
 };
 
 const updateUI = (detail) => {
