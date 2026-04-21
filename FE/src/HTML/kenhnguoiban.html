@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopee Kênh Người Bán - Tổng hợp</title>
+  <link rel="stylesheet" href="../CSS/kenhnguoiban.css" />
+  
+</head>
+<body>
+  <div class="top-orange-bar"></div>
+  <header class="header">
+    <div class="header-left">
+      <span class="logo-icon">🛍️</span>
+      <span class="logo-text">Shopee</span>
+      <span class="header-title">Kênh Người Bán</span>
+    </div>
+    <div class="header-right">
+      <div class="user-profile">
+        <img src="https://ui-avatars.com/api/?name=L+M&background=random" class="user-avatar" alt="Avatar" />
+        <span class="user-name">Lê Thị Mỹ</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-wrapper layout-container">
+    <main class="main-content">
+      <aside class="sidebar">
+        <a href="#" class="nav-link active" onclick="showTab('sodu-page', this)">Số Dư TK Shopee</a>
+        <a href="#" class="nav-link" onclick="showTab('tatcasp-page', this)">Tất Cả Sản Phẩm</a>
+        <a href="#" class="nav-link" onclick="showTab('themsp-page', this)">Thêm Sản Phẩm</a>
+        <a href="#" class="nav-link" onclick="showTab('trahang-page', this)">Trả Hàng/Hoàn Tiền</a>
+      </aside>
+      
+      <section id="sodu-page" class="page-section active">
+        <div class="page-title-section">
+          <h1>Số Dư TK Shopee</h1>
+          <p style="color: #666; margin-top: 8px; font-size: 14px;">Quản lý số dư và rút tiền về tài khoản ngân hàng của bạn</p>
+        </div>
+        <div class="panel balance-panel">
+          <div class="balance-info">
+            <div class="balance-title">Số dư hiện tại</div>
+            <div class="balance-amount" id="currentBalance">0 ₫</div>
+            <div class="balance-desc">Số tiền này có thể rút về tài khoản ngân hàng được liên kết.</div>
+          </div>
+          <div class="balance-action">
+            <button class="btn btn-primary btn-large" onclick="openWithdrawModal()">Yêu cầu Rút Tiền</button>
+            <button class="btn btn-secondary btn-large" onclick="alert('Chức năng thêm tài khoản ngân hàng đang phát triển!')">Tài khoản Ngân hàng</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="order-tabs" id="sodu-tabs">
+            <div class="tab-item active" data-type="all">Tất cả lịch sử</div>
+            <div class="tab-item" data-type="in">Tiền vào (Doanh thu)</div>
+            <div class="tab-item" data-type="out">Tiền ra (Rút tiền)</div>
+          </div>
+          <div class="filter-section">
+            <input type="text" id="searchInputSoDu" class="search-input" placeholder="Tìm kiếm theo Mã giao dịch hoặc Nội dung..." />
+            <button id="searchBtnSoDu" class="btn btn-secondary">Tìm kiếm</button>
+          </div>
+          <div class="transaction-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Mã giao dịch</th>
+                  <th>Nội dung</th>
+                  <th>Số tiền</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="transactionList"></tbody>
+            </table>
+            <div id="noDataMessage" style="display: none; text-align: center; padding: 40px; color: #888;">
+              Không có dữ liệu giao dịch.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tatcasp-page" class="page-section">
+        <div class="page-title-section">
+          <h1>Tất Cả Sản Phẩm</h1>
+        </div>
+        <div class="panel panel-controls">
+          <div class="controls-row">
+            <div class="control-item search-box">
+              <input id="searchInputTatCa" type="search" placeholder="Tìm tên sản phẩm/SKU" />
+            </div>
+            <div class="control-item select-box">
+              <label>Danh mục</label>
+              <select id="categorySelect">
+                <option value="">Danh mục</option>
+                <option value="Thời trang">Thời trang</option>
+                <option value="Giày dép">Giày dép</option>
+                <option value="Điện thoại">Điện thoại</option>
+                <option value="Phụ kiện">Phụ kiện</option>
+                <option value="Đồ gia dụng">Đồ gia dụng</option>
+              </select>
+            </div>
+            <div class="control-item select-box">
+              <label>Trạng thái</label>
+              <select id="statusSelect">
+                <option value="">Tất cả</option>
+                <option value="Đang bán">Đang bán</option>
+                <option value="Hết hàng">Hết hàng</option>
+                <option value="Ẩn">Ẩn</option>
+              </select>
+            </div>
+            <div class="control-item price-range">
+              <label>Giá</label>
+              <div class="price-inputs">
+                <input id="priceMin" type="number" min="0" placeholder="Từ" /><span>-</span><input id="priceMax" type="number" min="0" placeholder="Đến" />
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="showTab('themsp-page', document.querySelectorAll('.nav-link')[2])">+ Thêm Sản Phẩm</button>
+          </div>
+        </div>
+        <div class="panel panel-table">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll" /></th>
+                  <th>Hình ảnh</th>
+                  <th>Tên sản phẩm & SKU</th>
+                  <th>Giá bán</th>
+                  <th>Kho hàng</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </section>
+
+      <section id="themsp-page" class="page-section">
+        <div class="page-title-section">
+          <h1>Thêm Sản Phẩm</h1>
+        </div>
+        <div class="panel panel-add">
+          <form id="productForm" class="add-grid" onsubmit="return false;">
+            <div class="form-block">
+              <div class="form-card">
+                <div class="card-head"><h2>Thông tin cơ bản</h2></div>
+                <div class="form-group">
+                  <label for="productName">Tên sản phẩm <span>*</span></label>
+                  <input id="productName" type="text" placeholder="Nhập tên sản phẩm" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryInput">Ngành hàng <span>*</span></label>
+                  <select id="categoryInput">
+                    <option value="">Chọn ngành hàng</option>
+                    <option value="Thời trang">Thời trang</option>
+                    <option value="Giày dép">Giày dép</option>
+                    <option value="Điện thoại">Điện thoại</option>
+                    <option value="Phụ kiện">Phụ kiện</option>
+                    <option value="Đồ gia dụng">Đồ gia dụng</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="description">Mô tả sản phẩm <span>*</span></label>
+                  <textarea id="description" rows="5" placeholder="Nhập mô tả sản phẩm"></textarea>
+                </div>
+              </div>
+              <div class="form-card">
+                <div class="card-head"><h2>Thông tin bán hàng</h2></div>
+                <div class="form-group small-group">
+                  <label for="priceInput">Giá bán (đ)</label>
+                  <input id="priceInput" type="number" placeholder="Nhập giá bán" />
+                </div>
+                <div class="form-group small-group">
+                  <label for="stockInput">Kho hàng</label>
+                  <input id="stockInput" type="number" placeholder="Số lượng sản phẩm" />
+                </div>
+                <div class="section-subtitle" style="margin-top: 15px;">Vận chuyển</div>
+                <div class="form-group small-group">
+                  <label for="weightInput">Cân nặng (gram)</label>
+                  <input id="weightInput" type="number" placeholder="Nhập cân nặng" />
+                </div>
+                <div class="form-group small-group">
+                  <label for="shippingInput">Đơn vị vận chuyển</label>
+                  <input id="shippingInput" type="text" placeholder="Ví dụ: ShopeeExpress" />
+                </div>
+              </div>
+            </div>
+            <div class="media-block">
+              <div class="form-card">
+                <div class="card-head"><h2>Hình ảnh sản phẩm</h2></div>
+                <div class="upload-grid">
+                  <label class="upload-box"><span class="upload-icon">+</span><span class="upload-text">Tải lên</span><input class="file-input" type="file" accept="image/*" /></label>
+                  <label class="upload-box"><span class="upload-icon">+</span><span class="upload-text">Tải lên</span><input class="file-input" type="file" accept="image/*" /></label>
+                  <label class="upload-box"><span class="upload-icon">+</span><span class="upload-text">Tải lên</span><input class="file-input" type="file" accept="image/*" /></label>
+                </div>
+                <div class="help-note">Hỗ trợ jpg, jpeg, png, tối đa 2MB. Tỷ lệ khuyên dùng 1:1.</div>
+              </div>
+            </div>
+          </form>
+          <div class="action-row">
+            <button class="btn btn-secondary" onclick="showTab('tatcasp-page', document.querySelectorAll('.nav-link')[1])">Hủy</button>
+            <button id="saveBtn" class="btn btn-primary">Lưu sản phẩm</button>
+          </div>
+          <div id="formMessage" class="form-message"></div>
+        </div>
+      </section>
+
+      <section id="trahang-page" class="page-section">
+        <div class="page-title-section">
+          <h1>Trả Hàng / Hoàn Tiền</h1>
+        </div>
+        <div class="panel">
+          <div class="order-tabs" id="trahang-tabs">
+            <div class="tab-item active" data-type="all">Tất cả</div>
+            <div class="tab-item" data-type="pending">Chưa xử lý <span id="pendingCount" class="badge">0</span></div>
+            <div class="tab-item" data-type="refunded">Đã hoàn tiền</div>
+          </div>
+          <div class="filter-section">
+            <input type="text" id="searchInputTraHang" class="search-input" placeholder="Tìm tên người mua, mã đơn..." />
+            <button id="searchBtnTraHang" class="btn btn-secondary">Tìm kiếm</button>
+          </div>
+          <div id="orderListContainer" class="order-list-container" style="padding: 24px;"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="withdrawModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeWithdrawModal()">&times;</span>
+      <div class="modal-title">Yêu cầu Rút Tiền</div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Rút về tài khoản ngân hàng</label>
+          <select id="bankAccountSelect" class="form-control">
+            <option value="vcb">Vietcombank - **********1234 (Lê Thị Mỹ)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Số tiền muốn rút (VNĐ)</label>
+          <input type="number" id="withdrawAmount" class="form-control" placeholder="Nhập số tiền..." />
+          <p style="font-size: 12px; color: #666; margin-top: 5px;">Số dư khả dụng: <strong id="availableToWithdraw" style="color: #ff5722;">0 ₫</strong></p>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-secondary" onclick="closeWithdrawModal()">Hủy</button>
+        <button class="btn btn-primary" onclick="processWithdraw()">Xác nhận Rút</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoModalSoDu" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="document.getElementById('infoModalSoDu').classList.remove('show')">&times;</span>
+      <div class="modal-title">Chi Tiết Giao Dịch</div>
+      <div id="modalBodySoDu" class="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="infoModalTraHang" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="document.getElementById('infoModalTraHang').classList.remove('show')">&times;</span>
+      <div id="modalTitleTraHang" class="modal-title">Chi Tiết Yêu Cầu</div>
+      <div id="modalBodyTraHang" class="modal-body"></div>
+      <div class="modal-footer" style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <button id="confirmRefundBtn" class="btn btn-primary" style="display:none;" onclick="acceptRefund()">Xác nhận hoàn tiền</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/kenhnguoiban.js"></script>
+</body>
+</html>

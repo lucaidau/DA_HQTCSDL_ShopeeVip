@@ -1,0 +1,111 @@
+/* --- RESET & GLOBAL --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f2f3f7; color: #333; }
+a { text-decoration: none; color: inherit; }
+
+/* HEADER */
+.top-orange-bar { height: 4px; background-color: #ff5722; width: 100%; position: fixed; top: 0; left: 0; z-index: 100;}
+.header { background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; box-shadow: 0 1px 8px rgba(0,0,0,0.06); position: fixed; top: 4px; left: 0; width: 100%; z-index: 99;}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.logo-icon { font-size: 24px; }
+.logo-text { color: #ff5722; font-weight: 700; font-size: 20px; }
+.header-title { font-size: 16px; color: #333; border-left: 1px solid #ddd; padding-left: 12px; }
+.user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.user-avatar { width: 34px; height: 34px; border-radius: 50%; }
+
+/* LAYOUT & SIDEBAR */
+.layout-container { display: block; width: min(1300px, 100%); margin: 80px auto 40px auto; padding: 0 24px; }
+.sidebar { width: 100%; flex-shrink: 0; background: #fff; border-radius: 18px; padding: 0; box-shadow: 0 12px 40px rgba(0,0,0,0.05); height: auto; display: flex; margin-bottom: 20px; overflow-x: auto; }
+.nav-link { display: flex; align-items: center; justify-content: center; padding: 14px 24px; color: #555; font-weight: 500; border-bottom: 3px solid transparent; border-left: none; transition: 0.2s; white-space: nowrap; flex: 1; text-align: center; }
+.nav-link:hover, .nav-link.active { background: #fff4f1; color: #ff5722; border-bottom-color: #ff5722; border-left-color: transparent; }
+.main-content { flex: 1; min-width: 0; }
+
+/* SPA PAGE VIEW HIDE/SHOW */
+.page-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+.page-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* COMMON PANELS & BUTTONS */
+.page-title-section { background: #fff; border-radius: 18px; padding: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.page-title-section h1 { font-size: 24px; color: #222; }
+.panel { background: #fff; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.05); margin-bottom: 20px; overflow: hidden;}
+.btn { border: none; border-radius: 8px; padding: 0 20px; height: 40px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+.btn-large { height: 46px; font-size: 15px; padding: 0 30px; }
+.btn-primary { background: #ff5722; color: #fff; }
+.btn-secondary { background: #fff; color: #555; border: 1px solid #d9d9d9; }
+
+/* MODULE SỐ DƯ */
+.balance-panel { display: flex; padding: 40px 30px; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #fff 0%, #fff4f1 100%); border-left: 5px solid #ff5722; }
+.balance-info { flex: 1; }
+.balance-title { font-size: 16px; color: #555; margin-bottom: 10px; font-weight: 600; }
+.balance-amount { font-size: 38px; font-weight: bold; margin-bottom: 10px; color: #ff5722; }
+.balance-desc, .help-note { font-size: 13px; color: #666; }
+.order-tabs { display: flex; border-bottom: 1px solid #eee; background: #fff; }
+.tab-item { padding: 16px 24px; font-size: 14px; color: #555; cursor: pointer; font-weight: 500; position: relative;}
+.tab-item.active { color: #ff5722; }
+.tab-item.active::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #ff5722; }
+.filter-section { padding: 20px 24px; display: flex; gap: 12px; background: #fafafb; border-bottom: 1px solid #eee; }
+.search-input { flex: 1; height: 40px; padding: 0 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 14px; outline: none;}
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 16px 15px; text-align: left; font-size: 14px; border-bottom: 1px solid #eee; }
+.data-table th { background: #fafafb; color: #666; font-weight: 600; }
+.amount-in { color: #4caf50; font-weight: bold; }
+.amount-out { color: #f44336; font-weight: bold; }
+.status-label { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+.status-success { background: #e8f5e9; color: #4caf50; }
+.status-processing { background: #e3f2fd; color: #2196f3; }
+.action-link { color: #2196f3; font-weight: 500; cursor: pointer; }
+
+/* MODULE TẤT CẢ SẢN PHẨM */
+.controls-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 16px; align-items: end; padding: 20px 24px;}
+.control-item { display: flex; flex-direction: column; gap: 8px; }
+.control-item label { font-size: 13px; color: #777; }
+.control-item input, .control-item select { height: 44px; border: 1px solid #ddd; border-radius: 10px; padding: 0 14px; font-size: 14px; }
+.price-inputs { display: flex; align-items: center; gap: 8px; }
+.price-inputs input { width: 100%; }
+.data-table td img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+.product-info .product-name { font-weight: 600; color: #222; }
+.product-info .product-sku, .product-info .product-category { color: #888; font-size: 13px; }
+.status-pill { padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.status-sell { background: #eaf7f7; color: #007d75; }
+.status-out { background: #fff0f0; color: #d32f2f; }
+.status-hide { background: #f2f2f2; color: #666; }
+.action-links { display: flex; gap: 10px; }
+.action-links button { background: none; border: none; color: #1a73e8; cursor: pointer; font-size: 13px;}
+.action-links button.delete { color: #e53935; }
+.pagination { display: flex; gap: 8px; justify-content: flex-end; padding: 20px; }
+.page-btn { border: 1px solid #ddd; background: #fff; border-radius: 6px; padding: 8px 14px; cursor: pointer;}
+.page-btn.active { background: #ff5722; color: #fff; border-color: #ff5722; }
+
+/* MODULE THÊM SẢN PHẨM */
+.add-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 24px; padding: 24px;}
+.form-card { background: #fafafb; border: 1px solid #e8eaed; border-radius: 18px; padding: 24px; margin-bottom: 24px;}
+.card-head h2 { font-size: 18px; color: #252525; margin-bottom: 18px;}
+.form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;}
+.form-group label { font-size: 14px; color: #444; }
+.form-group label span { color: #e53935; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; border-radius: 10px; border: 1px solid #d9d9d9; padding: 12px; font-size: 14px; }
+.upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.upload-box { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; border: 2px dashed #d2d6db; border-radius: 16px; cursor: pointer; background: #fff;}
+.upload-icon { font-size: 26px; color: #ff5722; }
+.file-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.action-row { display: flex; justify-content: flex-end; gap: 12px; padding: 0 24px 24px; }
+
+/* MODULE TRẢ HÀNG */
+.order-card { background: #fff; border: 1px solid #eee; border-radius: 12px; margin-bottom: 16px; padding: 16px; }
+.order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 12px; font-size: 14px;}
+.order-body { display: flex; gap: 16px; margin-bottom: 16px; }
+.product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+.product-details { flex: 1; }
+.product-details .product-name { font-weight: 600; font-size: 15px;}
+.product-details .product-variation { color: #777; font-size: 13px; margin: 4px 0;}
+.reason-box { background: #fdf2f2; color: #d32f2f; padding: 6px 10px; border-radius: 6px; font-size: 13px; display: inline-block;}
+.order-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 12px; }
+.badge { background: #f44336; color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 5px; }
+
+/* MODALS */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+.modal.show { display: flex; }
+.modal-content { background: #fff; padding: 24px; border-radius: 12px; width: 450px; position: relative; }
+.close-btn { position: absolute; top: 16px; right: 20px; font-size: 26px; cursor: pointer; color: #999; line-height: 1; }
+.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
