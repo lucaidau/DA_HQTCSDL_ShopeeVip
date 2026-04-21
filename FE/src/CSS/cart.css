@@ -9,38 +9,6 @@
 
         /* --- Header Giỏ Hàng --- */
         /* HEADER */
-        .header-top {
-            background: #ee4d2d;
-            height: 34px;
-            color: #fff;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-        }
-
-        .header-top-left, .header-top-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .user-avatar {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #fff;
-            object-fit: cover;
-        }
-
         .header-main {
             background: #fff;
             border-bottom: 1px solid rgba(0,0,0,.09);

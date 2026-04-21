@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm Sản Phẩm</title>
+  <link rel="stylesheet" href="../CSS/themsanpham.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="tatcasanpham.html" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper no-sidebar">
+      <div class="main-content">
+        <div class="page-title-section">
+          <div class="breadcrumbs"><a href="tatcasanpham.html">Tất Cả Sản Phẩm</a> <span>›</span> Thêm Sản Phẩm</div>
+          <h1>Thêm Sản Phẩm</h1>
+        </div>
+
+        <section class="panel panel-add">
+          <form id="productForm" class="add-grid" onsubmit="return false;">
+            <div class="form-block">
+              <div class="form-card">
+                <div class="card-head">
+                  <h2>Thông tin cơ bản</h2>
+                </div>
+                <div class="form-group">
+                  <label for="productName">Tên sản phẩm <span>*</span></label>
+                  <input id="productName" type="text" placeholder="Nhập tên sản phẩm" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryInput">Ngành hàng <span>*</span></label>
+                  <select id="categoryInput">
+                    <option value="">Chọn ngành hàng</option>
+                    <option value="Thời trang">Thời trang</option>
+                    <option value="Giày dép">Giày dép</option>
+                    <option value="Điện thoại">Điện thoại</option>
+                    <option value="Phụ kiện">Phụ kiện</option>
+                    <option value="Đồ gia dụng">Đồ gia dụng</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="description">Mô tả sản phẩm <span>*</span></label>
+                  <textarea id="description" rows="5" placeholder="Nhập mô tả sản phẩm"></textarea>
+                </div>
+              </div>
+
+              <div class="form-card">
+                <div class="card-head">
+                  <h2>Thông tin bán hàng</h2>
+                </div>
+                <div class="form-group small-group">
+                  <label for="priceInput">Giá bán (đ)</label>
+                  <input id="priceInput" type="number" placeholder="Nhập giá bán" />
+                </div>
+                <div class="form-group small-group">
+                  <label for="stockInput">Kho hàng</label>
+                  <input id="stockInput" type="number" placeholder="Số lượng sản phẩm" />
+                </div>
+                <div class="section-subtitle">Vận chuyển</div>
+                <div class="form-group small-group">
+                  <label for="weightInput">Cân nặng (gram)</label>
+                  <input id="weightInput" type="number" placeholder="Nhập cân nặng" />
+                </div>
+                <div class="form-group small-group">
+                  <label for="shippingInput">Đơn vị vận chuyển</label>
+                  <input id="shippingInput" type="text" placeholder="Ví dụ: ShopeeExpress" />
+                </div>
+              </div>
+            </div>
+
+            <div class="media-block">
+              <div class="media-card">
+                <div class="card-head">
+                  <h2>Hình ảnh sản phẩm</h2>
+                  <a class="help-link" href="#">Help</a>
+                </div>
+                <div class="upload-grid">
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                  <label class="upload-box">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-text">Tải lên</span>
+                    <input class="file-input" type="file" accept="image/*" />
+                  </label>
+                </div>
+                <div class="help-note">
+                  Tải lên hình ảnh (Tối đa 8 ảnh). Hỗ trợ jpg, jpeg, png, kích thước tối đa 2MB. Tỷ lệ khuyên dùng 1:1.
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="action-row">
+            <button id="backBtn" class="btn btn-secondary">Hủy</button>
+            <button id="saveBtn" class="btn btn-primary">Lưu sản phẩm</button>
+          </div>
+          <div id="formMessage" class="form-message"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/themsanpham.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cài Đặt Sản Phẩm</title>
+  <link rel="stylesheet" href="../CSS/caidatsanpham.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="tatcasanpham.html" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper no-sidebar">
+      <div class="page-heading">
+        <div>
+          <div class="breadcrumbs"><a href="tatcasanpham.html">Quản Lý Sản Phẩm</a> <span>›</span> Cài Đặt Sản Phẩm</div>
+          <h1>Cài Đặt Sản Phẩm</h1>
+        </div>
+        <div class="top-actions">
+          <button id="cancelBtn" class="btn btn-secondary">Hủy</button>
+          <button id="saveBtn" class="btn btn-primary">Lưu Cài Đặt</button>
+        </div>
+      </div>
+
+      <section class="settings-grid">
+        <div class="setting-card">
+          <h2>Cài Đặt Hiển Thị</h2>
+          <div class="setting-row">
+            <label class="checkbox-label"><input type="checkbox" id="showOnShop" /> Hiển thị sản phẩm trên trang cửa hàng</label>
+          </div>
+          <div class="setting-row">
+            <label>Sắp xếp sản phẩm mặc định</label>
+            <select id="defaultSort">
+              <option value="Phổ biến">Phổ biến</option>
+              <option value="Bán chạy">Bán chạy</option>
+            </select>
+          </div>
+          <div class="setting-note">Chọn thứ tự sản phẩm mặc định khi khách hàng xem cửa hàng.</div>
+          <div class="setting-row">
+            <label class="checkbox-label"><input type="checkbox" id="showSku" /> Hiển thị mã sản phẩm (SKU) trong trang chi tiết</label>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <h2>Cài Đặt Giá & Khuyến Mãi</h2>
+          <div class="setting-row">
+            <label class="checkbox-label"><input type="checkbox" id="showVideoPrice" /> Hiển thị giá sản phẩm trên Shopee Video</label>
+          </div>
+          <div class="setting-note">Tích chọn nếu muốn giá hiển thị khi sản phẩm xuất hiện trong video.</div>
+          <div class="setting-row">
+            <button id="manageWholesaleBtn" class="outline-btn">Quản lý giá sỉ</button>
+          </div>
+          <div class="setting-row">
+            <label class="checkbox-label"><input type="checkbox" id="showGiftIcon" /> Hiển thị biểu tượng "Quà tặng" khi có khuyến mãi kèm</label>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <h2>Cài Đặt Tồn Kho</h2>
+          <div class="setting-row">
+            <label>Ngưỡng cảnh báo tồn kho thấp</label>
+            <input id="stockThreshold" type="number" min="0" value="5" />
+          </div>
+          <div class="setting-note">Nhập số lượng tối thiểu để hệ thống cảnh báo khi sản phẩm sắp hết hàng.</div>
+          <div class="setting-row">
+            <button id="manageStockBtn" class="outline-btn">Quản lý lịch sử tồn kho</button>
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <h2>Cài Đặt Thuộc Tính & Phân Loại</h2>
+          <div class="setting-row">
+            <button id="manageAttributesBtn" class="outline-btn">Quản lý thuộc tính sản phẩm</button>
+          </div>
+          <div class="setting-row">
+            <label class="checkbox-label"><input type="checkbox" id="allowBuyerAddVariant" /> Cho phép khách hàng chọn thêm thuộc tính</label>
+          </div>
+          <div class="setting-note">Bật nếu sản phẩm có nhiều tùy chọn kích cỡ, màu sắc, hoặc quà tặng.</div>
+        </div>
+      </section>
+
+      <div id="messageBox" class="form-message"></div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/caidatsanpham.js"></script>
+</body>
+
+</html>

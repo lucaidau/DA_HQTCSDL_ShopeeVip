@@ -1,15 +1,49 @@
+const CART_COUNT_KEY = 'cartCount';
+const CART_ITEMS_KEY = 'cartItems';
 const urlParams = new URLSearchParams(window.location.search);
 const productID = urlParams.get("id");
 
+const getCartCount = () => Number(localStorage.getItem(CART_COUNT_KEY) || 0);
+const setCartCount = (count) => localStorage.setItem(CART_COUNT_KEY, count);
+const getCartItems = () => {
+  const stored = localStorage.getItem(CART_ITEMS_KEY);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch (error) {
+    console.warn('Không thể đọc giỏ hàng', error);
+    return [];
+  }
+};
+const setCartItems = (items) => localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(items));
+
+const getSelectedProductFallback = () => {
+  const stored = localStorage.getItem('selectedProduct');
+  if (!stored) return [];
+  try {
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : [parsed];
+  } catch (error) {
+    console.warn('Không thể đọc sản phẩm đã chọn', error);
+    return [];
+  }
+};
+
 const getProductDetail = async () => {
+  if (!productID) {
+    return getSelectedProductFallback();
+  }
+
   try {
     const res = await fetch(`http://localhost:3000/sanpham/${productID}`);
     const detail = await res.json();
-    const product = detail.san_pham;
-
-    return product[0];
+    const product = detail.san_pham || detail || [];
+    if (Array.isArray(product) && product.length) return product;
+    if (product && typeof product === 'object') return [product];
+    return getSelectedProductFallback();
   } catch (error) {
-    console.error("Không thấy ID sản phẩm");
+    console.error("Không thể lấy chi tiết sản phẩm", error);
+    return getSelectedProductFallback();
   }
 };
 
@@ -35,7 +69,13 @@ let toastTimer = null;
 function updateCartBadge(count) {
   const badge = document.querySelector(".cart-badge");
   if (!badge) return;
-  badge.textContent = count > 99 ? "99+" : count;
+  if (count > 0) {
+    badge.textContent = count > 99 ? "99+" : count;
+    badge.style.display = "flex";
+  } else {
+    badge.style.display = "none";
+  }
+
   // Animate badge
   badge.style.transform = "scale(1.5)";
   badge.style.transition = "transform 0.2s ease";
@@ -62,21 +102,52 @@ let qty = parseInt(document.getElementById("qtyInput").value) || 1;
 
 const updateQty = (sigma) => {
   const selectedBtn = document.querySelector(".btn-attr.active");
-  const maxStock = selectedBtn
+  const defaultStock = Array.isArray(productDetail) && productDetail[0]
+    ? parseInt(productDetail[0].SoLuongTonKho || productDetail[0].SoLuongTonKho || 999)
+    : 999;
+  let maxStock = selectedBtn
     ? parseInt(selectedBtn.getAttribute("data-stock"))
-    : 1;
+    : defaultStock;
+
+  if (!maxStock || maxStock < 1) maxStock = 999;
 
   qty += sigma;
-
   if (qty < 1) qty = 1;
-
   if (qty > maxStock) qty = maxStock;
   qtyTxt.value = qty;
 };
 
 function addToCart() {
   qty = qty <= 0 ? 1 : qty;
-  cartCount += qty;
+  const currentProduct = Array.isArray(productDetail) ? productDetail[0] : productDetail;
+  const itemId = currentProduct.IDBanSao || currentProduct.IDSanPham || productID || `product-${Date.now()}`;
+  const image = Array.isArray(currentProduct.HinhAnh)
+    ? currentProduct.HinhAnh[0]
+    : currentProduct.HinhAnh || '';
+
+  const cartItems = getCartItems();
+  const existingIndex = cartItems.findIndex(
+    (item) => item.id === itemId && item.variant === (currentProduct.BienThe || '')
+  );
+
+  const cartItem = {
+    id: itemId,
+    name: currentProduct.TenSanPham || currentProduct.title || 'Sản phẩm',
+    price: Number(currentProduct.GiaBan || currentProduct.Gia || 0),
+    image,
+    variant: currentProduct.BienThe || '',
+    quantity: qty,
+  };
+
+  if (existingIndex >= 0) {
+    cartItems[existingIndex].quantity += qty;
+  } else {
+    cartItems.push(cartItem);
+  }
+
+  setCartItems(cartItems);
+  cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  setCartCount(cartCount);
 
   updateCartBadge(cartCount);
   showToast(qty);
@@ -108,23 +179,45 @@ const price = document.getElementById("prodNewPrice");
 window.onload = async () => {
   const cartData = await countCartItem();
   productDetail = await getProductDetail();
-  console.log(productDetail);
-  const totalQuantity = cartData.cart.reduce(
+  const currentProduct = Array.isArray(productDetail) ? productDetail[0] : productDetail;
+
+  if (!currentProduct || Object.keys(currentProduct).length === 0) {
+    console.error("Không tìm thấy sản phẩm hoặc sản phẩm không hợp lệ.");
+    return;
+  }
+
+  const apiQuantity = ((cartData && cartData.cart) || []).reduce(
     (sum, item) => sum + item.SoLuongMua,
     0,
   );
-  cartCount = totalQuantity;
+  const storedCount = getCartCount();
+  const localItemsCount = getCartItems().reduce(
+    (sum, item) => sum + Number(item.quantity || item.SoLuongMua || 1),
+    0,
+  );
+  cartCount = storedCount || localItemsCount || apiQuantity;
+  setCartCount(cartCount);
   updateCartBadge(cartCount);
 
-  const formatPrice = productDetail[0].GiaBan
-    ? Number(productDetail[0].GiaBan).toLocaleString("vi-VN")
+  const formatPrice = currentProduct.GiaBan
+    ? Number(currentProduct.GiaBan).toLocaleString("vi-VN")
+    : currentProduct.Gia
+    ? Number(currentProduct.Gia).toLocaleString("vi-VN")
     : "0";
-  const formatDiscount = productDetail[0].GiaBan
-    ? Number(productDetail[0].GiaBan / (48 / 100)).toLocaleString("vi-VN")
+  const formatDiscount = currentProduct.GiaBan
+    ? Number(currentProduct.GiaBan / (48 / 100)).toLocaleString("vi-VN")
     : "0";
-  productTitle.innerText = productDetail[0].TenSanPham;
+
+  const rating = currentProduct.DiemDanhGia || currentProduct.Rating || 4.9;
+  const reviewCount = currentProduct.SoDanhGia || currentProduct.Reviews || '141';
+  const soldCount = currentProduct.DaBan || currentProduct.sold || '4,5k';
+
+  productTitle.innerText = currentProduct.TenSanPham || currentProduct.title || 'Sản phẩm';
   price.innerText = "₫" + formatPrice;
   discount.innerText = "₫" + formatDiscount;
+  document.getElementById('prodRating').innerText = rating;
+  document.getElementById('prodReviews').innerText = `${reviewCount} Đánh Giá`;
+  document.getElementById('prodSold').innerText = soldCount;
 
   CreateCopyProduct(productDetail);
   updateUI(productDetail);
@@ -145,6 +238,15 @@ const CreateCopyProduct = (detail) => {
   typeList.innerHTML = htmlContent;
 
   const allBtn = document.querySelectorAll(".btn-attr");
+  if (allBtn.length > 0) {
+    allBtn[0].classList.add("active");
+    const firstStock = parseInt(allBtn[0].getAttribute("data-stock")) || 999;
+    document.getElementById("mainImg").src = allBtn[0].querySelector("img").src;
+    document.getElementById("tonKho").innerText = `${firstStock} có sẵn`;
+    qtyTxt.value = 1;
+    qty = 1;
+  }
+
   allBtn.forEach((item) => {
     item.addEventListener("click", function (e) {
       const currSelected = typeList.querySelector(".btn-attr.active");
@@ -153,14 +255,13 @@ const CreateCopyProduct = (detail) => {
       }
       this.classList.add("active");
       document.getElementById("mainImg").src = this.querySelector("img").src;
-      document.getElementById("tonKho").innerText =
-        `${this.getAttribute("data-stock")} có sẵn`;
+      const stock = parseInt(this.getAttribute("data-stock")) || 999;
+      document.getElementById("tonKho").innerText = `${stock} có sẵn`;
 
-      qtyTxt.max = this.getAttribute("data-stock");
-      if (parseInt(qtyTxt.value) > this.getAttribute("data-stock")) {
-        qtyTxt.value = this.getAttribute("data-stock");
-        qty = this.getAttribute("data-stock");
+      if (qty > stock) {
+        qty = stock;
       }
+      qtyTxt.value = qty;
     });
   });
 

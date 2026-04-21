@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tất Cả Sản Phẩm</title>
+  <link rel="stylesheet" href="../CSS/tatcasanpham.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="#" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper no-sidebar">
+      <div class="main-content">
+        <div class="page-title-section">
+          <div class="breadcrumbs">Quản Lý Sản Phẩm <span>›</span> Tất Cả Sản Phẩm</div>
+          <h1>Tất Cả Sản Phẩm</h1>
+        </div>
+
+        <section class="panel panel-controls">
+          <div class="controls-row">
+            <div class="control-item search-box">
+              <input id="searchInput" type="search" placeholder="Tìm tên sản phẩm/SKU" />
+            </div>
+            <div class="control-item select-box">
+              <label>Danh mục</label>
+              <select id="categorySelect">
+                <option value="">Danh mục</option>
+                <option value="Thời trang">Thời trang</option>
+                <option value="Giày dép">Giày dép</option>
+                <option value="Điện thoại">Điện thoại</option>
+                <option value="Phụ kiện">Phụ kiện</option>
+                <option value="Đồ gia dụng">Đồ gia dụng</option>
+              </select>
+            </div>
+            <div class="control-item select-box">
+              <label>Trạng thái</label>
+              <select id="statusSelect">
+                <option value="">Tất cả</option>
+                <option value="Đang bán">Đang bán</option>
+                <option value="Hết hàng">Hết hàng</option>
+                <option value="Ẩn">Ẩn</option>
+              </select>
+            </div>
+            <div class="control-item price-range">
+              <label>Giá</label>
+              <div class="price-inputs">
+                <input id="priceMin" type="number" min="0" placeholder="Từ" />
+                <span>-</span>
+                <input id="priceMax" type="number" min="0" placeholder="Đến" />
+              </div>
+            </div>
+            <button id="newProductBtn" class="btn btn-primary">+ Thêm Sản Phẩm</button>
+          </div>
+        </section>
+
+        <section class="panel panel-table">
+          <div class="table-wrap">
+            <table class="product-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll" /></th>
+                  <th>Hình ảnh</th>
+                  <th>Tên sản phẩm & SKU</th>
+                  <th>Giá bán</th>
+                  <th>Kho hàng</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/tatcasanpham.js"></script>
+</body>
+
+</html>

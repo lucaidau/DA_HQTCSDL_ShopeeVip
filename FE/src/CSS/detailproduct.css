@@ -133,22 +133,6 @@
             font-weight: bold;
         }
 
-        /* BREADCRUMB */
-        .breadcrumb {
-            padding: 20px 0;
-            font-size: 14px;
-            color: rgba(0, 0, 0, .54);
-        }
-
-        .breadcrumb a {
-            color: #0055aa;
-            margin: 0 5px;
-        }
-
-        .breadcrumb a:first-child {
-            margin-left: 0;
-        }
-
         /* BOX BACKGROUND */
         .box {
             background: #fff;

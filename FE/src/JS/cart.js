@@ -1,84 +1,81 @@
-// Thêm đoạn này vào đầu script
 let itemsToDelete = [];
 const modal = document.getElementById("delete-modal");
 const modalMsg = document.getElementById("modal-message");
-// Hàm đổi số lượng
-function changeQty(id, delta) {
-  const input = document.getElementById(id);
-  let val = parseInt(input.value);
-  val += delta;
-  if (val < 1) val = 1;
-  input.value = val;
-}
-
-// Dữ liệu mẫu sản phẩm gợi ý
-const sampleProducts = [
-  {
-    name: "Kem Chống Nắng Skin1004 Madagascar Centella",
-    price: "285.000",
-    img: "21",
-  },
-  {
-    name: "Nước Tẩy Trang L'Oreal Paris 3-in-1 Micellar",
-    price: "159.000",
-    img: "22",
-  },
-  {
-    name: "Sữa Rửa Mặt Cerave Foaming Facial Cleanser",
-    price: "320.000",
-    img: "23",
-  },
-  {
-    name: "Mặt Nạ Ngủ Môi Laneige Lip Sleeping Mask",
-    price: "45.000",
-    img: "24",
-  },
-  {
-    name: "Serum The Ordinary Niacinamide 10% + Zinc 1%",
-    price: "185.000",
-    img: "25",
-  },
-  {
-    name: "Phấn Phủ Bột Kiềm Dầu Innisfree No Sebum",
-    price: "99.000",
-    img: "26",
-  },
-];
+const CART_ITEMS_KEY = 'cartItems';
 
 const grid = document.getElementById("product-grid");
 const loading = document.getElementById("loading");
 
-function createProductHTML(p) {
-  const randomId = "qty_" + Math.random().toString(36).substr(2, 9);
-  // Chuyển "285.000" thành số 285000
-  const numericPrice = parseInt(p.price.replace(/\./g, ""));
+function getCartItems() {
+  const stored = localStorage.getItem(CART_ITEMS_KEY);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch (error) {
+    console.warn('Không thể đọc giỏ hàng', error);
+    return [];
+  }
+}
+
+function setCartItems(items) {
+  localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(items));
+}
+
+function getCartCountFromItems(items) {
+  return items.reduce((sum, item) => sum + Number(item.quantity || item.SoLuongMua || 1), 0);
+}
+
+function syncCartCount(items) {
+  const count = getCartCountFromItems(items || getCartItems());
+  localStorage.setItem('cartCount', count);
+  const badge = document.querySelector('.cart-badge');
+  if (badge) {
+    if (count > 0) {
+      badge.textContent = count > 99 ? '99+' : count;
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  return count;
+}
+
+function createCartItemHTML(item) {
+  const id = item.id || item.IDSanPham || item.IDBanSao || `item-${Date.now()}`;
+  const quantityId = `qty_${id}`;
+  const name = item.name || item.TenSanPham || 'Sản phẩm';
+  const variant = item.variant || item.BienThe || 'Mặc định';
+  const numericPrice = Number(item.price || item.GiaBan || item.Gia || 0);
+  const quantity = Number(item.quantity || item.SoLuongMua || 1);
+  const image = item.image || item.HinhAnh || 'https://picsum.photos/100/100';
+  const subtotal = numericPrice * quantity;
 
   return `
-    <div class="shop-section">
+    <div class="shop-section" data-product-id="${id}">
         <div class="shop-header">
             <input type="checkbox" class="shop-checkbox"> 
             <span class="badge-yeuthich">Gợi ý</span>
-            <strong>Cửa hàng của ${p.name.split(" ")[0]}</strong>
+            <strong>Cửa hàng của ${name.split(" ")[0] || 'Shop'}</strong>
             <i class="fa-solid fa-comment-dots" style="color: var(--shopee-orange);"></i>
         </div>
         <div class="cart-item">
             <input type="checkbox" class="item-checkbox" data-price="${numericPrice}">
             <div class="item-info">
-                <img src="https://picsum.photos/100/100?random=${p.img}" alt="product">
+                <img src="${image}" alt="product">
                 <div>
-                    <div class="item-name">${p.name}</div>
-                    <div class="item-variant">Phân loại hàng: Mặc định <i class="fa-solid fa-caret-down"></i></div>
+                    <div class="item-name">${name}</div>
+                    <div class="item-variant">${variant} <i class="fa-solid fa-caret-down"></i></div>
                 </div>
             </div>
-            <div style="text-align: center;">₫${p.price}</div>
+            <div style="text-align: center;">₫${numericPrice.toLocaleString('vi-VN')}</div>
             <div style="display: flex; justify-content: center;">
                 <div class="quantity-control">
-                    <button class="btn-qty" data-target="${randomId}" data-delta="-1">-</button>
-                    <input type="text" id="${randomId}" class="qty-input" value="1" readonly>
-                    <button class="btn-qty" data-target="${randomId}" data-delta="1">+</button>
+                    <button class="btn-qty" data-target="${quantityId}" data-delta="-1">-</button>
+                    <input type="text" id="${quantityId}" class="qty-input" value="${quantity}" readonly>
+                    <button class="btn-qty" data-target="${quantityId}" data-delta="1">+</button>
                 </div>
             </div>
-            <div style="text-align: center;" class="price-subtotal">₫${p.price}</div>
+            <div style="text-align: center;" class="price-subtotal">₫${subtotal.toLocaleString('vi-VN')}</div>
             <div style="text-align: center;">
                 <button class="btn-delete">Xóa</button>
             </div>
@@ -87,35 +84,110 @@ function createProductHTML(p) {
     `;
 }
 
-// Hàm tải thêm sản phẩm
-function loadMore() {
-  loading.style.display = "block";
-
-  // Giả lập gọi API mất 1 giây
-  setTimeout(() => {
-    let html = "";
-    // Thêm 12 sản phẩm mỗi lần cuộn
-    for (let i = 0; i < 12; i++) {
-      const p =
-        sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
-      html += createProductHTML(p);
-    }
-    grid.insertAdjacentHTML("beforeend", html);
-    loading.style.display = "none";
-  }, 1000);
+function syncCartFromDOM() {
+  const sections = document.querySelectorAll('.shop-section');
+  const updatedCart = Array.from(sections).map((section) => {
+    const id = section.dataset.productId;
+    const cartItem = section.querySelector('.cart-item');
+    const price = Number(cartItem.querySelector('.item-checkbox').getAttribute('data-price'));
+    const qty = Number(cartItem.querySelector('.qty-input').value);
+    const name = cartItem.querySelector('.item-name').innerText;
+    const variant = cartItem.querySelector('.item-variant').innerText.replace(' ▼', '').trim();
+    const image = cartItem.querySelector('img')?.src || '';
+    return { id, name, variant, price, quantity: qty, image };
+  });
+  setCartItems(updatedCart);
+  return updatedCart;
 }
 
-// Sử dụng Intersection Observer để phát hiện cuộn đến cuối trang
-const observer = new IntersectionObserver(
-  (entries) => {
-    if (entries[0].isIntersecting) {
-      loadMore();
-    }
-  },
-  { threshold: 0.1 },
-);
+function updateTotal() {
+  let totalItems = 0;
+  let totalPrice = 0;
 
-observer.observe(document.getElementById("scroll-marker"));
+  const selectedItems = document.querySelectorAll(".item-checkbox:checked");
+
+  selectedItems.forEach((checkbox) => {
+    const cartItem = checkbox.closest(".cart-item");
+    const price = parseInt(checkbox.getAttribute("data-price"));
+    const qtyInput = cartItem.querySelector(".qty-input");
+    const qty = parseInt(qtyInput.value);
+
+    totalItems += qty;
+    totalPrice += price * qty;
+  });
+
+  const footer = document.querySelector(".footer-checkout");
+  if (!footer) return;
+
+  footer.querySelector(".total-amount span").innerText =
+    `₫${totalPrice.toLocaleString("vi-VN")}`;
+  footer.querySelector(".checkout-left label").innerText =
+    `Chọn Tất Cả (${totalItems})`;
+  footer.querySelector(".total-amount div:first-child").innerHTML =
+    `Tổng thanh toán (${totalItems} sản phẩm): <span>₫${totalPrice.toLocaleString("vi-VN")}</span>`;
+}
+
+function renderCartItems(items) {
+  if (!items.length) {
+    grid.innerHTML = '<div style="padding: 40px; color: #555; text-align: center;">Giỏ hàng đang trống.</div>';
+    updateTotal();
+    return;
+  }
+
+  grid.innerHTML = items.map((item) => createCartItemHTML(item)).join('');
+  updateTotal();
+}
+
+async function loadCartItems() {
+  loading.style.display = 'block';
+  const localCart = getCartItems();
+  if (localCart.length) {
+    renderCartItems(localCart);
+    syncCartCount(localCart);
+    loading.style.display = 'none';
+    return;
+  }
+
+  const userID = localStorage.getItem('userID');
+  if (!userID) {
+    grid.innerHTML = '<div style="padding: 40px; color: #555; text-align: center;">Giỏ hàng đang trống.</div>';
+    loading.style.display = 'none';
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:3000/giohang/${userID}`);
+    const data = await res.json();
+    const cartItems = data.cart || [];
+
+    if (!cartItems.length) {
+      grid.innerHTML = '<div style="padding: 40px; color: #555; text-align: center;">Giỏ hàng đang trống.</div>';
+      loading.style.display = 'none';
+      updateTotal();
+      return;
+    }
+
+    const normalized = cartItems.map((item) => ({
+      id: item.IDSanPham || item.IDBanSao || `item-${Date.now()}`,
+      name: item.TenSanPham || 'Sản phẩm',
+      variant: item.BienThe || 'Mặc định',
+      price: Number(item.GiaBan || item.Gia || 0),
+      quantity: Number(item.SoLuongMua || 1),
+      image: item.HinhAnh || 'https://picsum.photos/100/100',
+    }));
+
+    setCartItems(normalized);
+    renderCartItems(normalized);
+    syncCartCount(normalized);
+    loading.style.display = 'none';
+  } catch (error) {
+    console.error('Không thể tải giỏ hàng:', error);
+    grid.innerHTML = '<div style="padding: 40px; color: #555; text-align: center;">Lỗi khi tải giỏ hàng.</div>';
+    loading.style.display = 'none';
+  }
+}
+
+// no random cart loading anymore
 // Cập nhật lại hàm updateTotal cho chính xác
 function updateTotal() {
   let totalItems = 0;
@@ -142,7 +214,7 @@ function updateTotal() {
     `Chọn Tất Cả (${totalItems})`;
   // Cập nhật dòng tổng thanh toán
   footer.querySelector(".total-amount div:first-child").innerHTML =
-    `Tổng thanh toán (${selectedItems.length} sản phẩm): <span>${totalPrice.toLocaleString("vi-VN")}₫</span>`;
+    `Tổng thanh toán (${totalItems} sản phẩm): <span>₫${totalPrice.toLocaleString("vi-VN")}</span>`;
 }
 
 // Lắng nghe sự kiện click trên toàn bộ danh sách sản phẩm (Event Delegation)
@@ -188,6 +260,8 @@ grid.addEventListener("click", function (e) {
       `₫${(price * val).toLocaleString("vi-VN")}`;
 
     updateTotal();
+    const updatedCart = syncCartFromDOM();
+    syncCartCount(updatedCart);
   }
   // THÊM ĐOẠN NÀY: Xử lý nút Xóa từng dòng
   if (e.target.classList.contains("btn-delete")) {
@@ -222,6 +296,8 @@ document.getElementById("btn-confirm").addEventListener("click", () => {
 
   modal.style.display = "none";
   itemsToDelete = [];
+  const updatedCart = syncCartFromDOM();
+  syncCartCount(updatedCart);
   updateTotal(); // Tính lại tổng tiền sau khi xóa
 });
 // Thêm đoạn này vào bất kỳ đâu trong script
@@ -244,17 +320,4 @@ document
     }
   });
 // Tải lần đầu
-loadMore();
-
-const LayCart = async () => {
-  try {
-    const userID = localStorage.getItem("userID");
-    const res = await fetch(`http://localhost:3000/giohang/${userID}`);
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log("Không thể lấy giỏ hàng: ", error);
-  }
-};
-
-window.onload = LayCart();
+window.addEventListener('load', loadCartItems);

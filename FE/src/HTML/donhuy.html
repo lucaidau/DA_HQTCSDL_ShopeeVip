@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đơn Huỷ - Shopee Kênh Người Bán</title>
+  <link rel="stylesheet" href="../CSS/donhuy.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="kenhbanhang.html" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper">
+      <div class="main-content">
+        <div class="page-title-section">
+          <h1>Đơn Huỷ</h1>
+        </div>
+
+        <section class="panel">
+          <div class="order-tabs">
+            <div class="tab-item active" data-type="all">Tất cả</div>
+            <div class="tab-item" data-type="buyer">Do người mua hủy</div>
+            <div class="tab-item" data-type="seller">Do người bán hủy</div>
+            <div class="tab-item" data-type="system">Hệ thống tự động hủy</div>
+          </div>
+
+          <div class="filter-section">
+            <input type="text" id="searchInput" class="search-input" placeholder="Nhập Mã ĐH, Tên người mua hoặc Tên SP..." />
+            <button id="searchBtn" class="btn btn-secondary">Tìm kiếm</button>
+          </div>
+
+          <div id="orderListContainer" class="order-list">
+            </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalTitle" class="modal-title">Chi Tiết Hủy Đơn Hàng</div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/donhuy.js"></script>
+</body>
+
+</html>

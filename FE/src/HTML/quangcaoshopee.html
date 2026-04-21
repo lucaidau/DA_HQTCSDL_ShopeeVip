@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quảng Cáo Shopee - Kênh Người Bán</title>
+  <link rel="stylesheet" href="../CSS/kenhbanhang.css" />
+  <link rel="stylesheet" href="../CSS/quangcaoshopee.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="kenhbanhang.html" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="menu-section expanded">
+                    <div class="menu-title-with-icon" onclick="toggleMenu(this)">
+                        <span>🚚 Vận chuyển</span>
+                        <span class="toggle-icon">˄</span>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="diachikho.html" class="sub-menu-item">Cài đặt địa chỉ kho lấy hàng</a>
+                        <a href="diachihoantra.html" class="sub-menu-item">Địa chỉ nhận hàng hoàn trả</a>
+                    </div>
+                </div>
+
+                <div class="menu-section expanded">
+                    <div class="menu-title-with-icon" onclick="toggleMenu(this)">
+                        <span>📋 Quản Lý Đơn Hàng</span>
+                        <span class="toggle-icon">˄</span>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="tatcadonhang.html" class="sub-menu-item">Tất cả</a>
+                        <a href="donhuy.html" class="sub-menu-item">Đơn Huỷ</a>
+                        <a href="trahanghoantien.html" class="sub-menu-item">Trả Hàng/Hoàn Tiền</a>
+                    </div>
+                </div>
+
+                <div class="menu-section expanded">
+                    <div class="menu-title-with-icon" onclick="toggleMenu(this)">
+                        <span>📦 Quản Lý Sản Phẩm</span>
+                        <span class="toggle-icon">˄</span>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="tatcasanpham.html" class="sub-menu-item">Tất Cả Sản Phẩm</a>
+                        <a href="themsanpham.html" class="sub-menu-item">Thêm Sản Phẩm</a>
+                    </div>
+                </div>
+
+                <div class="menu-section expanded">
+                    <div class="menu-title-with-icon" onclick="toggleMenu(this)">
+                        <span>🏷️ Kênh Marketing</span>
+                        <span class="toggle-icon">˄</span>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="quangcaoshopee.html" class="sub-menu-item active">Quảng Cáo Shopee</a>
+                    </div>
+                </div>
+
+                <div class="menu-section expanded">
+                    <div class="menu-title-with-icon" onclick="toggleMenu(this)">
+                        <span>💳 Tài Chính</span>
+                        <span class="toggle-icon">˄</span>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="sodutk.html" class="sub-menu-item">Doanh Thu / Số Dư TK</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+      <div class="main-content">
+        <div class="page-title-section">
+          <h1>Quảng Cáo Shopee</h1>
+        </div>
+
+        <section class="panel">
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Chiến dịch đang chạy</div>
+              <div id="activeAdCount" class="stat-value">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Tổng chiến dịch</div>
+              <div class="stat-value">3</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Lượt click</div>
+              <div class="stat-value">477</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Ngân sách</div>
+              <div class="stat-value">Không giới hạn</div>
+            </div>
+          </div>
+
+          <div class="order-tabs">
+            <div class="tab-item active" data-status="all">Tất cả</div>
+            <div class="tab-item" data-status="running">Đang chạy</div>
+            <div class="tab-item" data-status="paused">Tạm dừng</div>
+            <div class="tab-item" data-status="ended">Kết thúc</div>
+          </div>
+
+          <div class="filter-section">
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm chiến dịch theo mã, tên hoặc loại..." />
+            <button id="searchBtn" class="btn btn-secondary">Tìm kiếm</button>
+            <button class="btn btn-primary" onclick="openCreateModal()">Tạo chiến dịch mới</button>
+          </div>
+
+          <div id="adListContainer" class="order-list"></div>
+        </section>
+      </div>
+    </div>
+
+    <div id="createAdModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeCreateModal()">&times;</span>
+        <div class="modal-title">Tạo chiến dịch quảng cáo mới</div>
+        <div class="form-group">
+          <label for="newAdName">Tên chiến dịch</label>
+          <input id="newAdName" class="form-control" type="text" placeholder="Nhập tên chiến dịch" />
+        </div>
+        <div class="form-group">
+          <label for="newAdType">Loại chiến dịch</label>
+          <select id="newAdType" class="form-control">
+            <option value="Quảng Cáo Tìm Kiếm">Quảng Cáo Tìm Kiếm</option>
+            <option value="Quảng Cáo Khám Phá">Quảng Cáo Khám Phá</option>
+            <option value="Quảng Cáo Mua Sắm">Quảng Cáo Mua Sắm</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newAdBudget">Ngân sách</label>
+          <input id="newAdBudget" class="form-control" type="text" placeholder="Nhập ngân sách (vd: 100.000đ/ngày)" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:12px;">
+          <button class="btn btn-secondary" onclick="closeCreateModal()">Hủy</button>
+          <button class="btn btn-primary" onclick="createNewCampaign()">Tạo chiến dịch</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/kenhbanhang.js"></script>
+  <script src="../JS/quangcaoshopee.js"></script>
+</body>
+
+</html>

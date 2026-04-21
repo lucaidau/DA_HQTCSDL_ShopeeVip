@@ -23,9 +23,40 @@ const backToLogin = () => {
   }
 };
 
+const getStoredUsers = () => JSON.parse(localStorage.getItem('users') || '[]');
+const findStoredUser = (username) => getStoredUsers().find((u) => u.username === username);
+
+const saveCurrentUser = (user) => {
+  const safeUser = {
+    name: user.name || user.username || user.userName || '',
+    username: user.username || user.userName || '',
+    email: user.email || '',
+    phone: user.phone || '',
+    gender: user.gender || '',
+    role: String(user.role || 'user').trim(),
+    IDShop: user.IDShop || null,
+    password: user.password || ''
+  };
+  localStorage.setItem('user', JSON.stringify(safeUser));
+  return safeUser;
+};
+
+const isSellerRole = (role) => {
+  const normalized = String(role || '').trim().toLowerCase();
+  return normalized === '2' || normalized === 'seller' || normalized.includes('bán');
+};
+
+const getRedirectTarget = (user) => {
+  if (!user) return 'home.html';
+  if (isSellerRole(user.role) || user.IDShop) {
+    return 'kenhbanhang.html';
+  }
+  return 'home.html';
+};
+
 const login = () => {
-  const userName = document.getElementById("login-username").value;
-  const pass = document.getElementById("login-password").value;
+  const userName = document.getElementById("login-username").value.trim();
+  const pass = document.getElementById("login-password").value.trim();
 
   const loginData = {
     username: userName,
@@ -52,15 +83,22 @@ const login = () => {
     })
     .then((data) => {
       console.log("Đăng nhập thành công: ", data);
-      localStorage.setItem("user", data.user);
-  
-      if(data.user.IDShop === null)
-        window.location="home.html";
-      else
-        window.location = "kenhbanhang.html";
+      const userData = data.user || loginData;
+      const storedUser = findStoredUser(userData.username);
+      const user = saveCurrentUser(storedUser || userData);
+      window.location = getRedirectTarget(user);
     })
     .catch((err) => {
       console.log("Lỗi hệ thống: ", err);
+      const users = getStoredUsers();
+      const foundUser = users.find((u) => u.username === userName && u.password === pass);
+      if (foundUser) {
+        const user = saveCurrentUser(foundUser);
+        window.location = getRedirectTarget(user);
+      } else {
+        usernameInput.style.borderColor = "red";
+        passwordInput.style.borderColor = "red";
+      }
     });
 };
 
@@ -115,13 +153,30 @@ const register = () => {
           }
           throw new Error("Tài khoản đã tồn tại!");
         }
-        registerBox.style.display = "none";
-        loginBox.style.display = "block";
         return res.json();
       })
-      .then((data) => console.log("Đăng kí thành công!", data))
+      .then((data) => {
+        console.log("Đăng kí thành công!", data);
+        const users = getStoredUsers();
+        users.push(regData);
+        localStorage.setItem('users', JSON.stringify(users));
+        const user = saveCurrentUser(regData);
+        window.location = getRedirectTarget(user);
+      })
       .catch((err) => {
         console.log("Lỗi Server!", err);
+        const users = getStoredUsers();
+        const existingUser = users.find((u) => u.username === regData.username);
+        if (existingUser) {
+          for (let i = 0; i < 5; i++) {
+            registerBox[i].style.borderColor = "red";
+          }
+          return;
+        }
+        users.push(regData);
+        localStorage.setItem('users', JSON.stringify(users));
+        const user = saveCurrentUser(regData);
+        window.location = getRedirectTarget(user);
       });
 
 

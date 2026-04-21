@@ -1,0 +1,92 @@
+/* --- RESET & GLOBAL --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f2f3f7; color: #333; }
+a { text-decoration: none; }
+.page-wrapper { width: min(1200px, 100%); max-width: 1200px; margin: 0 auto; }
+.top-orange-bar { height: 4px; background-color: #ff5722; }
+
+/* HEADER */
+.header { background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06); }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.logo-icon { font-size: 24px; }
+.logo-text { color: #ff5722; font-weight: 700; font-size: 20px; }
+.header-title { font-size: 16px; color: #333; }
+.header-right, .user-profile { display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 34px; height: 34px; border-radius: 50%; }
+.user-name { font-size: 14px; }
+
+/* MAIN CONTENT LAYOUT */
+.main-wrapper { padding: 24px 0 40px; }
+.main-content { width: 100%; }
+
+.page-title-section { background: #fff; border-radius: 18px; padding: 24px 28px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05); margin-bottom: 20px; }
+.page-title-section h1 { font-size: 24px; color: #222; }
+.panel { background: #fff; border-radius: 18px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05); padding: 0; margin-bottom: 20px; overflow: hidden; }
+
+/* TABS & SEARCH */
+.order-tabs { display: flex; border-bottom: 1px solid #eee; overflow-x: auto; background: #fff; }
+.tab-item { padding: 16px 24px; font-size: 14px; color: #555; cursor: pointer; white-space: nowrap; position: relative; font-weight: 500; }
+.tab-item:hover { color: #ff5722; }
+.tab-item.active { color: #ff5722; }
+.tab-item.active::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #ff5722; }
+
+.filter-section { padding: 20px 24px; display: flex; gap: 12px; background: #fafafb; border-bottom: 1px solid #eee; }
+.search-input { flex: 1; height: 40px; padding: 0 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 14px; outline: none; transition: 0.3s;}
+.search-input:focus { border-color: #ff5722; box-shadow: 0 0 5px rgba(255,87,34,0.2);}
+.btn { border: none; border-radius: 8px; padding: 0 20px; height: 40px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+.btn:active { transform: scale(0.95); }
+.btn-primary { background: #ff5722; color: #fff; }
+.btn-primary:hover { background: #e64a19; }
+.btn-secondary { background: #fff; color: #555; border: 1px solid #d9d9d9; }
+.btn-secondary:hover { background: #f5f5f5; }
+
+/* ORDER LIST */
+.order-list { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.order-card { border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: 0.3s; background: #fff;}
+.order-card:hover { border-color: #ff5722; box-shadow: 0 4px 12px rgba(255,87,34,0.08); }
+.order-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fafafb; border-bottom: 1px solid #eee; font-size: 13px; }
+.buyer-info { font-weight: 600; color: #333; }
+.order-status { font-weight: 600; text-transform: uppercase;}
+.status-pending { color: #ff9800; }
+.status-shipping { color: #2196f3; }
+.status-delivering { color: #00bcd4; }
+.status-completed { color: #4caf50; }
+.status-cancelled { color: #f44336; }
+
+.order-body { display: flex; padding: 20px; gap: 16px; border-bottom: 1px solid #eee; }
+.product-img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #eee; }
+.product-details { flex: 1; }
+.product-name { font-size: 15px; color: #333; margin-bottom: 8px; }
+.product-variation { font-size: 13px; color: #777; margin-bottom: 4px; }
+.product-qty { font-size: 13px; color: #333; }
+.product-price { font-size: 14px; color: #333; }
+
+.order-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #fff; }
+.order-total span { font-size: 13px; color: #777; margin-right: 8px; }
+.order-total strong { font-size: 18px; color: #ff5722; }
+.order-actions { display: flex; gap: 10px; }
+
+/* --- CSS CHO CỬA SỔ POPUP (MODAL) --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+.modal.show { display: flex; animation: fadeIn 0.2s ease-in-out; }
+.modal-content { background-color: #fff; padding: 24px; border-radius: 12px; width: 450px; max-width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative; }
+.close-btn { position: absolute; top: 16px; right: 20px; font-size: 26px; cursor: pointer; color: #999; line-height: 1; transition: 0.2s; }
+.close-btn:hover { color: #333; }
+.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+.modal-body { font-size: 14px; color: #444; line-height: 1.6; }
+.modal-body p { margin-bottom: 8px; }
+.star-rating { color: #ffc107; font-size: 20px; margin-bottom: 8px; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+
+/* --- CẤU HÌNH CSS KHI BẤM NÚT IN (PRINT) --- */
+@media print {
+    body * { visibility: hidden; }
+    .print-target, .print-target * { visibility: visible; }
+    .print-target { position: absolute; left: 0; top: 0; width: 100%; border: 2px solid #000; border-radius: 0; box-shadow: none; }
+    .print-target .btn { display: none !important; }
+    .status-shipping { color: #000 !important; }
+    .order-total strong { color: #000 !important; }
+    .modal { display: none !important; } /* Ẩn Modal khi in */
+}

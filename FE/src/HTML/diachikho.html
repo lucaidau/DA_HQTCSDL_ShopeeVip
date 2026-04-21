@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cài Đặt Địa Chỉ Kho Lấy Hàng</title>
+  <link rel="stylesheet" href="../CSS/diachikho.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="top-orange-bar"></div>
+    <header class="header">
+      <div class="header-left">
+        <span class="logo-icon">🛍️</span>
+        <a href="#" class="logo-text">Shopee</a>
+        <span class="header-title">Kênh Người Bán</span>
+      </div>
+      <div class="header-right">
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=U+T&background=random" class="user-avatar" alt="Avatar" />
+          <span class="user-name"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-wrapper no-sidebar">
+      <div class="main-content">
+        <div class="page-title-section">
+          <p class="page-badge">Cài Đặt Vận Chuyển / Quản Lý Kho Lấy Hàng</p>
+          <h1>Quản lý địa chỉ kho lấy hàng</h1>
+        </div>
+
+        <section class="panel panel-list">
+          <div class="panel-header">
+            <h2>Danh Sách Địa Chỉ Kho Lấy Hàng</h2>
+          </div>
+          <div class="table-wrap">
+            <table class="address-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll" /></th>
+                  <th>Tên Kho</th>
+                  <th>Người Liên Hệ</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Địa Chỉ Chi Tiết</th>
+                  <th>Tỉnh/Thành</th>
+                  <th>Mặc Định</th>
+                  <th>Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="warehouseTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel panel-form">
+          <div class="panel-header">
+            <h2>Thêm Địa Chỉ Kho Lấy Hàng Mới</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-item">
+              <label for="warehouseName">Tên Kho</label>
+              <input id="warehouseName" type="text" placeholder="Tên Kho" />
+            </div>
+            <div class="form-item">
+              <label for="contactName">Tên Người Liên Hệ</label>
+              <input id="contactName" type="text" placeholder="Tên Người Liên Hệ" />
+            </div>
+            <div class="form-item">
+              <label for="phone">Số Điện Thoại</label>
+              <input id="phone" type="tel" placeholder="Số Điện Thoại" />
+            </div>
+
+            <div class="form-item">
+              <label for="province">Tỉnh / Thành Phố</label>
+              <select id="province">
+                <option value="">Chọn Tỉnh / Thành</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="TPHCM">TPHCM</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label for="district">Quận / Huyện</label>
+              <select id="district">
+                <option value="">Chọn Quận / Huyện</option>
+                <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+                <option value="Cầu Giấy">Cầu Giấy</option>
+                <option value="Quận 1">Quận 1</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label for="ward">Phường / Xã</label>
+              <select id="ward">
+                <option value="">Chọn Phường / Xã</option>
+                <option value="Phường 1">Phường 1</option>
+                <option value="Phường 2">Phường 2</option>
+                <option value="Phường 3">Phường 3</option>
+              </select>
+            </div>
+
+            <div class="form-item">
+              <label for="houseNumber">Số Nhà</label>
+              <input id="houseNumber" type="text" placeholder="Số nhà" />
+            </div>
+            <div class="form-item full-width">
+              <label for="street">Đường</label>
+              <div class="street-field">
+                <input id="street" type="text" placeholder="Đường" />
+                <span class="map-icon">📍</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <label class="checkbox-label">
+              <input type="checkbox" id="defaultWarehouse" />
+              Đặt làm địa chỉ kho lấy hàng mặc định
+            </label>
+          </div>
+          <div class="button-row">
+            <button id="addAddressBtn" class="btn btn-primary">Thêm Địa Chỉ</button>
+            <button id="cancelBtn" class="btn btn-secondary">Hủy</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/seller-header.js"></script>
+  <script src="../JS/diachikho.js"></script>
+</body>
+
+</html>
