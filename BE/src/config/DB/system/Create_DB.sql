@@ -1,7 +1,7 @@
 CREATE DATABASE ShopeeVipDB
 ON PRIMARY (
     NAME = ECommerce_Data,
-    FILENAME = 'D:\Project_HQTCSDL(LyThuyet)\DB\ShopeeVipDB.mdf',
+    FILENAME = 'D:\DoAnHQTCSDL\DB\ShopeeVipDB.mdf',
     SIZE = 10MB,
     MAXSIZE = UNLIMITED,
     FILEGROWTH = 5MB
