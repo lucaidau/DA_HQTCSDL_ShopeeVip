@@ -359,3 +359,41 @@ body {
   font-weight: bold;
   font-size: 18px;
 }
+.diachicuatoi{
+  
+            padding: 20px 30px;
+            font-size: 20px;
+            border-bottom: 1px solid #eee;
+}
+.dong258{
+   padding: 20px 30px;
+            border-top: 1px solid #eee;
+            text-align: right;
+}
+.nuthuy{
+   background: none;
+              border: none;
+              margin-right: 15px;
+              cursor: pointer;
+}
+.dong229{
+   margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+}
+.dong250{
+  padding: 0 30px; overflow-y: auto; flex: 1;
+}
+.label116{
+    display: flex;
+              align-items: center;
+              gap: 10px;
+              font-size: 14px;
+              cursor: pointer;
+}
+.small225{
+  color: #888; display: block; margin-bottom: 15px
+}
+.spantt{
+  font-size: 18px; color: #222
+}
