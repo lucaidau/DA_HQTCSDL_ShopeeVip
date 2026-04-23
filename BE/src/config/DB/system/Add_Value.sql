@@ -54,6 +54,6 @@ INSERT INTO DON_HANG (IDNguoiMua) VALUES (1);
 
 -- Bước 2: Tạo Chi tiết đơn hàng (Giả sử đơn hàng trên có ID = 1)
 -- Khách mua 1 chiếc Titan 128GB (IDBanSao = 1) và 1 chiếc Màu Xanh (IDBanSao = 2)
-INSERT INTO CHI_TIET_DON_HANG (IDDonHang, IDBanSao, TongTien, GhiChu, SoLuong, TrangThai)
+INSERT INTO CHI_TIET_DON_HANG (IDDonHang, IDBanSao, TongTien, GhiChu, SoLuong, TrangThai, GiaTien)
 VALUES 
-(1, 1, 25000000, N'Giao hàng nhanh nhé', 1, 1)
+(1, 1, 25000000, N'Giao hàng nhanh nhé', 1, 1,25000000)

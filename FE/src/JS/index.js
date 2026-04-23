@@ -54,8 +54,8 @@ const login = () => {
       console.log("Đăng nhập thành công: ", data);
       localStorage.setItem("user", data.user);
 
-      if (data.user.IDShop === null) window.location = "home.html";
-      else window.location = "kenhbanhang.html";
+      if (data.user.IDShop === null) window.location = "User/home.html";
+      else window.location = "Shop/TestShop.html";
     })
     .catch((err) => {
       console.log("Lỗi hệ thống: ", err);
