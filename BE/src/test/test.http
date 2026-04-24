@@ -18,8 +18,8 @@ POST http://localhost:3000/
 Content-Type: application/json
 
 {
-    "username": "",
-    "password": "01234"
+    "username": "user1",
+    "password": "123"
 }
 
 ### GET Danh sách sản phẩm
