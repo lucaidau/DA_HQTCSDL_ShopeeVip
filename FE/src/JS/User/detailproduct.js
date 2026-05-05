@@ -1,6 +1,10 @@
+// Logic cần có:
+// Nếu người dùng nhấn thêm vào giỏ hàng thêm vào db cập nhật số lượng và hiện lên Badge giỏ hàng số lượng hiện có trong giỏ hàng
+
 const urlParams = new URLSearchParams(window.location.search);
 const productID = urlParams.get("id");
 
+// lấy danh sách thông tin chi tiết của sản phẩm có productID
 const getProductDetail = async () => {
   try {
     const res = await fetch(`http://localhost:3000/sanpham/${productID}`);
@@ -13,6 +17,7 @@ const getProductDetail = async () => {
   }
 };
 
+// Lấy thông tin giỏ hàng
 const userID = localStorage.getItem("userID");
 const countCartItem = async () => {
   try {
@@ -24,6 +29,32 @@ const countCartItem = async () => {
   }
 };
 
+window.onload = async () => {
+  const cartData = await countCartItem();
+  productDetail = await getProductDetail();
+  console.log("return product API: ", productDetail);
+  console.log(`return cart API of user ${userID}: ${cartData}`, cartData);
+  const totalQuantity = cartData.cart.reduce(
+    (sum, item) => sum + item.SoLuongMua,
+    0,
+  );
+  cartCount = totalQuantity;
+  updateCartBadge(cartCount);
+
+  const formatPrice = productDetail[0].GiaBan
+    ? Number(productDetail[0].GiaBan).toLocaleString("vi-VN")
+    : "0";
+  const formatDiscount = productDetail[0].GiaBan
+    ? Number(productDetail[0].GiaBan / (48 / 100)).toLocaleString("vi-VN")
+    : "0";
+  productTitle.innerText = productDetail[0].TenSanPham;
+  price.innerText = "₫" + formatPrice;
+  discount.innerText = "₫" + formatDiscount;
+
+  CreateCopyProduct(productDetail);
+  updateUI(productDetail);
+};
+
 // ============================================================
 // CART LOGIC
 // ============================================================
@@ -32,6 +63,7 @@ let productDetail;
 
 let toastTimer = null;
 
+// Hàm cập nhật UI số lượng sản phẩm hiện có trong giỏ hàng
 function updateCartBadge(count) {
   const badge = document.querySelector(".cart-badge");
   if (!badge) return;
@@ -44,6 +76,7 @@ function updateCartBadge(count) {
   }, 200);
 }
 
+// Hàm UI hiện Toast thêm thành công vào giỏ hàng
 function showToast(qty) {
   const toast = document.getElementById("cartToast");
   const sub = document.getElementById("toastSub");
@@ -53,6 +86,7 @@ function showToast(qty) {
   toastTimer = setTimeout(() => hideToast(), 3000);
 }
 
+// Hàm ẩn Toast
 function hideToast() {
   document.getElementById("cartToast").classList.remove("show");
 }
@@ -104,31 +138,6 @@ function buyNow() {
 const productTitle = document.getElementById("prodTitle");
 const discount = document.getElementById("prodOldPrice");
 const price = document.getElementById("prodNewPrice");
-
-window.onload = async () => {
-  const cartData = await countCartItem();
-  productDetail = await getProductDetail();
-  console.log(productDetail);
-  const totalQuantity = cartData.cart.reduce(
-    (sum, item) => sum + item.SoLuongMua,
-    0,
-  );
-  cartCount = totalQuantity;
-  updateCartBadge(cartCount);
-
-  const formatPrice = productDetail[0].GiaBan
-    ? Number(productDetail[0].GiaBan).toLocaleString("vi-VN")
-    : "0";
-  const formatDiscount = productDetail[0].GiaBan
-    ? Number(productDetail[0].GiaBan / (48 / 100)).toLocaleString("vi-VN")
-    : "0";
-  productTitle.innerText = productDetail[0].TenSanPham;
-  price.innerText = "₫" + formatPrice;
-  discount.innerText = "₫" + formatDiscount;
-
-  CreateCopyProduct(productDetail);
-  updateUI(productDetail);
-};
 
 const CreateCopyProduct = (detail) => {
   let typeList = document.querySelector(".form-content");
@@ -197,7 +206,7 @@ const updateUI = (detail) => {
 const AddToCart = () => {
   const product = {
     userID: userID,
-
+    copyID: productID,
     quantity: qty,
   };
 };
