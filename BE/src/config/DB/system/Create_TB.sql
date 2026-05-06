@@ -15,14 +15,14 @@ CREATE TABLE TAI_KHOAN (
 CREATE TABLE NGUOI_MUA (
     IDNguoiMua INT IDENTITY(1,1) PRIMARY KEY ,
     IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
-    TrangThai INT
+    TrangThaiUser INT
 );
 
 -- 3. Bảng Shop
 CREATE TABLE SHOP (
     IDShop INT IDENTITY(1,1) PRIMARY KEY,
     IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
-    TrangThai INT
+    TrangThaiShop INT
 );
 
 CREATE TABLE TK_NGAN_HANG
@@ -59,7 +59,8 @@ CREATE TABLE SAN_PHAM (
     IDDanhMuc INT FOREIGN KEY REFERENCES DANH_MUC(IDDanhMuc),
     TenSanPham NVARCHAR(50),
     MoTa NVARCHAR(MAX),
-    HinhAnh VARCHAR(255)
+    HinhAnh VARCHAR(MAX),
+    TrangThaiSP BIT
 );
 
 -- 6. Bảng Bản Sao Sản Phẩm (Biến thể)
@@ -70,13 +71,15 @@ CREATE TABLE BAN_SAO_SAN_PHAM (
     GiaBan DECIMAL(18,2),
     BienThe NVARCHAR(50), -- Ví dụ: Màu Đỏ, Size L
     HinhAnh VARCHAR(MAX),
-    TrangThai INT
+    TrangThaiBS INT DEFAULT 1
 );
 
 -- 7. Bảng Đơn Hàng
 CREATE TABLE DON_HANG (
     IDDonHang INT IDENTITY(1,1) PRIMARY KEY,
-    IDNguoiMua INT FOREIGN KEY REFERENCES NGUOI_MUA(IDNguoiMua)
+    IDNguoiMua INT FOREIGN KEY REFERENCES NGUOI_MUA(IDNguoiMua),
+    NgayTao DATE,
+    TrangThaiDonHang INT DEFAULT 0
 );
 
 -- 8. Bảng Chi Tiết Đơn Hàng
@@ -84,14 +87,13 @@ CREATE TABLE CHI_TIET_DON_HANG (
     IDChiTiet INT IDENTITY(1,1) PRIMARY KEY,
     IDDonHang INT FOREIGN KEY REFERENCES DON_HANG(IDDonHang),
     IDBanSao INT FOREIGN KEY REFERENCES BAN_SAO_SAN_PHAM(IDBanSao),
-    TongTien DECIMAL(18,2), -- Nên hiểu là Giá tại thời điểm mua
+    GiaLucMua DECIMAL(18,2),
     GhiChu NVARCHAR(200),
     SoLuong INT,
-    TrangThai INT,
     GiaTien DECIMAL(18,2)
 );
 
--- 9. Bảng Giỏ Hàng (PK phức hợp theo ảnh của bạn)
+-- 9. Bảng Giỏ Hàng 
 CREATE TABLE GIO_HANG (
     IDTaiKhoan INT,
     IDBanSao INT,

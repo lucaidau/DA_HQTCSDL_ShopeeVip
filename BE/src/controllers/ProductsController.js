@@ -6,11 +6,7 @@ class ProductsController {
     try {
       const page = parseInt(req.query.page) || 1;
       const pool = await poolPromise;
-      const result = await pool
-        .request()
-        .input("PageNumber", sql.Int, page)
-        .input("PageSize", sql.Int, 20)
-        .execute("sp_LaySanPham");
+      const result = await pool.request().execute("sp_LaySanPham");
 
       return res.status(200).json({
         message: "Lấy sản phẩm thành công",
@@ -36,10 +32,6 @@ class ProductsController {
         .request()
         .input("IDSanPham", sql.Int, id)
         .execute("sp_LayChiTietSanPham");
-
-      // if (result.recordset.length === 0) {
-      //   return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-      // }
 
       return res.status(200).json({ san_pham: result.recordsets });
     } catch (error) {

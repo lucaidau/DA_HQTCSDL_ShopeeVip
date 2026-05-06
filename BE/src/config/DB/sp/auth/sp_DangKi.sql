@@ -31,12 +31,12 @@ AS
 
             IF @Loai = 1
             BEGIN
-                INSERT INTO NGUOI_MUA( IDTaiKhoan, TrangThai) VALUES(@IDTemp, 1);
+                INSERT INTO NGUOI_MUA( IDTaiKhoan, TrangThaiUser) VALUES(@IDTemp, 1);
             END
 
             ELSE IF @Loai = 2
             BEGIN
-                INSERT INTO SHOP(IDTaiKhoan, TrangThai) VALUES(@IDTemp,1);
+                INSERT INTO SHOP(IDTaiKhoan, TrangThaiShop) VALUES(@IDTemp,1);
             END
             COMMIT TRANSACTION;
         END TRY

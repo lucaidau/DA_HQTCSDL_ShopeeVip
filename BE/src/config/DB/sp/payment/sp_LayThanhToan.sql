@@ -53,8 +53,6 @@ AS
                         WHERE @IDNguoiMua = IDTaiKhoan AND IDBanSao IN (SELECT value FROM STRING_SPLIT(@ListID,','))
 
                         COMMIT TRANSACTION;
-
-                        SELECT @IDDonHang AS IDDonHang;
                         
                         SELECT *
                         FROM CHI_TIET_DON_HANG

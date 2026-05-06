@@ -1,11 +1,12 @@
 // Logic cần có:
 // Nếu người dùng nhấn thêm vào giỏ hàng thêm vào db cập nhật số lượng và hiện lên Badge giỏ hàng số lượng hiện có trong giỏ hàng
 
+// === [XỬ LÍ API] ===
 const urlParams = new URLSearchParams(window.location.search);
 const productID = urlParams.get("id");
 
-// lấy danh sách thông tin chi tiết của sản phẩm có productID
-const getProductDetail = async () => {
+// [API] lấy danh sách thông tin chi tiết của sản phẩm có productID
+const apiGetProductDetail = async () => {
   try {
     const res = await fetch(`http://localhost:3000/sanpham/${productID}`);
     const detail = await res.json();
@@ -13,39 +14,81 @@ const getProductDetail = async () => {
 
     return product[0];
   } catch (error) {
-    console.error("Không thấy ID sản phẩm");
+    console.error("Không thấy ID sản phẩm: ", error);
   }
 };
 
-// Lấy thông tin giỏ hàng
-const userID = localStorage.getItem("userID");
-const countCartItem = async () => {
+const userRaw = localStorage.getItem("user");
+const userData = JSON.parse(userRaw);
+const userID = userData.IDTaiKhoan;
+// [API] Lấy thông tin giỏ hàng
+const apiCountCartItem = async () => {
   try {
     const res = await fetch(`http://localhost:3000/giohang/${userID}`);
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Không thể lấy giỏ hàng");
+    console.error("Không thể lấy giỏ hàng: ", error);
+  }
+};
+
+let cartCount = 0;
+let productDetail;
+let selectedProduct = productID;
+// [API] Thêm vào giỏ hàng
+const apiAddToCart = async (copyID) => {
+  const product = {
+    userID: userID,
+    copyID: copyID,
+    quantity: qty,
+  };
+  console.log(product);
+
+  try {
+    const res = await fetch(`http://localhost:3000/giohang/themsanpham`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log("Thêm vào giỏ hàng thành công: ", data);
+
+      const updateCartData = await apiCountCartItem();
+      const newCount = updateCartData.cart.reduce(
+        (sum, item) => sum + item.SoLuongMua,
+        0,
+      );
+      updateCartBadge(newCount);
+      return data;
+    }
+  } catch (error) {
+    console.log("Không thể thêm vào giỏ hàng!", error);
   }
 };
 
 window.onload = async () => {
-  const cartData = await countCartItem();
-  productDetail = await getProductDetail();
+  const cartData = await apiCountCartItem();
+  productDetail = await apiGetProductDetail();
   console.log("return product API: ", productDetail);
   console.log(`return cart API of user ${userID}: ${cartData}`, cartData);
-  const totalQuantity = cartData.cart.reduce(
+  const cartCount = cartData.cart.reduce(
     (sum, item) => sum + item.SoLuongMua,
     0,
   );
-  cartCount = totalQuantity;
+
+  // === XỬ LÍ UI ===
   updateCartBadge(cartCount);
 
+  const formatDiscount = productDetail[0].GiaBan
+    ? Number(
+        productDetail[0].GiaBan - productDetail[0].GiaBan * (48 / 100),
+      ).toLocaleString("vi-VN")
+    : "0";
   const formatPrice = productDetail[0].GiaBan
     ? Number(productDetail[0].GiaBan).toLocaleString("vi-VN")
-    : "0";
-  const formatDiscount = productDetail[0].GiaBan
-    ? Number(productDetail[0].GiaBan / (48 / 100)).toLocaleString("vi-VN")
     : "0";
   productTitle.innerText = productDetail[0].TenSanPham;
   price.innerText = "₫" + formatPrice;
@@ -58,8 +101,6 @@ window.onload = async () => {
 // ============================================================
 // CART LOGIC
 // ============================================================
-let cartCount = 0;
-let productDetail;
 
 let toastTimer = null;
 
@@ -91,6 +132,7 @@ function hideToast() {
   document.getElementById("cartToast").classList.remove("show");
 }
 
+// xử lí ô input số lượng
 const qtyTxt = document.getElementById("qtyInput");
 let qty = parseInt(document.getElementById("qtyInput").value) || 1;
 
@@ -110,11 +152,9 @@ const updateQty = (sigma) => {
 
 function addToCart() {
   qty = qty <= 0 ? 1 : qty;
-  cartCount += qty;
 
-  updateCartBadge(cartCount);
   showToast(qty);
-
+  apiAddToCart(selectedProduct);
   // Briefly animate the button
   const btn = document.querySelector(".btn-add-cart");
   const original = btn.innerHTML;
@@ -132,12 +172,29 @@ function addToCart() {
 }
 
 function buyNow() {
-  addToCart();
+  window.location = "./pay.html";
 }
 
 const productTitle = document.getElementById("prodTitle");
-const discount = document.getElementById("prodOldPrice");
-const price = document.getElementById("prodNewPrice");
+const price = document.getElementById("prodOldPrice");
+const discount = document.getElementById("prodNewPrice");
+
+const updateSelection = (id) => {
+  selectedProduct = id;
+
+  const formatDiscount = productDetail[id - 1].GiaBan
+    ? Number(
+        productDetail[id - 1].GiaBan -
+          productDetail[id - 1].GiaBan * (48 / 100),
+      ).toLocaleString("vi-VN")
+    : "0";
+  const formatPrice = productDetail[id - 1].GiaBan
+    ? Number(productDetail[id - 1].GiaBan).toLocaleString("vi-VN")
+    : "0";
+  productTitle.innerText = productDetail[id - 1].TenSanPham;
+  price.innerText = "₫" + formatPrice;
+  discount.innerText = "₫" + formatDiscount;
+};
 
 const CreateCopyProduct = (detail) => {
   let typeList = document.querySelector(".form-content");
@@ -145,7 +202,7 @@ const CreateCopyProduct = (detail) => {
 
   for (let i = 0; i < detail.length; i++) {
     htmlContent += `
-      <button class="btn-attr" data-stock ="${detail[i].SoLuongTonKho}">
+      <button class="btn-attr" data-stock ="${detail[i].SoLuongTonKho}" onclick="updateSelection(${detail[i].IDBanSao})">
         <img src = "${detail[i].HinhAnh[1] || detail[i].HinhAnh[0]}">
         ${detail[i].BienThe}
       </button>
@@ -201,12 +258,4 @@ const updateUI = (detail) => {
   mainImg.src = `${detail[0].HinhAnh[0]}`;
   txtTonKho.innerText = `${detail[0].SoLuongTonKho} có sẵn`;
   txtMoTa.innerText = `${detail[0].MoTa}`;
-};
-
-const AddToCart = () => {
-  const product = {
-    userID: userID,
-    copyID: productID,
-    quantity: qty,
-  };
 };
