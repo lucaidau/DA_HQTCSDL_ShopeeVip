@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // Router
 const route = require("./routers/index");
 route(app);
 
-app.listen(port, ()=>{console.log(`App is running on http://localhost:${port}`);
-})
+app.listen(port, () => {
+  console.log(`App is running on http://localhost:${port}`);
+});

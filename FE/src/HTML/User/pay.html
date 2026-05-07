@@ -30,10 +30,10 @@
     </div>
 
     <div class="header-main">
-      <div class="logo-section">
+      <a href="./home.html" style="text-decoration: none" class="logo-section">
         <i class="fas fa-shopping-bag"></i>
         <div>Shopee <span>Thanh Toán</span></div>
-      </div>
+      </a>
     </div>
 
     <div class="container">
@@ -113,8 +113,7 @@
             <button class="btn-type" onclick="setType(this)">Văn Phòng</button>
           </div>
 
-          <label class="label116"
-          >
+          <label class="label116">
             <input type="checkbox" id="new-default" /> Đặt làm địa chỉ mặc định
           </label>
         </div>
@@ -206,7 +205,7 @@
 
       <div class="summary-box">
         <div id="tth" class="summary-row">
-          <span >Tổng tiền hàng</span> <span>₫235.400</span>
+          <span>Tổng tiền hàng</span> <span>₫235.400</span>
         </div>
 
         <div class="summary-row">
@@ -219,38 +218,27 @@
           <span class="total-final">₫252.400</span>
         </div>
 
-        <div
-          class="dong229"
-        >
+        <div class="dong229">
           <small class="small225"
             >Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản
             Shopee</small
           >
 
-          <button id="dh" class="btn-orange" onclick="processOrder()">Đặt Hàng</button>
+          <button id="dh" class="btn-orange" onclick="processOrder()">
+            Đặt Hàng
+          </button>
         </div>
       </div>
     </div>
 
     <div class="modal-overlay" id="modal">
       <div class="modal-box">
-        <div class="diachicuatoi">
-          Địa Chỉ Của Tôi
-        </div>
+        <div class="diachicuatoi">Địa Chỉ Của Tôi</div>
 
-        <div
-          class="modal-body"
-          id="list"
-          class="dong250"
-        ></div>
+        <div class="modal-body" id="list" class="dong250"></div>
 
         <div class="dong258">
-          <button
-            onclick="closeModal()"
-            class="nuthuy"
-          >
-            Hủy
-          </button>
+          <button onclick="closeModal()" class="nuthuy">Hủy</button>
 
           <button
             class="btn-orange"
