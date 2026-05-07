@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const cartController = require("../controllers/CartController")
+const cartController = require("../controllers/CartController");
 
-router.post("/themsanpham", cartController.themSanPhamVaoGioHang)
-router.post("/capnhatgiohang", cartController.capNhatGioHang)
-router.get("/:id", cartController.layGioHang)
+router.post("/themsanpham", cartController.themSanPhamVaoGioHang);
+router.delete("/xoasp", cartController.xoaSPTrongGioHang);
+router.post("/capnhatgiohang", cartController.capNhatGioHang);
+router.get("/:id", cartController.layGioHang);
 
 module.exports = router;

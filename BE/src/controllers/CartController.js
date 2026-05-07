@@ -4,7 +4,6 @@ class CartController {
   //[GET] /giohang/:id
   async layGioHang(req, res) {
     try {
-      
       const userID = parseInt(req.params.id);
       const pool = await poolPromise;
       const result = await pool
@@ -49,18 +48,39 @@ class CartController {
       const { userID, copyID, newQuantity } = req.body;
 
       const pool = await poolPromise;
-      const result = await pool.request()
-      .input("IDNguoiMua", sql.Int,userID)
-      .input("IDBanSao", sql.Int,copyID)
-      .input("SoLuongMoi", sql.Int,newQuantity)
-      .execute("sp_CapNhatGioHang");
+      const result = await pool
+        .request()
+        .input("IDNguoiMua", sql.Int, userID)
+        .input("IDBanSao", sql.Int, copyID)
+        .input("SoLuongMoi", sql.Int, newQuantity)
+        .execute("sp_CapNhatGioHang");
 
       return res
-      .status(201)
-      .json({message:"Cập nhật thành công!", newCart: result.recordset})
+        .status(201)
+        .json({ message: "Cập nhật thành công!", newCart: result.recordset });
     } catch (error) {
       console.log("Err: ", error);
       return res.status(500).json({ message: "Lỗi Server!" });
+    }
+  }
+
+  // [DELETE] /giohang/xoasp
+  async xoaSPTrongGioHang(req, res) {
+    const { userID, copyID } = req.body;
+    try {
+      const pool = await poolPromise;
+      const result = await pool
+        .request()
+        .input("IDTaiKhoan", sql.Int, userID)
+        .input("IDBanSao", sql.Int, copyID)
+        .execute("sp_XoaSPTrongGioHang");
+
+      return res.status(200).json({ success: true, message: "Xóa thành công" });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        error: error.message,
+      });
     }
   }
 }
