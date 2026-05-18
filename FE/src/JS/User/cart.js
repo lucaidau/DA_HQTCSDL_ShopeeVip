@@ -11,40 +11,6 @@ function changeQty(id, delta) {
   input.value = val;
 }
 
-// Dữ liệu mẫu sản phẩm gợi ý
-const sampleProducts = [
-  {
-    name: "Kem Chống Nắng Skin1004 Madagascar Centella",
-    price: "285.000",
-    img: "21",
-  },
-  {
-    name: "Nước Tẩy Trang L'Oreal Paris 3-in-1 Micellar",
-    price: "159.000",
-    img: "22",
-  },
-  {
-    name: "Sữa Rửa Mặt Cerave Foaming Facial Cleanser",
-    price: "320.000",
-    img: "23",
-  },
-  {
-    name: "Mặt Nạ Ngủ Môi Laneige Lip Sleeping Mask",
-    price: "45.000",
-    img: "24",
-  },
-  {
-    name: "Serum The Ordinary Niacinamide 10% + Zinc 1%",
-    price: "185.000",
-    img: "25",
-  },
-  {
-    name: "Phấn Phủ Bột Kiềm Dầu Innisfree No Sebum",
-    price: "99.000",
-    img: "26",
-  },
-];
-
 const grid = document.getElementById("product-grid");
 const loading = document.getElementById("loading");
 
@@ -87,35 +53,35 @@ function createProductHTML(p) {
     `;
 }
 
-// Hàm tải thêm sản phẩm
-function loadMore() {
-  loading.style.display = "block";
+// // Hàm tải thêm sản phẩm
+// function loadMore() {
+//   loading.style.display = "block";
 
-  // Giả lập gọi API mất 1 giây
-  setTimeout(() => {
-    let html = "";
-    // Thêm 12 sản phẩm mỗi lần cuộn
-    for (let i = 0; i < 12; i++) {
-      const p =
-        sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
-      html += createProductHTML(p);
-    }
-    grid.insertAdjacentHTML("beforeend", html);
-    loading.style.display = "none";
-  }, 1000);
-}
+//   // Giả lập gọi API mất 1 giây
+//   setTimeout(() => {
+//     let html = "";
+//     // Thêm 12 sản phẩm mỗi lần cuộn
+//     for (let i = 0; i < 12; i++) {
+//       const p =
+//         sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
+//       html += createProductHTML(p);
+//     }
+//     grid.insertAdjacentHTML("beforeend", html);
+//     loading.style.display = "none";
+//   }, 1000);
+// }
 
 // Sử dụng Intersection Observer để phát hiện cuộn đến cuối trang
-const observer = new IntersectionObserver(
-  (entries) => {
-    if (entries[0].isIntersecting) {
-      loadMore();
-    }
-  },
-  { threshold: 0.1 },
-);
+// const observer = new IntersectionObserver(
+//   (entries) => {
+//     if (entries[0].isIntersecting) {
+//       loadMore();
+//     }
+//   },
+//   { threshold: 0.1 },
+// );
 
-observer.observe(document.getElementById("scroll-marker"));
+// observer.observe(document.getElementById("scroll-marker"));
 // Cập nhật lại hàm updateTotal cho chính xác
 function updateTotal() {
   let totalItems = 0;
@@ -246,14 +212,27 @@ document
 // Tải lần đầu
 loadMore();
 
+const userRaw = localStorage.getItem("userID");
+const userData = JSON.parse(userRaw);
+const userID = userData.IDTaiKhoan;
 const LayCart = async () => {
   try {
-    const userID = localStorage.getItem("userID");
     const res = await fetch(`http://localhost:3000/giohang/${userID}`);
     const data = await res.json();
     console.log(data);
   } catch (error) {
     console.log("Không thể lấy giỏ hàng: ", error);
+  }
+};
+
+const xoaSpTrongCart = async () => {
+  try {
+    const res = await fetch(`http://localhost:3000/giohang/xoasp`,{
+      method: "DELETE",
+      
+    })
+  } catch (error) {
+    console.log("Không thể xóa sản phẩm: ", error);
   }
 };
 
