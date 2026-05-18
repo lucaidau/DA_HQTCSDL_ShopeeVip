@@ -4,5 +4,5 @@ CREATE PROC sp_XoaSPTrongGioHang
 AS
 BEGIN
     DELETE FROM GIO_HANG 
-    WHERE IDBanSao = @IDBanSao AND IDTaiKhoan = @IDTaiKhoan;
+    WHERE IDBanSao = @IDBanSao AND IDNguoiMua = @IDTaiKhoan;
 END;

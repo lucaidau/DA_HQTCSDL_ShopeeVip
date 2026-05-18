@@ -20,7 +20,7 @@ AS
         JOIN SHOP s ON sp.IDShop = s.IDShop 
         JOIN TAI_KHOAN tk_shop ON tk_shop.IDTaiKhoan = s.IDTaiKhoan
 
-        WHERE gh.IDTaiKhoan = @IDNguoiDung;
+        WHERE gh.IDNguoiMua = @IDNguoiDung;
     END
 
 DROP PROC IF EXISTS sp_LayGioHang
