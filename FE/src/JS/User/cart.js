@@ -14,75 +14,43 @@ function changeQty(id, delta) {
 const grid = document.getElementById("product-grid");
 const loading = document.getElementById("loading");
 
-function createProductHTML(p) {
-  const randomId = "qty_" + Math.random().toString(36).substr(2, 9);
-  // Chuyển "285.000" thành số 285000
-  const numericPrice = parseInt(p.price.replace(/\./g, ""));
-
+function createProductHTML(cart) {
+  const numericPrice = Number(cart.GiaBan).toLocaleString("vi-VN");
+  const procName = cart.TenSanPham + " " + (cart.BienThe || "");
   return `
     <div class="shop-section">
         <div class="shop-header">
             <input type="checkbox" class="shop-checkbox"> 
             <span class="badge-yeuthich">Gợi ý</span>
-            <strong>Cửa hàng của ${p.name.split(" ")[0]}</strong>
+            <strong>${cart.Ten}</strong>
             <i class="fa-solid fa-comment-dots" style="color: var(--shopee-orange);"></i>
         </div>
         <div class="cart-item">
-            <input type="checkbox" class="item-checkbox" data-price="${numericPrice}">
+            <input type="checkbox" class="item-checkbox" data-price="${cart.GiaBan}" data-id-bansao="${cart.IDBanSao}">
             <div class="item-info">
-                <img src="https://picsum.photos/100/100?random=${p.img}" alt="product">
+                <img src="${cart.HinhAnh}" alt="productImg">
                 <div>
-                    <div class="item-name">${p.name}</div>
+                    <div class="item-name">${procName}</div>
                     <div class="item-variant">Phân loại hàng: Mặc định <i class="fa-solid fa-caret-down"></i></div>
                 </div>
             </div>
-            <div style="text-align: center;">₫${p.price}</div>
+            <div style="text-align: center;">₫${numericPrice}</div>
             <div style="display: flex; justify-content: center;">
                 <div class="quantity-control">
-                    <button class="btn-qty" data-target="${randomId}" data-delta="-1">-</button>
-                    <input type="text" id="${randomId}" class="qty-input" value="1" readonly>
-                    <button class="btn-qty" data-target="${randomId}" data-delta="1">+</button>
+                    <button class="btn-qty" data-target="${cart.IDBanSao}" data-delta="-1">-</button>
+                    <input type="text" id="${cart.IDBanSao}" class="qty-input" value="${cart.SoLuongMua}" readonly>
+                    <button class="btn-qty" data-target="${cart.IDBanSao}" data-delta="1">+</button>
                 </div>
             </div>
-            <div style="text-align: center;" class="price-subtotal">₫${p.price}</div>
+            <div style="text-align: center;" class="price-subtotal">₫${cart.ThanhTien.toLocaleString("vi-VN")}</div>
             <div style="text-align: center;">
-                <button class="btn-delete">Xóa</button>
+                <button class="btn-delete data-id-bansao="${cart.IDBanSao}">Xóa</button>
             </div>
         </div>
     </div>
     `;
 }
 
-// // Hàm tải thêm sản phẩm
-// function loadMore() {
-//   loading.style.display = "block";
-
-//   // Giả lập gọi API mất 1 giây
-//   setTimeout(() => {
-//     let html = "";
-//     // Thêm 12 sản phẩm mỗi lần cuộn
-//     for (let i = 0; i < 12; i++) {
-//       const p =
-//         sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
-//       html += createProductHTML(p);
-//     }
-//     grid.insertAdjacentHTML("beforeend", html);
-//     loading.style.display = "none";
-//   }, 1000);
-// }
-
-// Sử dụng Intersection Observer để phát hiện cuộn đến cuối trang
-// const observer = new IntersectionObserver(
-//   (entries) => {
-//     if (entries[0].isIntersecting) {
-//       loadMore();
-//     }
-//   },
-//   { threshold: 0.1 },
-// );
-
-// observer.observe(document.getElementById("scroll-marker"));
-// Cập nhật lại hàm updateTotal cho chính xác
 function updateTotal() {
   let totalItems = 0;
   let totalPrice = 0;
@@ -209,31 +177,61 @@ document
       alert("Vui lòng chọn sản phẩm để xóa!");
     }
   });
-// Tải lần đầu
-loadMore();
 
-const userRaw = localStorage.getItem("userID");
+const userRaw = localStorage.getItem("user");
 const userData = JSON.parse(userRaw);
 const userID = userData.IDTaiKhoan;
+console.log(userID);
 const LayCart = async () => {
   try {
     const res = await fetch(`http://localhost:3000/giohang/${userID}`);
     const data = await res.json();
-    console.log(data);
+    return data;
   } catch (error) {
     console.log("Không thể lấy giỏ hàng: ", error);
   }
 };
 
-const xoaSpTrongCart = async () => {
+const xoaSpTrongCart = async (copyID) => {
   try {
-    const res = await fetch(`http://localhost:3000/giohang/xoasp`,{
+    const deleteProc = {
+      userID: userID,
+      copyID: copyID,
+    };
+    const res = await fetch(`http://localhost:3000/giohang/xoasp`, {
       method: "DELETE",
-      
-    })
+      headers: {},
+      body: JSON.stringify(),
+    });
   } catch (error) {
     console.log("Không thể xóa sản phẩm: ", error);
   }
 };
 
-window.onload = LayCart();
+window.onload = async () => {
+  try {
+    grid.innerHTML = "";
+
+    const cartData = await LayCart();
+    const cart = cartData.cart;
+
+    if (cart.length > 0) {
+      console.log(`Sản phẩm từ giỏ hàng của người dùng ${userID}: `, cart);
+      let htmlContent = "";
+      cart.forEach((item) => {
+        htmlContent += createProductHTML(item);
+      });
+      grid.innerHTML = htmlContent;
+      updateTotal();
+    } else {
+      grid.innerHTML = `<div style="text-align: center; padding: 80px 0; font-size: 16px; color: #555;">
+            <i class="fa-solid fa-basket-shopping" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+            <div>Giỏ hàng của bạn còn trống.</div>
+        </div>`;
+      updateTotal();
+    }
+  } catch (error) {
+    console.log("Lỗi khi tải giỏ hàng: ", error);
+    grid.innerHTML = `<div style="text-align:center; color:red; padding: 50px 0;">Không thể tải dữ liệu giỏ hàng lúc này.</div>`;
+  }
+};
