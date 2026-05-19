@@ -1,5 +1,5 @@
 const { VarChar, pool } = require("mssql");
-const { sql, poolPromise } = require("../config/connect");
+const { sql, customerPoolPromise } = require("../config/connect");
 
 class AuthController {
   //[POST] /
@@ -7,13 +7,13 @@ class AuthController {
     try {
       const { username, password } = req.body;
 
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
 
       const result = await pool
         .request()
         .input("TenDangNhap", sql.VarChar, username)
         .input("MatKhau", sql.VarChar, password)
-        .execute("sp_DangNhap");
+        .execute("sp_NguoiMua_DangNhap");
 
       const user = result.recordset[0];
 
@@ -33,7 +33,7 @@ class AuthController {
       const userRole = parseInt(role);
       const userGender = parseInt(gender);
 
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
 
       await pool
         .request()
@@ -44,7 +44,7 @@ class AuthController {
         .input("GioiTinh", sql.Int, userGender)
         .input("MatKhau", sql.VarChar, password)
         .input("Loai", sql.Int, userRole)
-        .execute("sp_DangKi");
+        .execute("sp_NguoiMua_DangKi");
 
       return res.status(201).json({ message: "Đăng kí thành công" });
     } catch (err) {

@@ -1,12 +1,12 @@
-const { sql, poolPromise } = require("../config/connect");
+const { sql, customerPoolPromise } = require("../config/connect");
 
 class ProductsController {
   //[GET] /sanpham
   async trangChu(req, res) {
     try {
       const page = parseInt(req.query.page) || 1;
-      const pool = await poolPromise;
-      const result = await pool.request().execute("sp_LaySanPham");
+      const pool = await customerPoolPromise;
+      const result = await pool.request().execute("sp_NguoiMua_LaySanPham");
 
       return res.status(200).json({
         message: "Lấy sản phẩm thành công",
@@ -26,12 +26,12 @@ class ProductsController {
     try {
       const id = parseInt(req.params.id);
 
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
 
       const result = await pool
         .request()
         .input("IDSanPham", sql.Int, id)
-        .execute("sp_LayChiTietSanPham");
+        .execute("sp_NguoiMua_LayChiTietSanPham");
 
       return res.status(200).json({ san_pham: result.recordsets });
     } catch (error) {
