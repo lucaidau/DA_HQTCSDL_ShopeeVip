@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_LaySanPham
+CREATE PROCEDURE sp_NguoiMua_LaySanPham
 AS
     BEGIN
         SET NOCOUNT ON;

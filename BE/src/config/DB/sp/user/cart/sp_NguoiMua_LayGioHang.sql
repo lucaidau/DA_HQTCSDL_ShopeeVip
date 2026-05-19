@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_LayGioHang
+CREATE PROCEDURE sp_NguoiMua_LayGioHang
     @IDNguoiDung INT
 AS
     BEGIN

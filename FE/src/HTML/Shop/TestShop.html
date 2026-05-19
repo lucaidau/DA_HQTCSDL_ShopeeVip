@@ -41,6 +41,11 @@
           <a href="#" class="nav-link" onclick="showTab('themsp-page', this)"
             >Thêm Sản Phẩm</a
           >
+          <a href="#" class="nav-link" onclick="showTab('donhang-page', this)"
+            >Đơn hàng<span id="pendingCount" class="badge" style="display: none"
+              >0</span
+            ></a
+          >
         </aside>
 
         <section id="sodu-page" class="page-section active">
@@ -324,6 +329,43 @@
               <button id="saveBtn" class="btn btn-primary">Lưu sản phẩm</button>
             </div>
             <div id="formMessage" class="form-message"></div>
+          </div>
+        </section>
+        <section id="donhang-page" class="page-section">
+          <div class="page-title-section">
+            <h1>Quản Lý Đơn Hàng</h1>
+            <p style="color: #666; margin-top: 8px; font-size: 14px">
+              Xem và xử lý danh sách các đơn hàng phát sinh từ người mua
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="filter-section">
+              <input
+                type="text"
+                id="searchOrderShip"
+                class="search-input"
+                placeholder="Tìm theo Mã đơn hàng hoặc Tên người mua..."
+              />
+              <button id="btnSearchShip" class="btn btn-secondary">
+                Tìm kiếm
+              </button>
+            </div>
+            <div class="transaction-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Khách hàng</th>
+                    <th>Sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="shippingOrderList"></tbody>
+              </table>
+            </div>
           </div>
         </section>
       </main>

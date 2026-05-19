@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_DangKi
+CREATE PROCEDURE sp_NguoiMua_DangKi
     @Ten NVARCHAR(50),
     @TenDangNhap VARCHAR(30),
     @Email VARCHAR(255),

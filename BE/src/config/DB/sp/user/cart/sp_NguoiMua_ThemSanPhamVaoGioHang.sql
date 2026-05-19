@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_ThemSanPhamVaoGioHang
+CREATE PROCEDURE sp_NguoiMua_ThemSanPhamVaoGioHang
     @IDNguoiDung INT,
     @IDBanSao INT,
     @SoLuong INT

@@ -1,4 +1,4 @@
-CREATE PROC sp_XoaSPTrongGioHang
+CREATE PROC sp_NguoiMua_XoaSPTrongGioHang
 @IDTaiKhoan INT,
 @IDBanSao INT
 AS

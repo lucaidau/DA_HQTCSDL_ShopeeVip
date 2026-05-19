@@ -439,113 +439,110 @@ window.App = {};
   });
 })();
 
-// ==================== MODULE: TRẢ HÀNG HOÀN TIỀN ====================
+// ==================== MODULE: QUẢN LÝ ĐƠN HÀNG (MỚI - ĐÃ TINH GỌN) ====================
 (function () {
-  let returnOrders = [
+  // Dữ liệu giả lập các đơn hàng của khách hàng
+  let shippingOrders = [
     {
-      id: "240418RET1",
-      buyer: "ngoc_huyen_99",
+      id: "SP-ORD88921",
+      buyer: "tran_van_a",
+      date: "19-05-2026 10:15",
+      productName: "Váy hoa dáng dài Vintage",
+      quantity: 1,
+      totalPrice: 250000,
       status: "pending",
-      statusText: "CHƯA XỬ LÝ",
-      statusColor: "#ff9800",
-      reason: "Sản phẩm lỗi",
-      product: {
-        name: "Tai nghe Bluetooth",
-        variation: "Trắng",
-        qty: 1,
-        price: "450.000đ",
-        img: "https://picsum.photos/80/80?random=20",
-      },
-      total: "450.000đ",
+      statusText: "Chờ chuẩn bị hàng",
+    },
+    {
+      id: "SP-ORD55210",
+      buyer: "hoang_thi_b",
+      date: "18-05-2026 15:40",
+      productName: "Điện thoại thông minh 128GB",
+      quantity: 2,
+      totalPrice: 12000000,
+      status: "shipped",
+      statusText: "Đang giao cho ĐVC",
     },
   ];
-  let currentTab = "all";
-  let searchQuery = "";
-  let currentProcessingId = null;
 
-  function renderOrders() {
-    const container = document.getElementById("orderListContainer");
-    const pendingCount = returnOrders.filter(
-      (o) => o.status === "pending",
-    ).length;
-    document.getElementById("pendingCount").innerText = pendingCount;
-    document.getElementById("pendingCount").style.display =
-      pendingCount > 0 ? "inline-block" : "none";
+  let searchShipQuery = "";
 
-    const filtered = returnOrders.filter(
+  function formatVNCurrency(num) {
+    return new Intl.NumberFormat("vi-VN").format(num) + "đ";
+  }
+
+  // Hàm hiển thị danh sách đơn hàng lên bảng
+  function renderShippingOrders() {
+    const tbody = document.getElementById("shippingOrderList");
+    if (!tbody) return;
+
+    const filtered = shippingOrders.filter(
       (o) =>
-        (currentTab === "all" || o.status === currentTab) &&
-        (o.id.toLowerCase().includes(searchQuery) ||
-          o.buyer.toLowerCase().includes(searchQuery)),
+        o.id.toLowerCase().includes(searchShipQuery) ||
+        o.buyer.toLowerCase().includes(searchShipQuery),
     );
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:center; color:#888;">Không có dữ liệu.</div>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888; padding:30px;">Không tìm thấy đơn hàng nào.</td></tr>`;
       return;
     }
 
-    container.innerHTML = filtered
-      .map(
-        (o) => `
-      <div class="order-card">
-        <div class="order-header"><div><b>${o.buyer}</b> | Mã: ${o.id}</div><div style="color:${o.statusColor}; font-weight:bold;">${o.statusText}</div></div>
-        <div class="order-body">
-          <img src="${o.product.img}" class="product-img" />
-          <div class="product-details"><div class="product-name">${o.product.name}</div><div class="reason-box">Lý do: ${o.reason}</div></div>
-          <div style="font-weight:bold;">${o.product.price}</div>
-        </div>
-        <div class="order-footer">
-          <div>Tổng tiền: <strong>${o.total}</strong></div>
-          <button class="btn ${o.status === "pending" ? "btn-primary" : "btn-secondary"}" onclick="openActionModal('${o.id}')">${o.status === "pending" ? "Xử lý ngay" : "Xem chi tiết"}</button>
-        </div>
-      </div>
-    `,
-      )
+    tbody.innerHTML = filtered
+      .map((o) => {
+        let actionBtn = "";
+        if (o.status === "pending") {
+          actionBtn = `<button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:12px;" onclick="shipOrder('${o.id}')">Giao hàng</button>`;
+        } else {
+          actionBtn = `<span style="color:#4caf50; font-size:13px; font-weight:600;">✓ Đã bàn giao</span>`;
+        }
+
+        return `
+        <tr>
+          <td style="font-weight:600;">${o.id}<br><span style="font-size:11px; color:#999; font-weight:400;">${o.date}</span></td>
+          <td><b>${o.buyer}</b></td>
+          <td>
+            <div style="font-weight:500;">${o.productName}</div>
+            <div style="font-size:12px; color:#777;">Số lượng: x${o.quantity}</div>
+          </td>
+          <td style="color:#ff5722; font-weight:600;">${formatVNCurrency(o.totalPrice)}</td>
+          <td>
+            <span class="status-pill ${o.status === "pending" ? "status-out" : "status-sell"}">
+              ${o.statusText}
+            </span>
+          </td>
+          <td>${actionBtn}</td>
+        </tr>
+      `;
+      })
       .join("");
   }
 
-  window.openActionModal = function (id) {
-    const order = returnOrders.find((o) => o.id === id);
-    currentProcessingId = id;
-    const btn = document.getElementById("confirmRefundBtn");
-
-    document.getElementById("modalTitleTraHang").innerText =
-      order.status === "pending" ? "Xử Lý Yêu Cầu" : "Chi Tiết Yêu Cầu";
-    document.getElementById("modalBodyTraHang").innerHTML =
-      `<p><strong>Người mua:</strong> ${order.buyer}</p><p><strong>Lý do:</strong> ${order.reason}</p><p><strong>Số tiền:</strong> <span style="color:#ff5722;font-weight:bold;">${order.total}</span></p>`;
-    btn.style.display = order.status === "pending" ? "inline-block" : "none";
-
-    document.getElementById("infoModalTraHang").classList.add("show");
-  };
-
-  window.acceptRefund = function () {
-    const order = returnOrders.find((o) => o.id === currentProcessingId);
+  // Hàm xử lý nút bấm giao hàng
+  window.shipOrder = function (id) {
+    const order = shippingOrders.find((o) => o.id === id);
     if (order) {
-      order.status = "refunded";
-      order.statusText = "ĐÃ HOÀN TIỀN";
-      order.statusColor = "#4caf50";
-      alert("Hoàn tiền thành công!");
+      order.status = "shipped";
+      order.statusText = "Đang giao cho ĐVC";
+      alert(
+        `Xác nhận chuẩn bị hàng thành công! Đơn hàng ${id} đã được chuyển sang trạng thái chờ đơn vị vận chuyển lấy hàng.`,
+      );
+      renderShippingOrders();
     }
-    document.getElementById("infoModalTraHang").classList.remove("show");
-    renderOrders();
   };
 
-  document.querySelectorAll("#trahang-tabs .tab-item").forEach((tab) => {
-    tab.addEventListener("click", function () {
-      document
-        .querySelectorAll("#trahang-tabs .tab-item")
-        .forEach((t) => t.classList.remove("active"));
-      this.classList.add("active");
-      currentTab = this.getAttribute("data-type");
-      renderOrders();
-    });
+  // Sự kiện lắng nghe bộ lọc Tìm Kiếm đơn hàng
+  document.getElementById("searchOrderShip").addEventListener("input", (e) => {
+    searchShipQuery = e.target.value.toLowerCase();
+    renderShippingOrders();
   });
-  document
-    .getElementById("searchInputTraHang")
-    .addEventListener("input", (e) => {
-      searchQuery = e.target.value.toLowerCase();
-      renderOrders();
-    });
 
-  renderOrders();
+  document.getElementById("btnSearchShip").addEventListener("click", () => {
+    searchShipQuery = document
+      .getElementById("searchOrderShip")
+      .value.toLowerCase();
+    renderShippingOrders();
+  });
+
+  // Khởi chạy render dữ liệu đơn hàng ngay khi module load
+  renderShippingOrders();
 })();
