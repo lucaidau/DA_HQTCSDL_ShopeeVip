@@ -1,12 +1,21 @@
+-- Tạo tài khoản đăng nhập
+CREATE LOGIN Login_Admin WITH PASSWORD = 'admin123';
+CREATE LOGIN Login_Shop WITH PASSWORD='shop123';
+CREATE LOGIN Login_Customer WITH PASSWORD='customer123';
+
+USE ShopeeVipDB;
+GO
+
+-- Tạo user
+CREATE USER Admin_User FOR LOGIN Login_Admin;
+CREATE USER Shop_User FOR LOGIN Login_Shop;
+CREATE USER Customer_User FOR LOGIN Login_Customer;
+
+-- Tạo Admin Role
 CREATE ROLE Role_Admin;
+ALTER ROLE db_owner ADD MEMBER Admin_User;
+GO
+
+-- Tạo Shop Role
 CREATE ROLE Role_Shop;
-CREATE ROLE Role_Customer;
-
--- Admin Role
-GRANT CONTROL TO Role_Admin;
-
--- Shop Role
-GRANT INSERT,UPDATE,DELETE ON SAN_PHAM TO Role_Shop;
-GRANT
-
--- Customer Role
+GRANT 

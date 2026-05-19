@@ -1,4 +1,7 @@
-CREATE PROCEDURE sp_CapNhatGioHang
+USE ShopeeVipDB;
+GO
+
+CREATE PROCEDURE NGUOI_MUA.sp_CapNhatGioHang
     @IDNguoiMua INT,
     @IDBanSao INT,
     @SoLuongMoi INT

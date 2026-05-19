@@ -47,8 +47,7 @@ INSERT INTO SHOP (IDTaiKhoan, TrangThaiShop) VALUES (2, 1);
 
 -- Ngân hàng
 INSERT INTO VI VALUES
-(1, 500000,GETDATE()),
-(2, 900000,GETDATE());
+(1, 900000,GETDATE());
 
 -- Sản phẩm & Biến thể
 INSERT INTO DANH_MUC VALUES (N'Điện thoại');

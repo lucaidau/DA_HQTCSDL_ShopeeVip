@@ -32,18 +32,14 @@ window.App = {};
       date: "15-04-2026 14:30",
       type: "in",
       desc: "Doanh thu đơn hàng 1",
-      amount: 2000000,
-      status: "success",
-      statusText: "Thành công",
+      amount: 200,
     },
     {
       id: "OUT-WITHDRAW1",
       date: "12-04-2026 08:00",
       type: "out",
       desc: "Rút tiền về VCB",
-      amount: 1000000,
-      status: "success",
-      statusText: "Thành công",
+      amount: 100,
     },
   ];
   let currentTab = "all";
@@ -58,7 +54,7 @@ window.App = {};
     let totalIn = 0,
       totalOut = 0;
     transactions.forEach((t) => {
-      if (t.type === "in" && t.status === "success") totalIn += t.amount;
+      if (t.type === "in") totalIn += t.amount;
       else if (t.type === "out") totalOut += t.amount;
     });
     currentBalanceNum = totalIn - totalOut;
@@ -94,7 +90,6 @@ window.App = {};
             <td style="font-weight: 500;">${t.id}</td>
             <td>${t.desc}</td>
             <td class="${t.type === "in" ? "amount-in" : "amount-out"}">${sign}${formatCurrency(t.amount)}</td>
-            <td><span class="status-label ${t.status === "success" ? "status-success" : "status-processing"}">${t.statusText}</span></td>
             <td><a class="action-link" onclick="viewDetailSoDu('${t.id}')">Xem</a></td>
           </tr>`;
         })
@@ -190,7 +185,7 @@ window.App = {};
       id: i + 1,
       image: `https://picsum.photos/seed/prod${i + 1}/80/80`,
       name: `Sản phẩm mẫu ${i + 1}`,
-      sku: `SP00${i + 1}`,
+
       price: Math.floor(Math.random() * 500000) + 50000,
       stock: Math.floor(Math.random() * 50),
       status: "Đang bán",
@@ -238,7 +233,7 @@ window.App = {};
       <tr>
         <td><input type="checkbox" /></td>
         <td><img src="${p.image}" /></td>
-        <td><div class="product-info"><div><div class="product-name">${p.name}</div><div class="product-sku">${p.sku}</div></div></div></td>
+        <td><div class="product-info"><div><div class="product-name">${p.name}</div></div></div></td>
         <td>${formatPrice(p.price)}</td><td>${p.stock}</td>
         <td><span class="status-pill status-sell">${p.status}</span></td>
         <td><div class="action-links"><button onclick="deleteProduct(${p.id})" class="delete">Xóa</button></div></td>
@@ -421,7 +416,6 @@ window.App = {};
     const newDisplayItem = {
       id: Date.now(),
       name: name,
-      sku: `SP${Date.now().toString().slice(-4)}`,
       price: displayPriceText,
       stock: totalStock,
       status: "Đang bán",
