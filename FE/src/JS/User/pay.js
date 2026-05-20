@@ -1,19 +1,3 @@
-// Mảng chứa dữ liệu địa chỉ
-let data = [
-  {
-    n: "Phàn Trục Ngọc",
-    p: "333 690 457",
-    d: "15/8, Đông Hưng Thuận 15, P. Đông Hưng Thuận, Q. 11, TP. Hồ Chí Minh",
-    def: true,
-  },
-  {
-    n: "Lê Văn Thành",
-    p: "392 461 235",
-    d: "5, Tổ 9, Ấp Lê Thành, Xã Tân Phú, Huyện Châu Thành, Sài gòn",
-    def: false,
-  },
-];
-
 function openModal() {
   renderAddressList();
   document.getElementById("modalList").style.display = "flex";
@@ -115,10 +99,6 @@ function processOrder() {
   // Lấy thông tin địa chỉ hiện tại để lưu lại
   const currentName = document.getElementById("display-name").innerText;
   const currentAddr = document.getElementById("display-address").innerText;
-
-  // Lưu vào bộ nhớ trình duyệt (localStorage)
-  localStorage.setItem("lastOrderName", currentName);
-  localStorage.setItem("lastOrderAddr", currentAddr);
 
   const targetUrl = "home.html"; // Nên dùng link tương đối cho ổn định
 

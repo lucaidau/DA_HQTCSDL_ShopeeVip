@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_CapNhatGioHang
+CREATE PROCEDURE sp_NguoiMua_CapNhatGioHang
     @IDNguoiMua INT,
     @IDBanSao INT,
     @SoLuongMoi INT

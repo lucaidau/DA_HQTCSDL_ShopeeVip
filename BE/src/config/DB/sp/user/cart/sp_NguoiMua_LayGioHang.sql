@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_LayGioHang
+CREATE PROCEDURE sp_NguoiMua_LayGioHang
     @IDNguoiDung INT
 AS
     BEGIN
@@ -6,20 +6,17 @@ AS
 
         SELECT 
             bs.IDSanPham,
+            bs.IDBanSao,
             sp.TenSanPham,
             bs.BienThe,
             bs.GiaBan,
             bs.HinhAnh,
             gh.SoLuongMua,
-            (gh.SoLuongMua * bs.GiaBan) AS ThanhTien,
-            tk_shop.Ten
+            (gh.SoLuongMua * bs.GiaBan) AS ThanhTien
 
         FROM GIO_HANG gh
         JOIN BAN_SAO_SAN_PHAM bs ON gh.IDBanSao = bs.IDBanSao
         JOIN SAN_PHAM sp ON sp.IDSanPham = bs.IDSanPham
-        JOIN SHOP s ON sp.IDShop = s.IDShop 
-        JOIN TAI_KHOAN tk_shop ON tk_shop.IDTaiKhoan = s.IDTaiKhoan
-
         WHERE gh.IDNguoiMua = @IDNguoiDung;
     END
 

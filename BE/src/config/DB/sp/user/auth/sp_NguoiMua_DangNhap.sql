@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_DangNhap
+CREATE PROCEDURE sp_NguoiMua_DangNhap
     @TenDangNhap VARCHAR(30),
     @MatKhau VARCHAR(100)
 

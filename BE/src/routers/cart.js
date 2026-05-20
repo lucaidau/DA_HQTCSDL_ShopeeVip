@@ -4,7 +4,7 @@ const cartController = require("../controllers/CartController");
 
 router.post("/themsanpham", cartController.themSanPhamVaoGioHang);
 router.delete("/xoasp", cartController.xoaSPTrongGioHang);
-router.post("/capnhatgiohang", cartController.capNhatGioHang);
+router.patch("/capnhatgiohang", cartController.capNhatGioHang);
 router.get("/:id", cartController.layGioHang);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_LayChiTietSanPham
+CREATE PROCEDURE sp_NguoiMua_LayChiTietSanPham
     @IDSanPham INT
 AS  
     BEGIN

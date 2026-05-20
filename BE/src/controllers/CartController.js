@@ -1,15 +1,15 @@
-const { sql, poolPromise } = require("../config/connect");
+const { sql, customerPoolPromise } = require("../config/connect");
 
 class CartController {
   //[GET] /giohang/:id
   async layGioHang(req, res) {
     try {
       const userID = parseInt(req.params.id);
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
       const result = await pool
         .request()
         .input("IDNguoiDung", userID)
-        .execute("sp_LayGioHang");
+        .execute("sp_NguoiMua_LayGioHang");
 
       return res
         .status(200)
@@ -25,13 +25,13 @@ class CartController {
     try {
       const { userID, copyID, quantity } = req.body;
 
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
       const result = await pool
         .request()
         .input("IDNguoiDung", sql.Int, userID)
         .input("IDBanSao", sql.Int, copyID)
         .input("SoLuong", sql.Int, quantity)
-        .execute("sp_ThemSanPhamVaoGioHang");
+        .execute("sp_NguoiMua_ThemSanPhamVaoGioHang");
 
       return res
         .status(201)
@@ -42,18 +42,18 @@ class CartController {
     }
   }
 
-  //[POST] /giohang/capnhatgiohang
+  //[PATCH] /giohang/capnhatgiohang
   async capNhatGioHang(req, res) {
     try {
       const { userID, copyID, newQuantity } = req.body;
 
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
       const result = await pool
         .request()
         .input("IDNguoiMua", sql.Int, userID)
         .input("IDBanSao", sql.Int, copyID)
         .input("SoLuongMoi", sql.Int, newQuantity)
-        .execute("sp_CapNhatGioHang");
+        .execute("sp_NguoiMua_CapNhatGioHang");
 
       return res
         .status(201)
@@ -68,14 +68,14 @@ class CartController {
   async xoaSPTrongGioHang(req, res) {
     const { userID, copyID } = req.body;
     try {
-      const pool = await poolPromise;
+      const pool = await customerPoolPromise;
       const result = await pool
         .request()
         .input("IDTaiKhoan", sql.Int, userID)
         .input("IDBanSao", sql.Int, copyID)
-        .execute("sp_XoaSPTrongGioHang");
+        .execute("sp_NguoiMua_XoaSPTrongGioHang");
 
-      return res.status(200).json({ success: true, message: "Xóa thành công" });
+      return res.status(204).json({ success: true, message: "Xóa thành công" });
     } catch (error) {
       return res.status(500).json({
         success: false,

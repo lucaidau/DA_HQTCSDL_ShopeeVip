@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_DangKi
+CREATE PROCEDURE sp_NguoiMua_DangKi
     @Ten NVARCHAR(50),
     @TenDangNhap VARCHAR(30),
     @Email VARCHAR(255),
@@ -23,11 +23,11 @@ AS
 
         BEGIN TRANSACTION;
         BEGIN TRY
-            DECLARE @IDTemp INT
+            DECLARE @IDTemp INT;
             INSERT INTO TAI_KHOAN(TenDangNhap, Ten, SDT, Email, GioiTinh, MatKhau)
             VALUES(@TenDangNhap, @Ten, @SDT, @Email, @GioiTinh, @MatKhau);
 
-            SET @IDTemp = SCOPE_IDENTITY()
+            SET @IDTemp = SCOPE_IDENTITY();
 
             IF @Loai = 1
             BEGIN
@@ -36,7 +36,10 @@ AS
 
             ELSE IF @Loai = 2
             BEGIN
+                DECLARE @IDShopTemp INT;
                 INSERT INTO SHOP(IDTaiKhoan, TrangThaiShop) VALUES(@IDTemp,1);
+                SET @IDShopTemp = SCOPE_IDENTITY();
+                INSERT INTO VI VALUES (@IDShopTemp, 0, GETDATE());
             END
             COMMIT TRANSACTION;
         END TRY
@@ -45,9 +48,8 @@ AS
             IF @@TRANCOUNT > 0
             BEGIN
                 ROLLBACK TRANSACTION;
-                DECLARE @ERR NVARCHAR(100) = ERROR_MESSAGE();
-
-                THROW 50000,@ERR,1;
+                RAISERROR(N'Đăng kí không hợp lệ!', 16,1);
             END  
         END CATCH
     END
+

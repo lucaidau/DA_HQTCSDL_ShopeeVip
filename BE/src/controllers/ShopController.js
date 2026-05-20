@@ -1,4 +1,4 @@
-const { sql, poolPromise } = require("../config/connect");
+const { sql, shopPoolPromise } = require("../config/connect");
 
 class ShopController {
   // [GET] Shop/:id
@@ -6,11 +6,11 @@ class ShopController {
     try {
       const shopID = parseInt(req.params.id);
 
-      const pool = await poolPromise;
+      const pool = await shopPoolPromise;
       const result = await pool
         .request()
         .input("IDShop", sql.Int, shopID)
-        .execute("sp_LaySanPhamShop");
+        .execute("sp_Shop_LaySanPhamShop");
 
       return res.status(200).json({
         message: "Lấy sản phẩm shop thành công",
