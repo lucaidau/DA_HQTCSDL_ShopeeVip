@@ -15,8 +15,10 @@ const grid = document.getElementById("product-grid");
 const loading = document.getElementById("loading");
 
 function createProductHTML(cart) {
-  const numericPrice = Number(cart.GiaBan).toLocaleString("vi-VN");
+  const price = Number(cart.GiaBan) - Number(cart.GiaBan) * (48 / 100);
+  const numericPrice = price.toLocaleString("vi-VN");
   const procName = cart.TenSanPham + " " + (cart.BienThe || "");
+  const total = cart.ThanhTien - cart.ThanhTien * (48 / 100);
   return `
     <div class="shop-section">
         <div class="shop-header">
@@ -42,9 +44,9 @@ function createProductHTML(cart) {
                     <button class="btn-qty" data-target="${cart.IDBanSao}" data-delta="1">+</button>
                 </div>
             </div>
-            <div style="text-align: center;" class="price-subtotal">₫${cart.ThanhTien.toLocaleString("vi-VN")}</div>
+            <div style="text-align: center;" class="price-subtotal">₫${total.toLocaleString("vi-VN")}</div>
             <div style="text-align: center;">
-                <button class="btn-delete data-id-bansao="${cart.IDBanSao}">Xóa</button>
+                <button class="btn-delete" data-id-bansao="${cart.IDBanSao}">Xóa</button>
             </div>
         </div>
     </div>
@@ -113,6 +115,8 @@ grid.addEventListener("click", function (e) {
     if (val < 1) val = 1;
     input.value = val;
 
+    capNhatCart(inputId, val);
+
     // Cập nhật lại thành tiền của dòng đó (Subtotal)
     const cartItem = e.target.closest(".cart-item");
     const price = parseInt(
@@ -126,7 +130,14 @@ grid.addEventListener("click", function (e) {
   // THÊM ĐOẠN NÀY: Xử lý nút Xóa từng dòng
   if (e.target.classList.contains("btn-delete")) {
     const shopSection = e.target.closest(".shop-section");
-    itemsToDelete = [shopSection]; // Lưu lại hàng cần xóa
+    const copyID = e.target.getAttribute("data-id-bansao");
+
+    itemsToDelete = [
+      {
+        element: shopSection,
+        id: copyID,
+      },
+    ]; // Lưu lại hàng cần xóa
     modalMsg.innerText = "Bạn có muốn bỏ 1 sản phẩm?";
     modal.style.display = "flex"; // Hiện modal
   }
@@ -149,10 +160,11 @@ document.getElementById("btn-cancel").addEventListener("click", () => {
 });
 
 // Nút CÓ (Thực hiện xóa)
-document.getElementById("btn-confirm").addEventListener("click", () => {
-  itemsToDelete.forEach((item) => {
-    item.remove(); // Xóa khỏi giao diện
-  });
+document.getElementById("btn-confirm").addEventListener("click", async () => {
+  for (const item of itemsToDelete) {
+    await xoaSpTrongCart(item.id);
+    item.element.remove();
+  }
 
   modal.style.display = "none";
   itemsToDelete = [];
@@ -161,16 +173,19 @@ document.getElementById("btn-confirm").addEventListener("click", () => {
 // Thêm đoạn này vào bất kỳ đâu trong script
 document
   .querySelector(".checkout-left .btn-delete")
-  .addEventListener("click", function () {
+  .addEventListener("click", () => {
     const selectedCheckboxes = document.querySelectorAll(
       ".item-checkbox:checked",
     );
 
     if (selectedCheckboxes.length > 0) {
       // Lấy tất cả các shop-section của các sản phẩm đã chọn
-      itemsToDelete = Array.from(selectedCheckboxes).map((cb) =>
-        cb.closest(".shop-section"),
-      );
+      itemsToDelete = Array.from(selectedCheckboxes).map((cb) => {
+        return {
+          element: cb.closest(".shop-section"),
+          id: cb.getAttribute("data-id-bansao"),
+        };
+      });
       modalMsg.innerText = `Bạn có muốn bỏ ${selectedCheckboxes.length} sản phẩm?`;
       modal.style.display = "flex";
     } else {
@@ -178,10 +193,47 @@ document
     }
   });
 
+// Xử lí chuyển sang mua hàng
+document.getElementById("btn-checkout")?.addEventListener("click", () => {
+  const selectedCheckboxes = document.querySelectorAll(
+    ".item-checkbox:checked",
+  );
+
+  if (selectedCheckboxes.length == 0) {
+    alert("Vui lòng chọn ít nhất 1 sản phẩm để thanh toán");
+    return;
+  }
+
+  const buyList = [];
+
+  selectedCheckboxes.forEach((box) => {
+    const cartItem = box.closest(".cart-item");
+    const copyID = box.getAttribute("data-id-bansao");
+
+    const qty = cartItem.querySelector(".qty-input");
+    const newqty = parseInt(qty.value);
+    const sellPrice = parseInt(box.getAttribute("data-price"));
+
+    buyList.push({
+      IDBanSao: copyID,
+      TenSanPham: cartItem.querySelector(".item-name").innerText,
+      SoLuongMua: newqty,
+      GiaBan: sellPrice,
+      ThanhTien: sellPrice * newqty,
+    });
+  });
+  console.log("Danh sách sản phẩm chuyển sang thanh toán: ", buyList);
+  localStorage.setItem("pendingOrder", JSON.stringify(buyList));
+
+  window.location.href = "../../HTML/User/pay.html";
+});
+
+// Xử lí call API
 const userRaw = localStorage.getItem("user");
 const userData = JSON.parse(userRaw);
 const userID = userData.IDTaiKhoan;
 console.log(userID);
+
 const LayCart = async () => {
   try {
     const res = await fetch(`http://localhost:3000/giohang/${userID}`);
@@ -189,6 +241,26 @@ const LayCart = async () => {
     return data;
   } catch (error) {
     console.log("Không thể lấy giỏ hàng: ", error);
+  }
+};
+
+const capNhatCart = async (copyID, newqty) => {
+  try {
+    const updateProc = {
+      userID: userID,
+      copyID: copyID,
+      newQuantity: newqty,
+    };
+
+    const res = await fetch(`http://localhost:3000/giohang/capnhatgiohang`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updateProc),
+    });
+    const data = await res.json();
+    console.log("Trạng thái: ", data);
+  } catch (error) {
+    console.log("Không thể cập nhật: ", error);
   }
 };
 
@@ -200,9 +272,15 @@ const xoaSpTrongCart = async (copyID) => {
     };
     const res = await fetch(`http://localhost:3000/giohang/xoasp`, {
       method: "DELETE",
-      headers: {},
-      body: JSON.stringify(),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(deleteProc),
     });
+
+    const data = await res.json();
+    console.log("Trạng thái: ", data);
+    return data;
   } catch (error) {
     console.log("Không thể xóa sản phẩm: ", error);
   }

@@ -140,7 +140,7 @@ const updateQty = (sigma) => {
   const selectedBtn = document.querySelector(".btn-attr.active");
   const maxStock = selectedBtn
     ? parseInt(selectedBtn.getAttribute("data-stock"))
-    : 1;
+    : parseInt(productDetail[0].SoLuongTonKho || 99);
 
   qty += sigma;
 
@@ -171,9 +171,29 @@ function addToCart() {
   }, 1800);
 }
 
-function buyNow() {
-  window.location = "./pay.html";
-}
+document.getElementById("btn-buy-now").addEventListener("click", () => {
+  const selectedBtn = document.querySelector(".btn-attr.active");
+
+  qty = qty <= 0 ? 1 : qty;
+
+  const curr = productDetail.find((item) => item.IDBanSao === selectedProduct);
+  if (!curr) {
+    alert("Có lỗi xảy ra khi lấy dữ liệu sản phẩm!");
+    return;
+  }
+  const sellPrice = curr.GiaBan - curr.GiaBan * (48 / 100);
+  const buyNow = [
+    {
+      IDBanSao: curr.IDBanSao,
+      HinhAnh: curr.HinhAnh[0],
+      TenSanPham: curr.TenSanPham + " " + curr.BienThe,
+      SoLuongMua: qty,
+      GiaBan: sellPrice,
+      ThanhTien: sellPrice * qty,
+    },
+  ];
+  localStorage.setItem("pendingOrder", JSON.stringify(buyNow));
+});
 
 const productTitle = document.getElementById("prodTitle");
 const price = document.getElementById("prodOldPrice");
@@ -209,6 +229,15 @@ const CreateCopyProduct = (detail) => {
     `;
   }
   typeList.innerHTML = htmlContent;
+
+  const firstBtn = typeList.querySelector(".btn-attr");
+  if (firstBtn) {
+    firstBtn.classList.add("active"); // Thêm màu cam active cho nút đầu tiên
+    // Cập nhật lại kho của nút đầu tiên lên giao diện luôn
+    document.getElementById("tonKho").innerText =
+      `${firstBtn.getAttribute("data-stock")} có sẵn`;
+    qtyTxt.max = firstBtn.getAttribute("data-stock");
+  }
 
   const allBtn = document.querySelectorAll(".btn-attr");
   allBtn.forEach((item) => {

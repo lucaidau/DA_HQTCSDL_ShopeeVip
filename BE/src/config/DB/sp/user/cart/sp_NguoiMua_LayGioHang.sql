@@ -6,6 +6,7 @@ AS
 
         SELECT 
             bs.IDSanPham,
+            bs.IDBanSao,
             sp.TenSanPham,
             bs.BienThe,
             bs.GiaBan,

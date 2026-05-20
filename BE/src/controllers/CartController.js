@@ -42,7 +42,7 @@ class CartController {
     }
   }
 
-  //[POST] /giohang/capnhatgiohang
+  //[PATCH] /giohang/capnhatgiohang
   async capNhatGioHang(req, res) {
     try {
       const { userID, copyID, newQuantity } = req.body;
@@ -75,7 +75,7 @@ class CartController {
         .input("IDBanSao", sql.Int, copyID)
         .execute("sp_NguoiMua_XoaSPTrongGioHang");
 
-      return res.status(200).json({ success: true, message: "Xóa thành công" });
+      return res.status(204).json({ success: true, message: "Xóa thành công" });
     } catch (error) {
       return res.status(500).json({
         success: false,
