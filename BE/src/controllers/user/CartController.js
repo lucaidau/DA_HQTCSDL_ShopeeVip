@@ -1,4 +1,4 @@
-const { sql, customerPoolPromise } = require("../config/connect");
+const { sql, customerPoolPromise } = require("../../config/connect");
 
 class CartController {
   //[GET] /giohang/:id

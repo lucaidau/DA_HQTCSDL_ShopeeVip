@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cartController = require("../controllers/CartController");
+const cartController = require("../../controllers/user/CartController");
 
 router.post("/themsanpham", cartController.themSanPhamVaoGioHang);
 router.delete("/xoasp", cartController.xoaSPTrongGioHang);

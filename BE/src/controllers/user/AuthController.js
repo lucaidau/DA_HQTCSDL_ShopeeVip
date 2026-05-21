@@ -1,5 +1,5 @@
 const { VarChar, pool } = require("mssql");
-const { sql, customerPoolPromise } = require("../config/connect");
+const { sql, customerPoolPromise } = require("../../config/connect");
 
 class AuthController {
   //[POST] /
