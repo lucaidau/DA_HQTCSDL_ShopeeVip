@@ -28,7 +28,16 @@ function createProductHTML(cart) {
             <i class="fa-solid fa-comment-dots" style="color: var(--shopee-orange);"></i>
         </div>
         <div class="cart-item">
-            <input type="checkbox" class="item-checkbox" data-price="${cart.GiaBan}" data-id-bansao="${cart.IDBanSao}">
+            <input 
+            type="checkbox"
+             class="item-checkbox"
+              data-id-shop="${cart.IDShop}"
+              data-img="${cart.HinhAnh}"
+              data-name ="${cart.Ten}" 
+              data-phone="${cart.SDT}" 
+              data-address="${cart.DiaChi}" 
+              data-price="${cart.GiaBan}" 
+              data-id-bansao="${cart.IDBanSao}">
             <div class="item-info">
                 <img src="${cart.HinhAnh}" alt="productImg">
                 <div>
@@ -208,14 +217,24 @@ document.getElementById("btn-checkout")?.addEventListener("click", () => {
 
   selectedCheckboxes.forEach((box) => {
     const cartItem = box.closest(".cart-item");
-    const copyID = box.getAttribute("data-id-bansao");
 
+    const copyID = box.getAttribute("data-id-bansao");
+    const img = box.getAttribute("data-img");
+    const shopID = box.getAttribute("data-id-shop");
+    const name = box.getAttribute("data-name");
+    const phoneNumber = box.getAttribute("data-phone");
+    const address = box.getAttribute("data-address");
     const qty = cartItem.querySelector(".qty-input");
     const newqty = parseInt(qty.value);
     const sellPrice = parseInt(box.getAttribute("data-price"));
 
     buyList.push({
+      Ten: name,
+      SDT: phoneNumber,
+      DiaChi: address,
+      IDShop: shopID,
       IDBanSao: copyID,
+      HinhAnh: img,
       TenSanPham: cartItem.querySelector(".item-name").innerText,
       SoLuongMua: newqty,
       GiaBan: sellPrice,

@@ -41,215 +41,65 @@
         <div class="addr-title">
           <i class="fas fa-map-marker-alt"></i> Địa Chỉ Nhận Hàng
         </div>
-        <div class="addr-flex">
-          <b id="display-name">Nguyễn Văn Sương (+84) 333 887 655</b>
-          <div id="display-address" class="detail-address">
-            11/2, Đông Hưng Thuận 15, Quận 11, TP. Hồ Chí Minh
-            <span class="badge">Mặc định</span>
-          </div>
-          <div class="btn-link" onclick="openModal()">Thay Đổi</div>
+        <div class="addr-info">
+          <b id="display-name">Đang tải thông tin...</b>
+          <span id="display-address" style="margin-left: 20px"></span>
+          <span class="change-addr" onclick="openModal()">Thay Đổi</span>
         </div>
       </div>
-    </div>
 
-    <div class="modal-overlay" id="modalList">
-      <div class="modal-box">
-        <div class="modal-header">Địa Chỉ Của Tôi</div>
-        <div class="modal-body">
-          <div id="addr-items-container"></div>
-          <button class="btn-add-new" onclick="openNewAddrModal()">
-            + Thêm Địa Chỉ Mới
-          </button>
-        </div>
-        <div class="modal-footer">
-          <button class="btn-outline" onclick="closeModal('modalList')">
-            Hủy
-          </button>
-          <button class="btn-orange" onclick="confirmAddrSelection()">
-            Xác nhận
-          </button>
+      <div class="section product-section" id="checkout-products-list">
+        <div class="product-header">
+          <div>Sản phẩm</div>
+          <div>Đơn giá</div>
+          <div>Số lượng</div>
+          <div>Thành tiền</div>
         </div>
       </div>
-    </div>
 
-    <div class="modal-overlay" id="modalNew">
-      <div class="modal-box">
-        <div class="modal-header">
-          Địa chỉ mới (dùng thông tin trước sáp nhập)
+      <div class="section total-section">
+        <div class="message-box">
+          <span>Lời nhắn:</span>
+          <input type="text" id="ghiChu" placeholder="Lưu ý cho Người bán..." />
         </div>
-        <div class="modal-body" style="padding-top: 20px">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-input"
-              id="new-name"
-              placeholder="Họ và tên"
-            />
-            <input
-              type="text"
-              class="form-input"
-              id="new-phone"
-              placeholder="Số điện thoại"
-            />
-          </div>
-          <input
-            type="text"
-            class="form-input full-width"
-            id="new-city"
-            placeholder="Tỉnh/Thành phố, Quận/Huyện, Phường/Xã"
-          />
-          <textarea
-            class="form-input full-width"
-            id="new-detail"
-            style="height: 80px"
-            placeholder="Địa chỉ cụ thể"
-          ></textarea>
 
-          <p style="color: #888; font-size: 14px">Loại địa chỉ:</p>
-          <div class="type-btns">
-            <button class="btn-type active" onclick="setType(this)">
-              Nhà Riêng
-            </button>
-            <button class="btn-type" onclick="setType(this)">Văn Phòng</button>
-          </div>
-
-          <label class="label116">
-            <input type="checkbox" id="new-default" /> Đặt làm địa chỉ mặc định
-          </label>
-        </div>
-        <div class="modal-footer">
-          <button class="btn-outline" onclick="closeModal('modalNew')">
-            Trở Lại
-          </button>
-          <button class="btn-orange" onclick="addNewAddress()">
-            Hoàn thành
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="product-header">
-        <div>Sản phẩm</div>
-        <div>Đơn giá</div>
-        <div>Số lượng</div>
-        <div style="text-align: right">Thành tiền</div>
-      </div>
-
-      <div class="product-item">
-        <div style="display: flex; gap: 10px">
-          <img src="https://picsum.photos/40" width="40" height="40" />
-
+        <div class="shipping-box">
           <div>
-            [BANILA CO] Smudging Lip Pencil<br /><small style="color: #888"
-              >Loại: BE03 Salmon</small
+            <div style="color: #00bfa5; font-weight: bold; font-size: 14px">
+              Đơn vị vận chuyển: Nhanh
+            </div>
+            <small style="color: #888">Nhận hàng vào 24 Th05 - 26 Th05</small>
+          </div>
+          <div style="font-size: 14px">₫17.000</div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-row">
+            <span>Tổng tiền hàng:</span>
+            <span id="total-items-price">₫0</span>
+          </div>
+          <div class="summary-row">
+            <span>Phí vận chuyển:</span>
+            <span>₫17.000</span>
+          </div>
+          <div class="summary-row" style="align-items: center">
+            <span id="ttt" class="spantt">Tổng thanh toán</span>
+            <span id="total-final-price" class="total-final">₫0</span>
+          </div>
+
+          <div class="dong229">
+            <small class="small225"
+              >Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều
+              khoản Shopee</small
             >
+            <button id="dh" class="btn-orange" onclick="processOrder()">
+              Đặt Hàng
+            </button>
           </div>
         </div>
-
-        <div>₫235.400</div>
-
-        <div>1</div>
-
-        <div style="text-align: right">₫235.400</div>
-      </div>
-
-      <div class="shipping-box">
-        <div>
-          <span style="color: #00bfa5; font-weight: bold"
-            >Phương thức vận chuyển:</span
-          >
-
-          <span>Nhanh (Đảm bảo nhận hàng vào 27 Th03 - 01 Th04)</span>
-        </div>
-
-        <div style="text-align: right">
-          <span class="btn-link" style="margin-right: 20px">THAY ĐỔI</span>
-
-          <span>₫17.000</span>
-        </div>
       </div>
     </div>
 
-    <div class="section" style="padding: 0">
-      <div class="voucher-section">
-        <div><i class="fas fa-ticket-alt icon-orange"></i> Shopee Voucher</div>
-
-        <div class="btn-link">Chọn hoặc nhập mã</div>
-      </div>
-
-      <div class="xu-section">
-        <div>
-          <i
-            class="fas fa-coins"
-            style="color: #f6bc3e; margin-right: 10px"
-          ></i>
-          Shopee Xu
-          <small style="margin-left: 10px">Không thể sử dụng Xu</small>
-        </div>
-
-        <input type="checkbox" disabled />
-      </div>
-    </div>
-
-    <div class="section" style="padding: 0">
-      <div class="payment-method">
-        <div style="font-size: 18px">Phương thức thanh toán</div>
-
-        <div style="text-align: right">
-          <span>Thanh toán khi nhận hàng</span>
-
-          <span class="btn-link" style="margin-left: 20px">THAY ĐỔI</span>
-        </div>
-      </div>
-
-      <div class="summary-box">
-        <div id="tth" class="summary-row">
-          <span>Tổng tiền hàng</span> <span>₫235.400</span>
-        </div>
-
-        <div class="summary-row">
-          <span>Phí vận chuyển</span> <span>₫17.000</span>
-        </div>
-
-        <div class="summary-row" style="align-items: center">
-          <span id="ttt" class="spantt">Tổng thanh toán</span>
-
-          <span class="total-final">₫252.400</span>
-        </div>
-
-        <div class="dong229">
-          <small class="small225"
-            >Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản
-            Shopee</small
-          >
-
-          <button id="dh" class="btn-orange" onclick="processOrder()">
-            Đặt Hàng
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-overlay" id="modal">
-      <div class="modal-box">
-        <div class="diachicuatoi">Địa Chỉ Của Tôi</div>
-
-        <div class="modal-body" id="list" class="dong250"></div>
-
-        <div class="dong258">
-          <button onclick="closeModal()" class="nuthuy">Hủy</button>
-
-          <button
-            class="btn-orange"
-            onclick="confirmAddr()"
-            style="padding: 10px 30px"
-          >
-            Xác nhận
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="modal-overlay" id="modalSuccess">
       <div class="modal-box" style="width: 400px">
         <div class="success-content">
