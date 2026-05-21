@@ -1,4 +1,5 @@
-CREATE PROCEDURE sp_LaySanPhamShop
+
+CREATE PROCEDURE sp_Shop_LaySanPham
     @IDShop INT
 AS
     BEGIN
@@ -25,4 +26,4 @@ AS
     ORDER BY SP.IDSanPham ASC;
     END
 
-EXEC sp_LaySanPhamShop 1
+EXEC sp_Shop_LaySanPham 1

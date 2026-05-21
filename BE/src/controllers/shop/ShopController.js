@@ -1,4 +1,4 @@
-const { sql, shopPoolPromise } = require("../config/connect");
+const { sql, shopPoolPromise } = require("../../config/connect.js");
 
 class ShopController {
   // [GET] Shop/:id

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const authController = require("../controllers/AuthController");
+const authController = require("../../controllers/user/AuthController");
 
 router.get("/", (req, res) => res.send("<h1>Hello Server</h1>"));
 router.post("/dangKi", authController.dangKi);

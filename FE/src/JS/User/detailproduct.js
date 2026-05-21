@@ -193,6 +193,8 @@ document.getElementById("btn-buy-now").addEventListener("click", () => {
     },
   ];
   localStorage.setItem("pendingOrder", JSON.stringify(buyNow));
+  console.log("Sản phẩm mua ngay: ", buyNow);
+  window.location.href = "../../HTML/User/pay.html";
 });
 
 const productTitle = document.getElementById("prodTitle");
