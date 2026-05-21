@@ -4,14 +4,15 @@
 AS
 BEGIN
     SET NOCOUNT ON;
-      BEGIN TRAN;
+     
+        BEGIN TRY
+        BEGIN TRAN;
         IF NOT EXISTS (
             SELECT * FROM SAN_PHAM 
             WHERE IDSanPham = @IDSanPham AND IDShop = @IDShop
         )
         BEGIN
-            ROLLBACK TRAN;
-            PRINT N'Sản phẩm không thuộc shop này!!';
+            raiserror(N'[Lỗi]',16,1);
             RETURN;
         END
         
@@ -29,7 +30,18 @@ BEGIN
             WHERE IDSanPham = @IDSanPham
         );
         COMMIT TRAN;
-        PRINT N'Đã xóa sản phẩm thành công!';
+        PRINT N'Đã xóa sản phẩm thành công!'
+        END TRY
+
+        BEGIN CATCH
+               IF @@TRANCOUNT > 0 
+        BEGIN
+            ROLLBACK TRAN;
+        END
+        PRINT ERROR_MESSAGE();
+        THROW;    
+        END CATCH
 END
 GO
 exec sp_Shop_XoaSanPham 1,1
+DROP PROC sp_Shop_XoaSanPham
