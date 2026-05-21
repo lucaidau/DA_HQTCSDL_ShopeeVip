@@ -2,7 +2,7 @@ const { sql, poolPromise } = require("../config/connect");
 
 class PaymentController {
   //[POST] /thanhtoan
-  async layThanhToan(req, res) {
+  async thanhToan(req, res) {
     try {
       const { userID, listID, note } = req.body;
 
