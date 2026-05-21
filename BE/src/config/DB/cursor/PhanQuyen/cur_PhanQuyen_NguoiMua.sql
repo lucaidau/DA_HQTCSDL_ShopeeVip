@@ -21,5 +21,8 @@ END
 CLOSE Cur_PhanQuyen_NguoiMua;
 DEALLOCATE Cur_PhanQuyen_NguoiMua;
 
+GRANT EXECUTE ON TYPE::dbo.TYPE_DanhSachMuaHang TO PUBLIC;
+GO
+
 PRINT N'Đã cấp quyền chạy sp thành công cho nhóm Role_Customer!';
 GO
