@@ -7,23 +7,35 @@ class PaymentController {
       const { userID, buyList } = req.body;
 
       const pool = await poolPromise;
-      for (item of buyList) {
+      const transactionHistory = [];
+
+      for (const item of buyList) {
         const result = await pool
           .request()
           .input("IDNguoiMua", sql.Int, userID)
-          .input("ListID", sql.VarChar(sql.MAX), listID)
-          .input("SoLuongMua", sql.Int, quantity)
-          .input("TongTien", sql.Decimal, total)
-          .execute("sp_LayThanhToan");
+          .input("IDBanSao", sql.VarChar(sql.MAX), item.copyID)
+          .input("SoLuongMua", sql.Int, item.quantity)
+          .input("TongTien", sql.Decimal(18, 2), item.total)
+          .execute("sp_NguoiMua_ThanhToan");
+
+        const procResponse = result.recordset[0];
+        if (!procResponse || procResponse.Success === 0) {
+          return res.status(400).json({
+            success: false,
+            message: `Thanh toán thất bại cho đơn hàng ${item.TenSP}. Lý do: ${procResponse ? procResponse.Message : "Lỗi không xác định"}`,
+          });
+        }
+        transactionHistory.push(procResponse);
       }
 
       return res.status(201).json({
+        success: true,
         message: "Thanh toán thành công",
-        data: result.recordsets,
+        orders: transactionHistory,
       });
     } catch (error) {
       console.log("Err: ", error);
-      return res.status(500).json({ message: "Lỗi server" });
+      return res.status(500).json({ success: false, message: "Lỗi server" });
     }
   }
 }
