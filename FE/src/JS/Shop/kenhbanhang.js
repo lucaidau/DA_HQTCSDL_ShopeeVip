@@ -494,7 +494,9 @@ document.querySelector(".user-name").innerText = shopName;
       const matchBuyer = o.TenNguoiMua
         ? o.TenNguoiMua.toLowerCase().includes(searchShipQuery)
         : false;
-      const matchProduct = o.IDDonHang ? o.IDDonHang == searchShipQuery : false;
+      const matchProduct = o.IDDonHangFormat
+        ? o.IDDonHangFormat.toLowerCase().includes(searchShipQuery)
+        : false;
       return matchBuyer || matchProduct;
     });
 
@@ -542,7 +544,24 @@ document.querySelector(".user-name").innerText = shopName;
       return;
 
     try {
-    } catch (error) {}
+      const res = await fetch(`http://localhost:3000/shop/donhang/xacnhan`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderID: id }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Xác nhận chuẩn bị thành công");
+        await loadOrders();
+      } else {
+        alert("Cập nhật thất bại: Lỗi hệ thống");
+      }
+    } catch (error) {
+      console.error("Lỗi xác nhận đơn hàng: ", error);
+      alert("Lỗi kết nối máy chủ");
+    }
   };
 
   // Sự kiện lắng nghe bộ lọc Tìm Kiếm đơn hàng
@@ -566,6 +585,6 @@ document.querySelector(".user-name").innerText = shopName;
   });
 
   // Khởi chạy render dữ liệu đơn hàng ngay khi module load
-  App.reloadOrder = loadOrders;
+  App.loadOrders = loadOrders;
   loadOrders();
 })(window.App);

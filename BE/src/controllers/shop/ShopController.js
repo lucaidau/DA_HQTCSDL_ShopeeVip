@@ -50,15 +50,30 @@ class ShopController {
     }
   }
 
+  // [PUT] /shop/xacnhan
   async xacNhanDonHang(req, res) {
     try {
-      const { copyID } = req.body;
+      const { orderID } = req.body;
 
       const pool = await shopPoolPromise;
       const result = await pool
         .request()
-        .input("IDBanSao", sql.Int, copyID)
+        .input("IDDonHang", sql.Int, orderID)
         .execute("sp_Shop_CapNhatDonHang");
+
+      const procResponse = result.recordset[0];
+
+      if (procResponse && procResponse.Success === 1) {
+        return res.status(200).json({
+          success: true,
+          message: procResponse.Message,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Không thể cập nhật trạng thái đơn hàng!",
+        });
+      }
 
       return res
         .status(204)

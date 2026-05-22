@@ -24,8 +24,5 @@ BEGIN
     JOIN BAN_SAO_SAN_PHAM BS ON BS.IDBanSao = CT.IDBanSao
     JOIN SAN_PHAM SP ON BS.IDSanPham = SP.IDSanPham
     WHERE DH.IDShop = @IDShop
-    ORDER BY DH.NgayTao DESC;
+    ORDER BY DH.NgayTao ASC;
 END
-
-drop proc sp_Shop_LayDonHang
-EXEC sp_Shop_LayDonHang 1
