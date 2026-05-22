@@ -97,8 +97,15 @@ const loginMethod = async () => {
     console.log("Đăng nhập thành công: ", data);
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    if (data.user.IDShop === null) window.location = "User/home.html";
-    else window.location = "Shop/TestShop.html";
+    if (data.user.IDShop === null && data.user.IDNguoiMua === null) {
+      window.location.href = "Admin/admin.html";
+      return;
+    }
+
+    if (data.user.IDShop === null) {
+      window.location.href = "User/home.html";
+    } else window.location.href = "Shop/TestShop.html";
+    return;
   } catch (error) {
     console.log("Lỗi hệ thống: ", error);
   }
