@@ -47,7 +47,7 @@ BEGIN
             (@NewIDDonHang, @IDBanSao, @GiaHienTai, @Ghichu, @SoLuongMua, @TongTien);
 
             DELETE GIO_HANG
-            WHERE @IDNguoiMua = IDNguoiMua;
+            WHERE @IDNguoiMua = IDNguoiMua AND @IDBanSao = IDBanSao;
 
             FETCH NEXT FROM CUR_SanPham INTO @IDBanSao, @SoLuongMua, @TongTien;
         END

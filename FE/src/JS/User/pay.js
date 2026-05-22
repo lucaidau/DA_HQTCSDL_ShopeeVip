@@ -1,5 +1,5 @@
 const userRaw = localStorage.getItem("user");
-const userID = JSON.parse(userRaw).IDTaiKhoan;
+const userID = JSON.parse(userRaw).IDNguoiMua;
 
 const buyListRaw = localStorage.getItem("pendingOrder");
 const buyList = JSON.parse(buyListRaw);

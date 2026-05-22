@@ -458,30 +458,28 @@ document.querySelector(".user-name").innerText = shopName;
 // ==================== MODULE: QUẢN LÝ ĐƠN HÀNG ====================
 (function (App) {
   // Dữ liệu giả lập các đơn hàng của khách hàng
-  let shippingOrders = [
-    {
-      id: "SP-ORD88921",
-      buyer: "tran_van_a",
-      date: "19-05-2026 10:15",
-      productName: "Váy hoa dáng dài Vintage",
-      quantity: 1,
-      totalPrice: 250000,
-      status: "pending",
-      statusText: "Chờ chuẩn bị hàng",
-    },
-    {
-      id: "SP-ORD55210",
-      buyer: "hoang_thi_b",
-      date: "18-05-2026 15:40",
-      productName: "Điện thoại thông minh 128GB",
-      quantity: 2,
-      totalPrice: 12000000,
-      status: "shipped",
-      statusText: "Đang giao cho ĐVC",
-    },
-  ];
+  let shippingOrders = [];
 
   let searchShipQuery = "";
+
+  async function loadOrders() {
+    try {
+      const res = await fetch(`http://localhost:3000/shop/donhang/${shopID}`);
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        shippingOrders = data.orders;
+      } else {
+        shippingOrders = [];
+      }
+      console.log("Đơn hàng của shop: ", data);
+      console.log("Đơn hàng lấy được: ", shippingOrders);
+    } catch (error) {
+      console.error("Lỗi kết nối API đơn hàng: ", error);
+      shippingOrders = [];
+    }
+    renderShippingOrders();
+  }
 
   function formatVNCurrency(num) {
     return new Intl.NumberFormat("vi-VN").format(num) + "đ";
@@ -492,11 +490,13 @@ document.querySelector(".user-name").innerText = shopName;
     const tbody = document.getElementById("shippingOrderList");
     if (!tbody) return;
 
-    const filtered = shippingOrders.filter(
-      (o) =>
-        o.id.toLowerCase().includes(searchShipQuery) ||
-        o.buyer.toLowerCase().includes(searchShipQuery),
-    );
+    const filtered = shippingOrders.filter((o) => {
+      const matchBuyer = o.TenNguoiMua
+        ? o.TenNguoiMua.toLowerCase().includes(searchShipQuery)
+        : false;
+      const matchProduct = o.IDDonHang ? o.IDDonHang == searchShipQuery : false;
+      return matchBuyer || matchProduct;
+    });
 
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888; padding:30px;">Không tìm thấy đơn hàng nào.</td></tr>`;
@@ -505,25 +505,28 @@ document.querySelector(".user-name").innerText = shopName;
 
     tbody.innerHTML = filtered
       .map((o) => {
+        const pillClass = o.TrangThai == 0 ? "status-out" : "status-sell";
+        const statusText =
+          o.TrangThai == 0 ? "Chờ xác nhận" : "Đang giao cho ĐVC";
         let actionBtn = "";
-        if (o.status === "pending") {
-          actionBtn = `<button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:12px;" onclick="shipOrder('${o.id}')">Giao hàng</button>`;
+        if (o.TrangThai == 0) {
+          actionBtn = `<button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:12px;" onclick="shipOrder('${o.IDDonHang}')">Giao hàng</button>`;
         } else {
           actionBtn = `<span style="color:#4caf50; font-size:13px; font-weight:600;">✓ Đã bàn giao</span>`;
         }
 
         return `
         <tr>
-          <td style="font-weight:600;">${o.id}<br><span style="font-size:11px; color:#999; font-weight:400;">${o.date}</span></td>
-          <td><b>${o.buyer}</b></td>
+          <td style="font-weight:600;">${o.IDDonHangFormat}<br><span style="font-size:11px; color:#999; font-weight:400;">${o.NgayTao}</span></td>
+          <td><b>${o.TenNguoiMua}</b></td>
           <td>
-            <div style="font-weight:500;">${o.productName}</div>
-            <div style="font-size:12px; color:#777;">Số lượng: x${o.quantity}</div>
+            <div style="font-weight:500;">${o.TenSanPham + " " + o.TenBienThe}</div>
+            <div style="font-size:12px; color:#777;">Số lượng: x${o.SoLuongMua}</div>
           </td>
-          <td style="color:#ff5722; font-weight:600;">${formatVNCurrency(o.totalPrice)}</td>
+          <td style="color:#ff5722; font-weight:600;">${formatVNCurrency(o.TongTien)}</td>
           <td>
-            <span class="status-pill ${o.status === "pending" ? "status-out" : "status-sell"}">
-              ${o.statusText}
+            <span class="status-pill ${pillClass}">
+              ${statusText}
             </span>
           </td>
           <td>${actionBtn}</td>
@@ -534,31 +537,35 @@ document.querySelector(".user-name").innerText = shopName;
   }
 
   // Hàm xử lý nút bấm giao hàng
-  window.shipOrder = function (id) {
-    const order = shippingOrders.find((o) => o.id === id);
-    if (order) {
-      order.status = "shipped";
-      order.statusText = "Đang giao cho ĐVC";
-      alert(
-        `Xác nhận chuẩn bị hàng thành công! Đơn hàng ${id} đã được chuyển sang trạng thái chờ đơn vị vận chuyển lấy hàng.`,
-      );
-      renderShippingOrders();
-    }
+  window.shipOrder = async function (id) {
+    if (!confirm(`Xác nhận gói đơn hàng ${id} và chuyển cho đơn vị vận chuyển`))
+      return;
+
+    try {
+    } catch (error) {}
   };
 
   // Sự kiện lắng nghe bộ lọc Tìm Kiếm đơn hàng
-  document.getElementById("searchOrderShip").addEventListener("input", (e) => {
-    searchShipQuery = e.target.value.toLowerCase();
-    renderShippingOrders();
-  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchOrderShip");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        searchShipQuery = e.target.value.toLowerCase();
+        renderShippingOrders();
+      });
+    }
 
-  document.getElementById("btnSearchShip").addEventListener("click", () => {
-    searchShipQuery = document
-      .getElementById("searchOrderShip")
-      .value.toLowerCase();
-    renderShippingOrders();
+    const searchBtn = document.getElementById("btnSearchShip");
+    if (searchBtn) {
+      searchBtn.addEventListener("click", (e) => {
+        const input = document.getElementById("searchOrderShip");
+        searchShipQuery = input ? input.value.toLowerCase() : "";
+        renderShippingOrders();
+      });
+    }
   });
 
   // Khởi chạy render dữ liệu đơn hàng ngay khi module load
-  renderShippingOrders();
+  App.reloadOrder = loadOrders;
+  loadOrders();
 })(window.App);

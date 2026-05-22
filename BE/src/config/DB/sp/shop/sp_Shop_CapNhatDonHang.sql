@@ -1,0 +1,10 @@
+CREATE PROC sp_Shop_CapNhatDonHang
+@IDBanSao INT
+AS
+BEGIN
+    UPDATE DON_HANG
+    SET TrangThaiDonHang = 1
+    FROM DON_HANG DH
+    JOIN CHI_TIET_DON_HANG CT ON CT.IDDonHang = DH.IDDonHang
+    WHERE CT.IDBanSao = @IDBanSao;
+END

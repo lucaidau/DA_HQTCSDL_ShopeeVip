@@ -24,7 +24,6 @@ class PaymentController {
       await transaction.begin();
       const createOrderIDs = [];
 
-      // Vòng lặp duyệt qua từng Shop để tạo đơn hàng lẻ
       for (const shopID in productsByShop) {
         const currShopItems = productsByShop[shopID];
 
@@ -34,7 +33,6 @@ class PaymentController {
         tableDT.columns.add("SoLuongMua", sql.Int);
         tableDT.columns.add("ThanhTien", sql.Decimal(18, 2));
 
-        // 2. Đổ dữ liệu sản phẩm từ giỏ hàng vào bảng tạm
         currShopItems.forEach((item) => {
           tableDT.rows.add(
             parseInt(item.IDBanSao),
@@ -43,7 +41,6 @@ class PaymentController {
           );
         });
 
-        // 3. Thực thi gọi Store Procedure (Đã FIX lỗi cú pháp và truyền tham số)
         const request = new sql.Request(transaction);
         const result = await request
           .input("IDNguoiMua", sql.Int, parseInt(userID))
