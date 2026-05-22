@@ -41,8 +41,8 @@ INSERT INTO NGUOI_MUA (IDTaiKhoan, TrangThaiUser) VALUES (1, 1);
 INSERT INTO SHOP (IDTaiKhoan, TrangThaiShop) VALUES (2, 1);
 
 -- Ngân hàng
-INSERT INTO VI VALUES
-(1, 900000,GETDATE());
+INSERT INTO VI (IDShop, NoiDung, SoTien,SoDu, NgayThucHien) VALUES
+(1, N'Nạp Tiền', 200000, 900000,GETDATE());
 
 -- Sản phẩm 
 INSERT INTO SAN_PHAM VALUES (1, N'iPhone 15', N'Siêu phẩm 2024', 'ip15.jpg', 1);

@@ -397,7 +397,7 @@ a {
 /* MODULE THÊM SẢN PHẨM */
 .add-grid {
   display: grid;
-  grid-template-columns: 1.8fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   padding: 24px;
 }
