@@ -25,7 +25,7 @@ function showTab(pageId, navElement) {
 window.App = {};
 
 // ==================== MODULE: SỐ DƯ TÀI KHOẢN ====================
-(function () {
+function soDu() {
   let transactions = [
     {
       id: "IN-240415AABB",
@@ -172,10 +172,10 @@ window.App = {};
 
   calculateBalance();
   renderTransactions();
-})();
+}
 
 // ==================== MODULE: TẤT CẢ SẢN PHẨM ====================
-(function () {
+function sanPham() {
   let products = [];
   const itemsPerPage = 6;
   let currentPage = 1;
@@ -263,10 +263,10 @@ window.App = {};
   // Public func để load lại khi thêm mới
   window.App.reloadProducts = loadProducts;
   loadProducts();
-})();
+}
 
 // ==================== MODULE: THÊM SẢN PHẨM ====================
-(function () {
+function themSanPham() {
   let selectedImageData = null;
 
   // Xử lý sự kiện tải hình ảnh sản phẩm gốc
@@ -437,10 +437,10 @@ window.App = {};
     wrapper.style.display = "none";
     showTab("tatcasp-page", document.querySelectorAll(".nav-link")[1]);
   });
-})();
+}
 
-// ==================== MODULE: QUẢN LÝ ĐƠN HÀNG (MỚI - ĐÃ TINH GỌN) ====================
-(function () {
+// ==================== MODULE: QUẢN LÝ ĐƠN HÀNG ====================
+function donHang() {
   // Dữ liệu giả lập các đơn hàng của khách hàng
   let shippingOrders = [
     {
@@ -545,4 +545,4 @@ window.App = {};
 
   // Khởi chạy render dữ liệu đơn hàng ngay khi module load
   renderShippingOrders();
-})();
+}

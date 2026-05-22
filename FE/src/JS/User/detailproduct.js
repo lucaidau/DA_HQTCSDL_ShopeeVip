@@ -20,7 +20,7 @@ const apiGetProductDetail = async () => {
 
 const userRaw = localStorage.getItem("user");
 const userData = JSON.parse(userRaw);
-const userID = userData.IDTaiKhoan;
+const userID = userData.IDNguoiMua;
 // [API] Lấy thông tin giỏ hàng
 const apiCountCartItem = async () => {
   try {

@@ -250,7 +250,7 @@ document.getElementById("btn-checkout")?.addEventListener("click", () => {
 // Xử lí call API
 const userRaw = localStorage.getItem("user");
 const userData = JSON.parse(userRaw);
-const userID = userData.IDTaiKhoan;
+const userID = userData.IDNguoiMua;
 console.log(userID);
 
 const LayCart = async () => {

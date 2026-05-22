@@ -5,15 +5,15 @@ AS
 BEGIN
     SET NOCOUNT ON;
      
-        BEGIN TRY
+    BEGIN TRY
         BEGIN TRAN;
         IF NOT EXISTS (
             SELECT * FROM SAN_PHAM 
             WHERE IDSanPham = @IDSanPham AND IDShop = @IDShop
         )
         BEGIN
-            raiserror(N'[Lỗi]',16,1);
-            RETURN;
+            RAISERROR(N'Sản phẩm không tồn tại!',16,1);
+
         END
         
         UPDATE SAN_PHAM 
@@ -30,18 +30,18 @@ BEGIN
             WHERE IDSanPham = @IDSanPham
         );
         COMMIT TRAN;
-        PRINT N'Đã xóa sản phẩm thành công!'
+            SELECT 1 AS Success, N'Xóa sản phẩm thành công' AS Message
+
         END TRY
 
         BEGIN CATCH
                IF @@TRANCOUNT > 0 
+               BEGIN
+                    SELECT 0 AS Success, ERROR_MESSAGE() AS Message
+               END
         BEGIN
             ROLLBACK TRAN;
         END
-        PRINT ERROR_MESSAGE();
-        THROW;    
         END CATCH
-END
+END;
 GO
-exec sp_Shop_XoaSanPham 1,1
-DROP PROC sp_Shop_XoaSanPham
