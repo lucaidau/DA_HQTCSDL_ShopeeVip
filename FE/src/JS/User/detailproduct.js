@@ -171,32 +171,6 @@ function addToCart() {
   }, 1800);
 }
 
-document.getElementById("btn-buy-now").addEventListener("click", () => {
-  const selectedBtn = document.querySelector(".btn-attr.active");
-
-  qty = qty <= 0 ? 1 : qty;
-
-  const curr = productDetail.find((item) => item.IDBanSao === selectedProduct);
-  if (!curr) {
-    alert("Có lỗi xảy ra khi lấy dữ liệu sản phẩm!");
-    return;
-  }
-  const sellPrice = curr.GiaBan - curr.GiaBan * (48 / 100);
-  const buyNow = [
-    {
-      IDBanSao: curr.IDBanSao,
-      HinhAnh: curr.HinhAnh[0],
-      TenSanPham: curr.TenSanPham + " " + curr.BienThe,
-      SoLuongMua: qty,
-      GiaBan: sellPrice,
-      ThanhTien: sellPrice * qty,
-    },
-  ];
-  localStorage.setItem("pendingOrder", JSON.stringify(buyNow));
-  console.log("Sản phẩm mua ngay: ", buyNow);
-  window.location.href = "../../HTML/User/pay.html";
-});
-
 const productTitle = document.getElementById("prodTitle");
 const price = document.getElementById("prodOldPrice");
 const discount = document.getElementById("prodNewPrice");

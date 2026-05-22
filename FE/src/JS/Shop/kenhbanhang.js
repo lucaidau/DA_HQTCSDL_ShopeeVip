@@ -456,7 +456,7 @@ document.querySelector(".user-name").innerText = shopName;
 })();
 
 // ==================== MODULE: QUẢN LÝ ĐƠN HÀNG ====================
-(function () {
+(function (App) {
   // Dữ liệu giả lập các đơn hàng của khách hàng
   let shippingOrders = [
     {
@@ -561,4 +561,4 @@ document.querySelector(".user-name").innerText = shopName;
 
   // Khởi chạy render dữ liệu đơn hàng ngay khi module load
   renderShippingOrders();
-})();
+})(window.App);
