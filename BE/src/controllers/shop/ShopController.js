@@ -1,8 +1,8 @@
 const { sql, shopPoolPromise } = require("../../config/connect.js");
 
 class ShopController {
-  // [GET] Shop/:id
-  async sanPham(req, res) {
+  // [GET] shop/:id
+  async laySanPham(req, res) {
     try {
       const shopID = parseInt(req.params.id);
 
@@ -10,15 +10,16 @@ class ShopController {
       const result = await pool
         .request()
         .input("IDShop", sql.Int, shopID)
-        .execute("sp_Shop_LaySanPhamShop");
+        .execute("sp_Shop_LaySanPham");
 
       return res.status(200).json({
+        success: true,
         message: "Lấy sản phẩm shop thành công",
         shopProduct: result.recordset,
       });
     } catch (error) {
       console.log("Err: ", error);
-      return res.status(500).json({ message: "Lỗi server!!" });
+      return res.status(500).json({ success: false, message: "Lỗi server!!" });
     }
   }
 }

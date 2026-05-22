@@ -1,3 +1,4 @@
+window.App = {};
 // ==================== HỆ THỐNG ĐIỀU HƯỚNG SPA ====================
 function showTab(pageId, navElement) {
   // Ẩn tất cả section
@@ -21,11 +22,15 @@ function showTab(pageId, navElement) {
   }
 }
 
+const userRaw = localStorage.getItem("user");
+const shopID = JSON.parse(userRaw).IDShop;
+const shopName = JSON.parse(userRaw).Ten;
+document.querySelector(".user-name").innerText = shopName;
+
 // Đối tượng trung gian để các module giao tiếp
-window.App = {};
 
 // ==================== MODULE: SỐ DƯ TÀI KHOẢN ====================
-function soDu() {
+(function (App) {
   let transactions = [
     {
       id: "IN-240415AABB",
@@ -172,33 +177,33 @@ function soDu() {
 
   calculateBalance();
   renderTransactions();
-}
+})(window.App);
 
 // ==================== MODULE: TẤT CẢ SẢN PHẨM ====================
-function sanPham() {
+(function (App) {
   let products = [];
-  const itemsPerPage = 6;
-  let currentPage = 1;
 
-  function generateProducts() {
-    return Array.from({ length: 12 }, (_, i) => ({
-      id: i + 1,
-      image: `https://picsum.photos/seed/prod${i + 1}/80/80`,
-      name: `Sản phẩm mẫu ${i + 1}`,
+  async function loadProducts() {
+    try {
+      const tableBody = document.getElementById("productTableBody");
+      if (tableBody) {
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Đang tải danh sách sản phẩm từ hệ thống...</td></tr>`;
+      }
 
-      price: Math.floor(Math.random() * 500000) + 50000,
-      stock: Math.floor(Math.random() * 50),
-      status: "Đang bán",
-      category: "Thời trang",
-    }));
-  }
+      const res = await fetch(`http://localhost:3000/shop/${shopID}`);
+      const data = await res.json();
+      console.log("Sản phẩm của shop: ", data);
 
-  function loadProducts() {
-    products = generateProducts();
-    const saved = JSON.parse(
-      localStorage.getItem("tatcasanpham_extra_products") || "[]",
-    );
-    products = [...saved, ...products];
+      if (res.ok && data.success) {
+        products = data.shopProduct;
+      } else {
+        products = [];
+        console.log("Backend trả về lỗi: ", data.message);
+      }
+    } catch (error) {
+      console.error("Lỗi kết nối API: ", error);
+      products = [];
+    }
     filterProducts(true);
   }
 
@@ -208,65 +213,76 @@ function sanPham() {
 
   function filterProducts(resetPage = false) {
     if (resetPage) currentPage = 1;
-    const search = document
-      .getElementById("searchInputTatCa")
-      .value.trim()
-      .toLowerCase();
-    const category = document.getElementById("categorySelect").value;
-    const status = document.getElementById("statusSelect").value;
+    const searchInput = document.getElementById("searchInputTatCa");
+    const search = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+    const categorySelect = document.getElementById("categorySelect");
+    const category = categorySelect ? categorySelect.value : "";
+
+    const statusSelect = document.getElementById("statusSelect");
+    const status = statusSelect ? statusSelect.value : "";
 
     const filtered = products.filter((p) => {
-      return (
-        (p.name.toLowerCase().includes(search) ||
-          p.sku.toLowerCase().includes(search)) &&
-        (category ? p.category === category : true) &&
-        (status ? p.status === status : true)
-      );
+      const matchSearch = p.TenSanPham
+        ? p.TenSanPham.toLowerCase().includes(search)
+        : true;
+
+      const matchStatus = status !== "" ? p.TrangThaiBS == status : true;
+
+      return matchSearch && matchStatus;
     });
 
-    const start = (currentPage - 1) * itemsPerPage;
-    const pageItems = filtered.slice(start, start + itemsPerPage);
+    const tableBody = document.getElementById("productTableBody");
+    if (!tableBody) return;
 
-    document.getElementById("productTableBody").innerHTML = pageItems
-      .map(
-        (p) => `
-      <tr>
-        <td><input type="checkbox" /></td>
-        <td><img src="${p.image}" /></td>
-        <td><div class="product-info"><div><div class="product-name">${p.name}</div></div></div></td>
-        <td>${formatPrice(p.price)}</td><td>${p.stock}</td>
-        <td><span class="status-pill status-sell">${p.status}</span></td>
-        <td><div class="action-links"><button onclick="deleteProduct(${p.id})" class="delete">Xóa</button></div></td>
-      </tr>
-    `,
-      )
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#888;">Không tìm thấy sản phẩm nào!</td></tr>`;
+      return;
+    }
+
+    tableBody.innerHTML = filtered
+      .map((p, index) => {
+        const imgSrc = p.HinhAnh;
+        const productName = p.TenSanPham + " " + p.BienThe;
+        const currPrice = p.GiaBan;
+        const currStock = p.SoLuongTonKho;
+        const currStatus = p.TrangThaiBS == 1 ? "Đang bán" : "Hết hàng";
+        return `
+          <tr>
+            <td><input type="checkbox" data-id="${p.IDSanPham}" /></td>
+            <td><img src="${imgSrc}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;" /></td>
+            <td>
+              <div class="product-info">
+                <div class="product-name" style="font-weight:600; color:#222;">${productName}</div>
+                
+              </div>
+            </td>
+            <td style="color:#ee4d2d; font-weight:500;">${formatPrice(currPrice)}</td>
+            <td>${currStock}</td>
+            <td><span class="status-pill ${p.TrangThaiBS == 1 ? "status-sell" : "status-out"}">${currStatus}</span></td>
+            
+          </tr>
+        `;
+      })
       .join("");
   }
 
-  window.deleteProduct = function (id) {
-    if (!confirm("Xóa sản phẩm này?")) return;
-    const idx = products.findIndex((p) => p.id === id);
-    if (idx > -1) products.splice(idx, 1);
-    filterProducts();
-  };
-
-  document
-    .getElementById("searchInputTatCa")
-    .addEventListener("input", () => filterProducts(true));
-  document
-    .getElementById("categorySelect")
-    .addEventListener("change", () => filterProducts(true));
-  document
-    .getElementById("statusSelect")
-    .addEventListener("change", () => filterProducts(true));
+  document.addEventListener("DOMContentLoaded", () => {
+    document
+      .getElementById("searchInputTatCa")
+      .addEventListener("input", () => filterProducts(true));
+    document
+      .getElementById("statusSelect")
+      .addEventListener("change", () => filterProducts(true));
+  });
 
   // Public func để load lại khi thêm mới
-  window.App.reloadProducts = loadProducts;
+  App.reloadProducts = loadProducts;
   loadProducts();
-}
+})(window.App);
 
 // ==================== MODULE: THÊM SẢN PHẨM ====================
-function themSanPham() {
+(function () {
   let selectedImageData = null;
 
   // Xử lý sự kiện tải hình ảnh sản phẩm gốc
@@ -437,10 +453,10 @@ function themSanPham() {
     wrapper.style.display = "none";
     showTab("tatcasp-page", document.querySelectorAll(".nav-link")[1]);
   });
-}
+})();
 
 // ==================== MODULE: QUẢN LÝ ĐƠN HÀNG ====================
-function donHang() {
+(function () {
   // Dữ liệu giả lập các đơn hàng của khách hàng
   let shippingOrders = [
     {
@@ -545,4 +561,4 @@ function donHang() {
 
   // Khởi chạy render dữ liệu đơn hàng ngay khi module load
   renderShippingOrders();
-}
+})();

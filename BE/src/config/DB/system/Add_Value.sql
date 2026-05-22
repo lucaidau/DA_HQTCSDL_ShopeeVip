@@ -18,7 +18,6 @@ SELECT * FROM TAI_KHOAN
 SELECT * FROM NGUOI_MUA
 SELECT * FROM SHOP
 SELECT * FROM VI
-SELECT * FROM DANH_MUC
 SELECT * FROM SAN_PHAM
 SELECT * FROM BAN_SAO_SAN_PHAM
 SELECT * FROM GIO_HANG
@@ -47,19 +46,18 @@ INSERT INTO SHOP (IDTaiKhoan, TrangThaiShop) VALUES (2, 1);
 INSERT INTO VI VALUES
 (1, 900000,GETDATE());
 
--- Sản phẩm & Biến thể
-INSERT INTO DANH_MUC VALUES (N'Điện thoại');
-INSERT INTO SAN_PHAM VALUES (1,1, N'iPhone 15', N'Siêu phẩm 2024', 'ip15.jpg', 1);
+-- Sản phẩm 
+INSERT INTO SAN_PHAM VALUES (1, N'iPhone 15', N'Siêu phẩm 2024', 'ip15.jpg', 1);
 INSERT INTO BAN_SAO_SAN_PHAM VALUES
 (1, 20, 27000000, N'Đen - 128GB', 'ip15.jpg', 1),
 (1, 10, 25000000, N'Hồng - 128GB', 'ip15_pink.jpg', 1),
-(1, 15, 30000000, N'Trắng - 128GB', 'ip15_white.jpg', 1);
+(1, 15, 30000000, N'Xanh - 128GB', 'ip15_blue.jpg', 1);
 
 -- Giỏ hàng
 INSERT INTO GIO_HANG VALUES (1, 1, 1, GETDATE());
 
 -- Bước 1: Tạo Đơn hàng tổng (Của người mua ID = 1)
-INSERT INTO DON_HANG (IDNguoiMua, NgayTao, TrangThaiDonHang) VALUES (1, GETDATE(), 0); 
+INSERT INTO DON_HANG (IDNguoiMua, IDShop, NgayTao, TrangThaiDonHang) VALUES (1, 1, GETDATE(), 0); 
 
 -- Bước 2: Tạo Chi tiết đơn hàng (Giả sử đơn hàng trên có ID = 1)
 -- Khách mua 1 chiếc Titan 128GB (IDBanSao = 1) và 1 chiếc Màu Xanh (IDBanSao = 2)

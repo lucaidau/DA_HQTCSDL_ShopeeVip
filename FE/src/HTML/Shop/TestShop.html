@@ -16,12 +16,10 @@
       </div>
       <div class="header-right">
         <div class="user-profile">
-          <img
-            src="https://ui-avatars.com/api/?name=L+M&background=random"
-            class="user-avatar"
-            alt="Avatar"
-          />
-          <span class="user-name">Lê Thị Mỹ</span>
+          <span
+            style="color: #ff5722; font-weight: bold"
+            class="user-name"
+          ></span>
         </div>
       </div>
     </header>
@@ -131,24 +129,13 @@
                   placeholder="Tìm tên sản phẩm"
                 />
               </div>
-              <div class="control-item select-box">
-                <label>Danh mục</label>
-                <select id="categorySelect">
-                  <option value="">Danh mục</option>
-                  <option value="Thời trang">Thời trang</option>
-                  <option value="Giày dép">Giày dép</option>
-                  <option value="Điện thoại">Điện thoại</option>
-                  <option value="Phụ kiện">Phụ kiện</option>
-                  <option value="Đồ gia dụng">Đồ gia dụng</option>
-                </select>
-              </div>
+
               <div class="control-item select-box">
                 <label>Trạng thái</label>
                 <select id="statusSelect">
                   <option value="">Tất cả</option>
-                  <option value="Đang bán">Đang bán</option>
-                  <option value="Hết hàng">Hết hàng</option>
-                  <option value="Ẩn">Ẩn</option>
+                  <option value="1">Đang bán</option>
+                  <option value="0">Hết hàng</option>
                 </select>
               </div>
               <button
@@ -175,7 +162,6 @@
                     <th>Giá bán</th>
                     <th>Kho hàng</th>
                     <th>Trạng thái</th>
-                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody id="productTableBody"></tbody>
