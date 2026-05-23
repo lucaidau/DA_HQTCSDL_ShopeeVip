@@ -104,8 +104,10 @@ const loginMethod = async () => {
 
     if (data.user.IDShop === null) {
       window.location.href = "User/home.html";
-    } else window.location.href = "Shop/TestShop.html";
-    return;
+    } else {
+      window.location.href = "Shop/TestShop.html";
+      return;
+    }
   } catch (error) {
     console.log("Lỗi hệ thống: ", error);
   }
