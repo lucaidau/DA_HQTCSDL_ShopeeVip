@@ -1,11 +1,222 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>This is Admin Page</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ShopeeVip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../CSS/admin.css">
+</head>
+
+<body>
+    <div class="admin-wrapper">
+        <header class="admin-header">
+            <div class="admin-logo">
+                <h2>🧡 Shopee <span style="font-weight: 300; font-size: 18px;">Kênh Quản Trị</span></h2>
+            </div>
+            <div class="admin-user">
+                <span id="admin-name">Admin</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <nav class="horizontal-navbar">
+                <a href="#accounts" class="nav-link active" data-tab="accounts">
+                    <i class="fas fa-users"></i> Quản Lý Tài Khoản
+                </a>
+                <a href="#products" class="nav-link" data-tab="products">
+                    <i class="fas fa-box"></i> Quản Lý Sản Phẩm
+                </a>
+                <a href="#backup" class="nav-link" data-tab="backup">
+                    <i class="fas fa-database"></i> Sao Lưu & Phục Hồi
+                </a>
+                <a href="../index.html" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+                </a>
+            </nav>
+
+            <section id="accounts" class="tab-content active">
+                <div class="section-header">
+                    <h2>Quản Lý Tài Khoản</h2>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="account-search" placeholder="Tìm kiếm tài khoản...">
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên Đăng Nhập</th>
+                                <th>Tên Người Dùng</th>
+                                <th>Email</th>
+                                <th>Vai Trò</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accounts-table">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="products" class="tab-content">
+                <div class="section-header">
+                    <h2>Quản Lý Sản Phẩm</h2>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="product-search" placeholder="Tìm kiếm shop...">
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tên Shop</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Giá</th>
+                                <th>Hình Ảnh</th>
+                                <th>Tồn Kho</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="backup" class="tab-content">
+                <div class="section-header">
+                    <h2>Sao Lưu & Phục Hồi Dữ Liệu</h2>
+                </div>
+
+                <div class="backup-container">
+                    <div class="backup-box">
+                        <h3><i class="fas fa-save"></i> Sao Lưu Dữ Liệu</h3>
+                        <p>Tạo bản sao lưu toàn bộ dữ liệu hệ thống</p>
+                        <button class="btn btn-success" id="btn-backup">
+                            <i class="fas fa-cloud-download-alt"></i> Sao Lưu Ngay
+                        </button>
+                        <div class="backup-info">
+                            <p><strong>Lần sao lưu cuối:</strong> <span id="last-backup">Chưa có</span></p>
+                            <p><strong>Dung lượng:</strong> <span id="backup-size">0 MB</span></p>
+                        </div>
+                    </div>
+
+                    <div class="backup-box">
+                        <h3><i class="fas fa-clock"></i> Sao Lưu Tự Động</h3>
+                        <p>Lập lịch sao lưu định kỳ</p>
+
+                        <div style="margin-top: 15px; margin-bottom: 10px;">
+                            <label
+                                style="font-size: 13px; color: #666; margin-bottom: 5px; display: block; font-weight: bold;">Mô
+                                hình phục hồi:</label>
+                            <select id="recovery-model"
+                                style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px;">
+                                <option value="full">Full Recovery Model</option>
+                                <option value="bulk_logged">Bulk-Logged Recovery Model</option>
+                                <option value="simple">Simple Recovery Model</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 10px;">
+                            <label
+                                style="font-size: 13px; color: #666; margin-bottom: 5px; display: block; font-weight: bold;">Loại
+                                sao lưu:</label>
+                            <select id="backup-type"
+                                style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px;">
+                                <option value="full">Full Backup (Toàn phần)</option>
+                                <option value="diff">Differential Backup (Một phần)</option>
+                                <option value="log">Transaction Log Backup (Lưu vết)</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="font-size: 13px; color: #666; margin-bottom: 5px; display: block; font-weight: bold;">Tần
+                                suất chạy:</label>
+                            <select id="backup-freq"
+                                style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px;">
+                                <option value="daily">Hằng ngày (Daily)</option>
+                                <option value="weekly">Hằng tuần (Weekly)</option>
+                                <option value="monthly">Hằng tháng (Monthly)</option>
+                                <option value="hourly">Mỗi giờ (Hourly)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" id="btn-save-schedule"
+                            style="width: 100%; justify-content: center;">
+                            <i class="fas fa-save"></i> Lưu Lịch Trình
+                        </button>
+                    </div>
+
+                    <div class="backup-box">
+                        <h3><i class="fas fa-undo-alt"></i> Phục Hồi Dữ Liệu</h3>
+                        <p>Khôi phục CSDL từ các bản sao lưu (.bak)</p>
+                        
+                        <div style="margin-top: 15px; margin-bottom: 10px;">
+                            <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block; font-weight: bold;">Loại phục hồi:</label>
+                            <select id="restore-type" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px;">
+                                <option value="full">Phục hồi Full Backup</option>
+                                <option value="diff">Phục hồi Differential Backup</option>
+                                <option value="log">Phục hồi Transaction Log Backup</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block; font-weight: bold;">Đường dẫn file (.bak):</label>
+                            <input type="text" id="restore-file-path" placeholder="VD: D:\Backup\ShopeeVip_Full.bak" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 13px;">
+                        </div>
+
+                        <button class="btn btn-warning" id="btn-execute-restore" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-database"></i> Phục Hồi Dữ Liệu
+                        </button>
+                        <div id="restore-status" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <div class="backup-box">
+                        <h3><i class="fas fa-chart-bar"></i> Thống Kê Cơ Sở Dữ Liệu</h3>
+                        <ul class="stats-list">
+                            <li>Tổng Sản Phẩm: <strong id="stat-products">0</strong></li>
+                            <li>Tổng Tài Khoản: <strong id="stat-accounts">0</strong></li>
+                            <li>Tổng Đơn Hàng: <strong id="stat-orders">0</strong></li>
+                            <li>Tổng Cửa Hàng: <strong id="stat-shops">0</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Form</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="modal-form" class="modal-body">
+                <div id="form-fields"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../JS/Admin/admin.js"></script>
+</body>
+
 </html>
