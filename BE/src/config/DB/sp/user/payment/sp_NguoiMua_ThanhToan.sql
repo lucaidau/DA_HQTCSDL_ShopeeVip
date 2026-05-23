@@ -37,11 +37,9 @@ BEGIN
             SET SoLuongTonKho = SoLuongTonKho - @SoLuongMua
             WHERE @IDBanSao = IDBanSao;
 
-            UPDATE SAN_PHAM
-            SET TrangThaiSP = 0
-            FROM SAN_PHAM SP
-            JOIN BAN_SAO_SAN_PHAM BS ON BS.IDSanPham = SP.IDSanPham
-            WHERE BS.IDBanSao = @IDBanSao AND BS.SoLuongTonKho <= 0
+            UPDATE BAN_SAO_SAN_PHAM
+            SET TrangThaiBS = 0
+            WHERE IDBanSao = @IDBanSao AND SoLuongTonKho <= 0
 
             INSERT INTO CHI_TIET_DON_HANG (IDDonHang, IDBanSao, GiaLucMua, GhiChu, SoLuong, GiaTien) VALUES
             (@NewIDDonHang, @IDBanSao, @GiaHienTai, @Ghichu, @SoLuongMua, @TongTien);
