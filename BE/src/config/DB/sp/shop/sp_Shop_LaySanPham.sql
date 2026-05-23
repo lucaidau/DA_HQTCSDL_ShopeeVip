@@ -18,5 +18,3 @@ AS
         WHERE SP.IDShop = @IDShop AND TrangThaiSP = 1;
         
     END
-DROP PROC sp_Shop_LaySanPham
-EXEC sp_Shop_LaySanPham 1

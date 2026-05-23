@@ -19,7 +19,7 @@ class ShopController {
       });
     } catch (error) {
       console.log("Err: ", error);
-      return res.status(500).json({ success: false, message: "Lỗi server!!" });
+      return res.status(500).json({ success: false, message: "Lỗi server!!" + error });
     }
   }
 
