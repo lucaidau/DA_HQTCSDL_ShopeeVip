@@ -171,10 +171,12 @@ const price = document.getElementById("prodNewPrice");
 const updateSelection = (id) => {
   selectedProduct = id;
 
-  const formatPrice = productDetail[id - 1].GiaBan
-    ? Number(productDetail[id - 1].GiaBan).toLocaleString("vi-VN")
+  const selected = productDetail.find((p) => p.IDBanSao === id);
+  if (!selected) return;
+  const formatPrice = selected.GiaBan
+    ? Number(selected.GiaBan).toLocaleString("vi-VN")
     : "0";
-  productTitle.innerText = productDetail[id - 1].TenSanPham;
+  productTitle.innerText = selected.TenSanPham;
   price.innerText = "₫" + formatPrice;
 };
 

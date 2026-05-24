@@ -1,3 +1,4 @@
+const { MAX } = require("mssql");
 const { sql, shopPoolPromise } = require("../../config/connect.js");
 
 class ShopController {
@@ -19,14 +20,59 @@ class ShopController {
       });
     } catch (error) {
       console.log("Err: ", error);
-      return res.status(500).json({ success: false, message: "Lỗi server!!" + error });
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server!!" + error });
     }
   }
 
   //[POST] /shop/themsanpham
   async themSanPham(req, res) {
     try {
-    } catch (error) {}
+      const { shopID, productName, imgLink, desc, copyList } = req.body;
+
+      const typeTable = new sql.Table();
+      typeTable.columns.add("SoLuongTonKho", sql.Int);
+      typeTable.columns.add("GiaBan", sql.Decimal(18, 2));
+      typeTable.columns.add("BienThe", sql.NVarChar(50));
+      typeTable.columns.add("HinhAnh", sql.VarChar(MAX));
+      typeTable.columns.add("TrangThaiBS", sql.Int);
+
+      if (copyList && copyList.length > 0) {
+        copyList.forEach((item) => {
+          typeTable.rows.add(
+            item.SoLuongTonKho,
+            item.GiaBan,
+            item.BienThe,
+            item.HinhAnh,
+            item.TrangThaiBS,
+          );
+        });
+      }
+
+      const pool = await shopPoolPromise;
+      const result = await pool
+        .request()
+        .input("IDShop", sql.Int, shopID)
+        .input("TenSP", sql.NVarChar(255), productName)
+        .input("HinhAnhSP", sql.VarChar(MAX), imgLink)
+        .input("MoTa", sql.NVarChar(MAX), desc)
+        .input("ListBienThe", typeTable)
+        .execute("sp_Shop_ThemSanPham");
+
+      const newProduct = result.recordset[0].IDSanPhamMoi;
+
+      return res.status(201).json({
+        success: true,
+        message: "Thêm sản phẩm thành công",
+        idSanPhamMoi: newProduct,
+      });
+    } catch (error) {
+      console.log("Lỗi server: ", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server: " + error });
+    }
   }
 
   //[GET] shop/donhang/:id
@@ -50,7 +96,7 @@ class ShopController {
     }
   }
 
-  // [PUT] /shop/xacnhan
+  // [PUT] /shop/donhang/xacnhan
   async xacNhanDonHang(req, res) {
     try {
       const { orderID } = req.body;

@@ -282,182 +282,127 @@ document.querySelector(".user-name").innerText = shopName;
 })(window.App);
 
 // ==================== MODULE: THÊM SẢN PHẨM ====================
-(function () {
-  let selectedImageData = null;
-
-  // Xử lý sự kiện tải hình ảnh sản phẩm gốc
-  document.querySelectorAll(".file-input").forEach((input) => {
-    input.addEventListener("change", () => {
-      const box = input.closest(".upload-box");
-      const file = input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        selectedImageData = reader.result;
-        box.style.backgroundImage = `url('${selectedImageData}')`;
-        box.style.backgroundSize = "cover";
-        box.querySelector(".upload-icon").style.display = "none";
-        box.querySelector(".upload-text").textContent = "Đã chọn";
-      };
-      reader.readAsDataURL(file);
-    });
-  });
-
+(function (App) {
   /**
    * HÀM SINH CÁC Ô NHẬP LIỆU GIÁ/KHO CHO TỪNG BIẾN THỂ TRÊN GIAO DIỆN
    */
-  window.generateVariantTable = function () {
-    const groupTitle = document
-      .getElementById("variantGroupTitle")
-      .value.trim();
-    const valuesRaw = document
-      .getElementById("variantValuesInput")
-      .value.trim();
+  App.generateVariantTable = function () {
+    const groupTitleInput = document.getElementById("variantGroupTitle");
+
+    const valuesInput = document.getElementById("variantValuesInput");
+
     const tbody = document.getElementById("variantTableBody");
+
     const wrapper = document.getElementById("variantTableWrapper");
 
-    if (!groupTitle || !valuesRaw) {
-      alert("Vui lòng điền Tên thuộc tính và các Giá trị phân loại trước!");
+    if (!groupTitleInput || !valuesInput) {
+      alert("Không tìm thấy thẻ");
       return;
     }
 
-    // Tách mảng giá trị phân loại (Ví dụ: S, M, L)
-    const listValues = valuesRaw
-      .split(",")
-      .map((item) => item.trim())
-      .filter((item) => item !== "");
-    if (listValues.length === 0) return;
+    const groupTitle = groupTitleInput.value.trim();
+    const itemValue = valuesInput.value.trim();
 
-    // Tiến hành render các hàng nhập liệu <tr> có kèm ô input nhìn thấy được rõ ràng
-    let htmlContent = "";
-    listValues.forEach((value) => {
-      const fullVariantName = `${groupTitle}: ${value}`;
-      htmlContent += `
-        <tr class="variant-row" data-name="${fullVariantName}">
-          <td style="font-weight: 600; color: #ff5722; padding: 12px 15px;">${fullVariantName}</td>
-          <td style="padding: 8px 10px;">
-            <input type="number" class="variant-price" placeholder="Nhập giá tiền... đ" min="0" 
-                   style="width: 100%; height: 38px; padding: 0 10px; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; display: block;" />
-          </td>
-          <td style="padding: 8px 10px;">
-            <input type="number" class="variant-stock" placeholder="Số lượng kho..." min="0" 
-                   style="width: 100%; height: 38px; padding: 0 10px; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; display: block;" />
-          </td>
-          <td style="padding: 8px 10px;">
-            <input type="text" class="variant-img" placeholder="URL hình ảnh sản phẩm..." 
-                   style="width: 100%; height: 38px; padding: 0 10px; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; display: block;" />
-          </td>
-        </tr>
-      `;
-    });
+    if (!groupTitle || !itemValue) {
+      alert("Vui lòng nhập đầy đủ dữ liệu!");
+      return;
+    }
 
-    // Gán dữ liệu vào tbody
-    tbody.innerHTML = htmlContent;
+    let newRowHtml = "";
 
+    const fullVariantName = `${groupTitle}: ${itemValue}`;
+
+    newRowHtml += `
+      <tr class="variant-row-item">
+        <td style="padding: 10px; font-weight: 500; color: #333;">
+          <input type="text" class="variant-name" value="${fullVariantName}" readonly style="width: 100%; padding: 8px; border: 1px solid #eee; background: #f9f9f9; border-radius: 10px; color: #ff4d4f; font-weight: 600" required />
+        </td>
+        <td style="padding: 10px;">
+          <input type="number" class="variant-price" placeholder="Giá bán riêng (đ)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required min="0" />
+        </td>
+        <td style="padding: 10px;">
+          <input type="number" class="variant-stock" placeholder="Kho hàng riêng" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required min="0" />
+        </td>
+        <td style="padding: 10px;">
+          <input type="text" class="variant-image" placeholder="Link hình ảnh (Nếu có)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
+        </td>
+        <td style="padding: 10px; text-align: center;">
+          <button type="button" class="btn" style="background: #ff4d4f; color: white; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;" onclick="App.removeVariantRow(this)">Xóa</button>
+        </td>
+      </tr>
+    `;
+
+    tbody.insertAdjacentHTML("beforeend", newRowHtml);
+    groupTitleInput.value = "";
+    valuesInput.value = "";
+    valuesInput.focus();
     // Hiển thị khung chứa bảng
     wrapper.style.display = "block";
   };
 
-  // Logic nút lưu sản phẩm thu thập giá riêng biệt
-  document.getElementById("saveBtn").addEventListener("click", () => {
-    const name = document.getElementById("productName").value.trim();
-    const category = document.getElementById("categoryInput").value;
-
-    if (!name || !category) {
-      alert("Vui lòng điền đủ Tên và Ngành hàng!");
-      return;
+  App.removeVariantRow = function (button) {
+    const row = button.closest("tr");
+    if (row) {
+      row.remove();
     }
+  };
 
-    const rowElements = document.querySelectorAll(
-      "#variantTableBody .variant-row",
-    );
-    if (rowElements.length === 0) {
-      alert("Vui lòng cấu hình thuộc tính phân loại và nhấn Áp dụng!");
-      return;
-    }
+  App.savedProducts = async function () {
+    const procName = document.getElementById("productName").value;
+    const procImgLink = document.getElementById("productImg").value;
+    const procDesc = document.getElementById("description").value;
 
-    const listBanSao = [];
-    let isDataValid = true;
-    let priceMin = Infinity;
-    let priceMax = -Infinity;
-    let totalStock = 0;
+    const variantList = [];
 
-    rowElements.forEach((row) => {
-      const nameVariant = row.getAttribute("data-name");
-      const priceVal = parseFloat(row.querySelector(".variant-price").value);
-      const stockVal = parseInt(row.querySelector(".variant-stock").value, 10);
-      const imgVal = row.querySelector(".variant-img").value.trim();
+    document
+      .querySelectorAll("#variantTableBody .variant-row-item")
+      .forEach((row) => {
+        const quantity = row.querySelector(".variant-stock").value;
+        const price = row.querySelector(".variant-price").value;
+        const name = row.querySelector(".variant-name").value;
+        const img = row.querySelector(".variant-image").value;
+        const status = 1;
 
-      if (isNaN(priceVal) || isNaN(stockVal) || priceVal < 0 || stockVal < 0) {
-        isDataValid = false;
-        return;
-      }
-
-      if (priceVal < priceMin) priceMin = priceVal;
-      if (priceVal > priceMax) priceMax = priceVal;
-      totalStock += stockVal;
-
-      listBanSao.push({
-        BienThe: nameVariant,
-        GiaBan: priceVal,
-        SoLuongTonKho: stockVal,
-        HinhAnh: imgVal || selectedImageData || "https://picsum.photos/80/80",
+        variantList.push({
+          SoLuongTonKho: parseInt(quantity),
+          GiaBan: parseFloat(price) || 0,
+          BienThe: name,
+          HinhAnh: img || "",
+          TrangThaiBS: parseInt(status),
+        });
       });
-    });
-
-    if (!isDataValid) {
-      alert(
-        "Vui lòng nhập đầy đủ Giá và Số lượng kho hợp lệ cho từng hàng biến thể!",
-      );
-      return;
-    }
-
-    // Đồ án: Đây là object Payload chứa mảng biến thể với các giá tiền khác nhau để gửi lên API Node.js
-    const productPayload = {
-      TenSanPham: name,
-      IDDanhMuc: category,
-      HinhAnh: selectedImageData || "https://picsum.photos/80/80",
-      BanSaoSanPham: listBanSao,
+    const newProc = {
+      shopID: shopID,
+      productName: procName,
+      imgLink: procImgLink,
+      desc: procDesc,
+      copyList: variantList,
     };
 
-    // Đồng bộ lưu trữ tạm thời ra danh sách trang ngoài
-    const savedProducts = JSON.parse(
-      localStorage.getItem("tatcasanpham_extra_products") || "[]",
-    );
-    let displayPriceText = priceMin;
-    if (priceMin !== priceMax) {
-      displayPriceText = `${priceMin} - ${priceMax}`;
+    try {
+      const res = await fetch(`http://localhost:3000/shop/themsp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProc),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert("Đã lưu sản phẩm!!");
+        document.getElementById("variantTableBody").innerHTML = "";
+        showTab("tatcasp-page");
+      } else {
+        alert("Thêm sản phẩm thất bại: " + (data.message || "Lỗi hệ thống"));
+      }
+    } catch (error) {
+      console.log("Lỗi kết nối API: ", error);
+      alert("Mất kết nối máy chủ");
     }
-
-    const newDisplayItem = {
-      id: Date.now(),
-      name: name,
-      price: displayPriceText,
-      stock: totalStock,
-      status: "Đang bán",
-      category: category,
-      image: productPayload.HinhAnh,
-    };
-
-    savedProducts.unshift(newDisplayItem);
-    localStorage.setItem(
-      "tatcasanpham_extra_products",
-      JSON.stringify(savedProducts),
-    );
-
-    alert(
-      `Thành công! Đã thêm sản phẩm gốc kèm theo ${listBanSao.length} biến thể có giá tiền khác nhau.`,
-    );
-    document.getElementById("productForm").reset();
-    tbody.innerHTML = "";
-    wrapper.style.display = "none";
-    showTab("tatcasp-page", document.querySelectorAll(".nav-link")[1]);
-  });
-})();
+  };
+})(window.App);
 
 // ==================== MODULE: QUẢN LÝ ĐƠN HÀNG ====================
 (function (App) {
-  // Dữ liệu giả lập các đơn hàng của khách hàng
   let shippingOrders = [];
 
   let searchShipQuery = "";

@@ -213,7 +213,7 @@
                 </div>
                 <div class="form-card">
                   <div class="card-head">
-                    <h2>Phân loại sản phẩm (Biến thể)</h2>
+                    <h2>Danh sách chi tiết các sản phẩm cùng loại</h2>
                   </div>
 
                   <div
@@ -233,14 +233,14 @@
                       <input
                         id="variantValuesInput"
                         type="text"
-                        placeholder="Ví dụ: S, M, L hoặc Đỏ, Xanh..."
+                        placeholder="Ví dụ: S (Hoặc M, L, Đỏ...)"
                       />
                     </div>
                     <button
                       type="button"
                       class="btn btn-secondary"
                       style="align-self: flex-end"
-                      onclick="generateVariantTable()"
+                      onclick="App.generateVariantTable()"
                     >
                       Áp dụng
                     </button>
@@ -268,6 +268,7 @@
                           <th>Giá bán riêng (đ)</th>
                           <th>Kho hàng riêng</th>
                           <th>Link hình ảnh (Nếu có)</th>
+                          <th style="text-align: center">Hành động</th>
                         </tr>
                       </thead>
                       <tbody id="variantTableBody"></tbody>
@@ -288,7 +289,13 @@
               >
                 Hủy
               </button>
-              <button id="saveBtn" class="btn btn-primary">Lưu sản phẩm</button>
+              <button
+                id="saveBtn"
+                class="btn btn-primary"
+                onclick="App.savedProducts()"
+              >
+                Lưu sản phẩm
+              </button>
             </div>
             <div id="formMessage" class="form-message"></div>
           </div>

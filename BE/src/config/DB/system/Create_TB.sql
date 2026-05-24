@@ -96,6 +96,15 @@ CREATE TYPE TYPE_DanhSachMuaHang AS TABLE
     SoLuongMua INT,
     ThanhTien DECIMAL(18,2)
 );
+
+CREATE TYPE TYPE_BienTheSP AS TABLE
+(
+    SoLuongTonKho INT,
+    GiaBan DECIMAL(18,2),
+    BienThe NVARCHAR(50),
+    HinhAnh VARCHAR(MAX),
+    TrangThaiBS TINYINT
+)
 GO
 
 -- DELETE FOR TEST ---
