@@ -15,10 +15,10 @@ const grid = document.getElementById("product-grid");
 const loading = document.getElementById("loading");
 
 function createProductHTML(cart) {
-  const price = Number(cart.GiaBan) - Number(cart.GiaBan) * (48 / 100);
+  const price = Number(cart.GiaBan);
   const numericPrice = price.toLocaleString("vi-VN");
   const procName = cart.TenSanPham + " " + (cart.BienThe || "");
-  const total = cart.ThanhTien - cart.ThanhTien * (48 / 100);
+  const total = cart.ThanhTien;
   return `
     <div class="shop-section">
         <div class="shop-header">

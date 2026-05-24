@@ -82,17 +82,11 @@ window.onload = async () => {
   // === XỬ LÍ UI ===
   updateCartBadge(cartCount);
 
-  const formatDiscount = productDetail[0].GiaBan
-    ? Number(
-        productDetail[0].GiaBan - productDetail[0].GiaBan * (48 / 100),
-      ).toLocaleString("vi-VN")
-    : "0";
   const formatPrice = productDetail[0].GiaBan
     ? Number(productDetail[0].GiaBan).toLocaleString("vi-VN")
     : "0";
   productTitle.innerText = productDetail[0].TenSanPham;
   price.innerText = "₫" + formatPrice;
-  discount.innerText = "₫" + formatDiscount;
 
   CreateCopyProduct(productDetail);
   updateUI(productDetail);
@@ -172,24 +166,16 @@ function addToCart() {
 }
 
 const productTitle = document.getElementById("prodTitle");
-const price = document.getElementById("prodOldPrice");
-const discount = document.getElementById("prodNewPrice");
+const price = document.getElementById("prodNewPrice");
 
 const updateSelection = (id) => {
   selectedProduct = id;
 
-  const formatDiscount = productDetail[id - 1].GiaBan
-    ? Number(
-        productDetail[id - 1].GiaBan -
-          productDetail[id - 1].GiaBan * (48 / 100),
-      ).toLocaleString("vi-VN")
-    : "0";
   const formatPrice = productDetail[id - 1].GiaBan
     ? Number(productDetail[id - 1].GiaBan).toLocaleString("vi-VN")
     : "0";
   productTitle.innerText = productDetail[id - 1].TenSanPham;
   price.innerText = "₫" + formatPrice;
-  discount.innerText = "₫" + formatDiscount;
 };
 
 const CreateCopyProduct = (detail) => {

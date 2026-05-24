@@ -74,8 +74,7 @@ function renderCheckoutItems() {
     totalItemsPriceEl.innerText = `₫${tongTienHang.toLocaleString("vi-VN")}`;
   }
   if (totalFinalPriceEl) {
-    const phiVanChuyen = 17000;
-    const tongThanhToan = tongTienHang + phiVanChuyen;
+    const tongThanhToan = tongTienHang;
     totalFinalPriceEl.innerText = `₫${tongThanhToan.toLocaleString("vi-VN")}`;
   }
 }
