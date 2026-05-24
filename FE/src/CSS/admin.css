@@ -1,0 +1,477 @@
+/* Admin Dashboard Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Layout */
+.admin-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header trải rộng 100% lên trên cùng */
+.admin-header {
+    background: white;
+    padding: 15px 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+}
+
+.admin-header h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+.admin-logo h2 {
+    color: #ee4d2d;
+    /* Màu cam đặc trưng Shopee */
+    font-size: 22px;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Toàn bộ vùng làm việc chính */
+.main-content {
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 25px 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Thanh Menu Nằm Ngang Kiểu Giao Diện Shopee Mẫu */
+.horizontal-navbar {
+    background: white;
+    border-radius: 15px;
+    /* Bo góc tròn lớn theo mẫu */
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 25px;
+    border: 1px solid #eef0f3;
+}
+
+.horizontal-navbar .nav-link {
+    flex: 1;
+    padding: 18px 20px;
+    color: #555;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    /* Tạo gạch chân ẩn */
+    font-size: 15px;
+}
+
+.horizontal-navbar .nav-link:hover {
+    background-color: #fafafa;
+    color: #ee4d2d;
+}
+
+/* Trạng thái Tab đang được chọn (Active) */
+.horizontal-navbar .nav-link.active {
+    color: #ee4d2d;
+    background-color: rgba(238, 77, 45, 0.04);
+    /* Đổ nền cam nhạt */
+    border-bottom-color: #ee4d2d;
+    /* Hiện gạch chân màu cam đậm */
+    font-weight: 600;
+}
+
+/* Nút đăng xuất nằm bên phải ngoài cùng */
+.horizontal-navbar .nav-link.logout {
+    color: #999;
+    border-left: 1px solid #f0f0f0;
+}
+
+.horizontal-navbar .nav-link.logout:hover {
+    background-color: rgba(231, 76, 60, 0.05);
+    color: #e74c3c;
+}
+
+/* Content Area */
+.tab-content {
+    display: none;
+    flex: 1;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+/* Search Bar */
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #ee4d2d;
+    box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+}
+
+/* Table */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table thead {
+    background-color: #fafdff;
+    border-bottom: 2px solid #eceff1;
+}
+
+.data-table thead th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #666;
+}
+
+.data-table tbody td {
+    padding: 14px 15px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.data-table img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #ee4d2d;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e03d1e;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #ddd;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #ccc;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-edit:hover {
+    background-color: #2980b9;
+}
+
+/* Backup Section */
+.backup-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.backup-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eee;
+}
+
+.backup-box h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.backup-box p {
+    color: #888;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.backup-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.backup-info p {
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.stats-list {
+    list-style: none;
+}
+
+.stats-list li {
+    padding: 11px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.stats-list li:last-child {
+    border-bottom: none;
+}
+
+.stats-list strong {
+    color: #ee4d2d;
+    font-size: 16px;
+}
+
+.file-input-wrapper {
+    margin-bottom: 10px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #ee4d2d;
+    box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .horizontal-navbar {
+        flex-direction: column;
+    }
+
+    .horizontal-navbar .nav-link {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+    }
+
+    .horizontal-navbar .nav-link.active {
+        border-left-color: #ee4d2d;
+    }
+
+    .main-content {
+        padding: 15px 20px;
+    }
+}
