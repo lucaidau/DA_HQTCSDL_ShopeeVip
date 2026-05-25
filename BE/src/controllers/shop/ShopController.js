@@ -129,6 +129,68 @@ class ShopController {
       return res.status(500).json({ success: false, message: "Lỗi Server!" });
     }
   }
+
+  //[GET] //shop/vi/:id
+  async layVi(req, res) {
+    try {
+      const IDShop = parseInt(req.params.id);
+
+      const pool = await shopPoolPromise;
+      const resultSoDu = await pool
+        .request()
+        .input("IDShop", sql.Int, IDShop)
+        .query(
+          "SELECT TOP 1 SoDu FROM VI WHERE IDShop = @IDShop ORDER BY NgayThucHien DESC",
+        );
+
+      const resultLichSu = await pool
+        .request()
+        .input("IDShop", sql.Int, IDShop)
+        .query("SELECT * FROM dbo.fn_Shop_LayLichSuVi(@IDShop)");
+
+      return res.status(200).json({
+        success: true,
+        message: "Lấy thông tin và lịch sử thành công",
+        balance: resultSoDu.recordset[0].SoDu,
+        transactions: resultLichSu.recordset,
+      });
+    } catch (error) {
+      console.log("Lỗi lấy thông tin shop: ", error.message);
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server: " + error.message });
+    }
+  }
+
+  async rutTien(req, res) {
+    try {
+      const { shopID, amount, desc } = req.body;
+
+      const pool = await shopPoolPromise;
+      const result = await pool
+        .request()
+        .input("IDShop", sql.Int, shopID)
+        .input("SoTien", sql.Decimal(18, 2), amount)
+        .input("NoiDung", sql.NVarChar(255), desc)
+        .execute("sp_Shop_RutTien");
+
+      const procResponse = result.recordset[0];
+      if (procResponse.Success && procResponse) {
+        return res.status(201).json({
+          success: true,
+          message: procResponse.Message,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: procResponse ? procResponse.Message : "Rút tiền thất bại",
+        });
+      }
+    } catch (error) {
+      console.log("Lỗi Server: ", error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
 }
 
 module.exports = new ShopController();

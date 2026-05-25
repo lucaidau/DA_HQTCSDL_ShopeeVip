@@ -31,22 +31,7 @@ document.querySelector(".user-name").innerText = shopName;
 
 // ==================== MODULE: SỐ DƯ TÀI KHOẢN ====================
 (function (App) {
-  let transactions = [
-    {
-      id: "IN-240415AABB",
-      date: "15-04-2026 14:30",
-      type: "in",
-      desc: "Doanh thu đơn hàng 1",
-      amount: 200,
-    },
-    {
-      id: "OUT-WITHDRAW1",
-      date: "12-04-2026 08:00",
-      type: "out",
-      desc: "Rút tiền về VCB",
-      amount: 100,
-    },
-  ];
+  let transactions = [];
   let currentTab = "all";
   let searchQuery = "";
   let currentBalanceNum = 0;
@@ -55,76 +40,117 @@ document.querySelector(".user-name").innerText = shopName;
     return new Intl.NumberFormat("vi-VN").format(number) + " ₫";
   }
 
+  App.loadWalletData = async function (params) {
+    try {
+      const res = await fetch(`http://localhost:3000/shop/vi/${shopID}`);
+      const data = await res.json();
+      console.log(`Thông tin ví của shop ${shopID}: `, data);
+      if (res.ok && data.success) {
+        const balanceEl = document.getElementById("currentBalance");
+        if (balanceEl) {
+          balanceEl.innerText = `${data.balance.toLocaleString("vi-VN")}đ`;
+        }
+        transactions = data.transactions || [];
+
+        calculateBalance();
+        renderTransactions();
+      }
+    } catch (error) {
+      console.log("Lỗi kết nối API ví: ", error);
+    }
+  };
+
   function calculateBalance() {
     let totalIn = 0,
       totalOut = 0;
     transactions.forEach((t) => {
-      if (t.type === "in") totalIn += t.amount;
-      else if (t.type === "out") totalOut += t.amount;
+      if (t.LoaiGiaoDich == 1) totalIn += parseFloat(t.SoTien);
+      else if (t.LoaiGiaoDich == 0) totalOut += parseFloat(t.SoTien);
     });
     currentBalanceNum = totalIn - totalOut;
     document.getElementById("currentBalance").innerText =
       formatCurrency(currentBalanceNum);
+
     document.getElementById("availableToWithdraw").innerText =
       formatCurrency(currentBalanceNum);
   }
 
   function renderTransactions() {
-    const tbody = document.getElementById("transactionList");
-    const noDataMsg = document.getElementById("noDataMessage");
+    try {
+      const tbody = document.getElementById("transactionList");
+      const noDataMsg = document.getElementById("noDataMessage");
 
-    const filtered = transactions.filter((t) => {
-      const matchTab = currentTab === "all" || t.type === currentTab;
-      const matchSearch =
-        t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.desc.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchTab && matchSearch;
-    });
+      const filtered = transactions.filter((t) => {
+        const matchTab =
+          currentTab === "all" ||
+          (currentTab === "in" && t.LoaiGiaoDich == 1) ||
+          (currentTab === "out" && t.LoaiGiaoDich == 0);
 
-    if (filtered.length === 0) {
-      tbody.innerHTML = "";
-      noDataMsg.style.display = "block";
-    } else {
-      noDataMsg.style.display = "none";
-      tbody.innerHTML = filtered
-        .map((t) => {
-          const sign = t.type === "in" ? "+" : "-";
-          return `
+        const searchQueryLower = searchQuery.toLowerCase();
+        const matchSearch =
+          !searchQuery ||
+          String(t.IDGiaoDichFormat)
+            .toLocaleLowerCase()
+            .includes(searchQueryLower) ||
+          String(t.NoiDung).toLocaleLowerCase().includes(searchQueryLower);
+        return matchTab && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = "";
+        noDataMsg.style.display = "block";
+        noDataMsg.innerText = "Không tìm thấy giao dịch nào";
+      } else {
+        noDataMsg.style.display = "none";
+        tbody.innerHTML = filtered
+          .map((t) => {
+            const sign = t.LoaiGiaoDich == 1 ? "+" : "-";
+            return `
           <tr>
-            <td style="color:#666;">${t.date}</td>
-            <td style="font-weight: 500;">${t.id}</td>
-            <td>${t.desc}</td>
-            <td class="${t.type === "in" ? "amount-in" : "amount-out"}">${sign}${formatCurrency(t.amount)}</td>
-            <td><a class="action-link" onclick="viewDetailSoDu('${t.id}')">Xem</a></td>
+            <td style="color:#666;">${t.NgayThucHien}</td>
+            <td style="font-weight: 500;">${t.IDGiaoDichFormat}</td>
+            <td>${t.NoiDung}</td>
+            <td class="${t.LoaiGiaoDich == 1 ? "amount-in" : "amount-out"}">${sign}${formatCurrency(parseFloat(t.SoTien))}</td>
+            <td><a class="action-link" onclick="App.viewDetailSoDu('${t.IDGiaoDich}')">Xem</a></td>
           </tr>`;
-        })
-        .join("");
+          })
+          .join("");
+      }
+    } catch (error) {
+      console.log("Lỗi: ", error.message);
     }
   }
 
   // Public functions gắn vào window để onclick trong HTML gọi được
-  window.viewDetailSoDu = function (id) {
-    const t = transactions.find((x) => x.id === id);
-    if (!t) return;
+  App.viewDetailSoDu = function (id) {
+    const t = transactions.find(
+      (x) =>
+        String(x.IDGiaoDich) === String(id) ||
+        String(x.IDGiaoDichFormat) === String(id),
+    );
+    if (!t) {
+      alert(`Không tìm thấy giao dịch với mã ${id}`);
+      return;
+    }
     document.getElementById("modalBodySoDu").innerHTML = `
-      <p><strong>Mã GD:</strong> ${t.id}</p><p><strong>Loại:</strong> ${t.type === "in" ? "Tiền vào" : "Tiền ra"}</p>
-      <p><strong>Thời gian:</strong> ${t.date}</p><p><strong>Nội dung:</strong> ${t.desc}</p>
+      <p><strong>Mã GD:</strong> ${t.IDGiaoDichFormat}</p><p><strong>Loại:</strong> ${t.LoaiGiaoDich == 1 ? "Tiền vào" : "Tiền ra"}</p>
+      <p><strong>Thời gian:</strong> ${t.NgayThucHien}</p><p><strong>Nội dung:</strong> ${t.NoiDung}</p>
       <hr style="margin: 15px 0; border:0; border-top: 1px dashed #ccc;">
       <div style="display:flex; justify-content:space-between; font-weight: bold;">
-        <span>Số tiền:</span><span style="color: ${t.type === "in" ? "#4caf50" : "#f44336"}">${t.type === "in" ? "+" : "-"}${formatCurrency(t.amount)}</span>
+        <span>Số tiền:</span><span style="color: ${t.LoaiGiaoDich == 1 ? "#4caf50" : "#f44336"}">${t.LoaiGiaoDich == 1 ? "+" : "-"}${formatCurrency(parseFloat(t.SoTien))}</span>
       </div>`;
     document.getElementById("infoModalSoDu").classList.add("show");
   };
 
-  window.openWithdrawModal = () => {
+  App.openWithdrawModal = () => {
     if (currentBalanceNum <= 0) return alert("Số dư không đủ.");
     document.getElementById("withdrawAmount").value = "";
     document.getElementById("withdrawModal").classList.add("show");
   };
-  window.closeWithdrawModal = () =>
+  App.closeWithdrawModal = () =>
     document.getElementById("withdrawModal").classList.remove("show");
 
-  window.processWithdraw = () => {
+  App.processWithdraw = async () => {
     const amount = parseInt(
       document.getElementById("withdrawAmount").value,
       10,
@@ -132,27 +158,39 @@ document.querySelector(".user-name").innerText = shopName;
     if (!amount || amount <= 0) return alert("Nhập số tiền hợp lệ!");
     if (amount > currentBalanceNum) return alert("Vượt quá số dư!");
 
-    transactions.unshift({
-      id: "OUT-REQ" + Math.floor(Math.random() * 9999),
-      date: "Vừa xong",
-      type: "out",
-      desc: "Rút tiền về Vietcombank",
-      amount,
-      status: "success",
-      statusText: "Thành công",
-    });
-    closeWithdrawModal();
-    alert("Rút tiền thành công!");
+    try {
+      const payLoad = {
+        shopID: parseInt(shopID),
+        amount: parseFloat(amount),
+        desc: "Rút tiền về tài khoản",
+      };
 
-    document
-      .querySelectorAll("#sodu-tabs .tab-item")
-      .forEach((t) => t.classList.remove("active"));
-    document
-      .querySelector('#sodu-tabs [data-type="out"]')
-      .classList.add("active");
-    currentTab = "out";
-    calculateBalance();
-    renderTransactions();
+      const res = await fetch("http://localhost:3000/shop/vi/rutien", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payLoad),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(data.message || "Rút tiền thành công");
+        App.closeWithdrawModal();
+
+        document
+          .querySelectorAll(".filter-tab .tab-item")
+          .forEach((t) => t.classList.remove("active"));
+        const outTab = document.querySelector('.filter-tab [data-type="out"]');
+        if (outTab) outTab.classList.add("active");
+        currentTab = "out";
+
+        App.loadWalletData();
+      } else {
+        alert("Rút tiền thất bại: " + (data.message || "Lỗi hệ thống"));
+      }
+    } catch (error) {
+      console.error("Lỗi API rút tiền: ", error.message);
+      alert("Lỗi kết nối API");
+    }
   };
 
   // Event Listeners riêng cho Module Số Dư
@@ -175,8 +213,7 @@ document.querySelector(".user-name").innerText = shopName;
     renderTransactions();
   });
 
-  calculateBalance();
-  renderTransactions();
+  App.loadWalletData();
 })(window.App);
 
 // ==================== MODULE: TẤT CẢ SẢN PHẨM ====================
@@ -500,6 +537,7 @@ document.querySelector(".user-name").innerText = shopName;
       if (res.ok) {
         alert("Xác nhận chuẩn bị thành công");
         await loadOrders();
+        await App.loadWalletData();
       } else {
         alert("Cập nhật thất bại: Lỗi hệ thống");
       }

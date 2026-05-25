@@ -34,8 +34,8 @@ BEGIN
         SET @SoDuCu = ISNULL(@SoDuCu, 0);
         SET @NoiDung = N'Doanh thu từ đơn hàng #SP-ORD' + RIGHT('00000' + CAST(@IDDonHang AS VARCHAR(10)),5)
 
-        INSERT INTO VI (IDShop, NoiDung, SoTien, SoDu, NgayThucHien) VALUES
-        (@IDShop, @NoiDung, @TongTien, @SoDuCu + @TongTien, GETDATE());
+        INSERT INTO VI (IDShop, NoiDung, SoTien, SoDu, NgayThucHien, LoaiGiaoDich) VALUES
+        (@IDShop, @NoiDung, @TongTien, @SoDuCu + @TongTien, GETDATE(),1);
 
         COMMIT TRANSACTION;
 

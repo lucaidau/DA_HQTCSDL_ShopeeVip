@@ -64,7 +64,7 @@
             <div class="balance-action">
               <button
                 class="btn btn-primary btn-large"
-                onclick="openWithdrawModal()"
+                onclick="App.openWithdrawModal()"
               >
                 Yêu cầu Rút Tiền
               </button>
@@ -342,7 +342,9 @@
 
     <div id="withdrawModal" class="modal">
       <div class="modal-content">
-        <span class="close-btn" onclick="closeWithdrawModal()">&times;</span>
+        <span class="close-btn" onclick="App.closeWithdrawModal()"
+          >&times;</span
+        >
         <div class="modal-title">Yêu cầu Rút Tiền</div>
         <div class="modal-body">
           <div class="form-group">
@@ -370,10 +372,10 @@
             gap: 10px;
           "
         >
-          <button class="btn btn-secondary" onclick="closeWithdrawModal()">
+          <button class="btn btn-secondary" onclick="App.closeWithdrawModal()">
             Hủy
           </button>
-          <button class="btn btn-primary" onclick="processWithdraw()">
+          <button class="btn btn-primary" onclick="App.processWithdraw()">
             Xác nhận Rút
           </button>
         </div>
