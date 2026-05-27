@@ -1,23 +1,23 @@
-USE ShopeeVipDB;
-GO
-
 SET NOCOUNT ON;
 
 DECLARE @SPName NVARCHAR(255);
+DECLARE @Quyen VARCHAR(50);
 DECLARE @SQLPhanQuyen NVARCHAR(MAX);
 
 DECLARE Cur_PhanQuyen_Shop CURSOR FOR
-    SELECT name  FROM  sys.procedures WHERE name LIKE 'sp_Shop_%';
+    SELECT name, 'EXEC' AS Quyen FROM sys.procedures WHERE name LIKE 'sp_Shop_%'
+    UNION ALL 
+    SELECT name, 'SELECT' AS Quyen FROM sys.objects WHERE type = 'IF' AND name LIKE 'fn_Shop_%';
 
 OPEN Cur_PhanQuyen_Shop;
-FETCH NEXT FROM Cur_PhanQuyen_Shop INTO @SPName;
+FETCH NEXT FROM Cur_PhanQuyen_Shop INTO @SPName, @Quyen;
 WHILE @@FETCH_STATUS = 0
 BEGIN
-    SET @SQLPhanQuyen = 'GRANT EXEC ON ' + QUOTENAME(@SPName) + ' TO Role_Shop'
+    SET @SQLPhanQuyen = 'GRANT ' + @Quyen + ' ON ' + QUOTENAME(@SPName) + ' TO Role_Shop'
     EXEC sp_executesql @SQLPhanQuyen;
 
-    FETCH NEXT FROM Cur_PhanQuyen_Shop INTO @SPName;
-END
+    FETCH NEXT FROM Cur_PhanQuyen_Shop INTO @SPName, @Quyen;
+END;
 CLOSE Cur_PhanQuyen_Shop;
 DEALLOCATE Cur_PhanQuyen_Shop;
 
