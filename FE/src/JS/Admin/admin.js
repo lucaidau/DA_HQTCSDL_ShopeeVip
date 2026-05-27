@@ -8,420 +8,502 @@ let allAccounts = [];
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
-    checkAuth();
-    setupNavigation();
-    setupEventListeners();
-    loadAllData();
+  checkAuth();
+  setupNavigation();
+  setupEventListeners();
+  loadAllData();
 });
 
 // Check Authentication
 function checkAuth() {
-    let user = null;
-    try {
-        const userStr = localStorage.getItem("user");
-        if (userStr) {
-            user = JSON.parse(userStr);
-        }
-    } catch (e) {
-        console.warn("Invalid user JSON in localStorage");
+  let user = null;
+  try {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      user = JSON.parse(userStr);
     }
-    
-    if (!user) {
-        // Tạm thời tạo user ảo để dễ test giao diện Admin mà không bị văng ra ngoài
-        user = { Ten: "Admin (Test Mode)", Loai: 0 };
-    }
-    const adminNameEl = document.getElementById("admin-name");
-    if (adminNameEl) {
-        adminNameEl.textContent = user.Ten || "Admin";
-    }
+  } catch (e) {
+    console.warn("Invalid user JSON in localStorage");
+  }
+
+  if (!user) {
+    // Tạm thời tạo user ảo để dễ test giao diện Admin mà không bị văng ra ngoài
+    user = { Ten: "Admin (Test Mode)", Loai: 0 };
+  }
+  const adminNameEl = document.getElementById("admin-name");
+  if (adminNameEl) {
+    adminNameEl.textContent = user.Ten || "Admin";
+  }
 }
 
 // Setup Navigation
 function setupNavigation() {
-    const navLinks = document.querySelectorAll(".nav-link");
-    navLinks.forEach(link => {
-        link.addEventListener("click", (e) => {
-            if (link.classList.contains("logout")) return;
-            
-            e.preventDefault();
-            const tab = link.getAttribute("data-tab");
-            switchTab(tab, link);
-        });
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      if (link.classList.contains("logout")) return;
+
+      e.preventDefault();
+      const tab = link.getAttribute("data-tab");
+      switchTab(tab, link);
     });
+  });
 }
 
 // Switch Tab
 function switchTab(tabName, linkElement) {
-    // Hide all tabs
-    document.querySelectorAll(".tab-content").forEach(tab => {
-        tab.classList.remove("active");
-    });
-    
-    // Show selected tab
-    const selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-        selectedTab.classList.add("active");
-    }
-    
-    // Update nav links
-    document.querySelectorAll(".nav-link").forEach(link => {
-        link.classList.remove("active");
-    });
-    if (linkElement) linkElement.classList.add("active");
-    
-    // Update page title
-    const titles = {
-        products: "Quản Lý Sản Phẩm",
-        accounts: "Quản Lý Tài Khoản",
-        backup: "Sao Lưu & Phục Hồi"
-    };
-    const pageTitle = document.getElementById("page-title");
-    if (pageTitle) {
-        pageTitle.textContent = titles[tabName] || "Admin";
-    }
+  // Hide all tabs
+  document.querySelectorAll(".tab-content").forEach((tab) => {
+    tab.classList.remove("active");
+  });
+
+  // Show selected tab
+  const selectedTab = document.getElementById(tabName);
+  if (selectedTab) {
+    selectedTab.classList.add("active");
+  }
+
+  // Update nav links
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.classList.remove("active");
+  });
+  if (linkElement) linkElement.classList.add("active");
+
+  // Update page title
+  const titles = {
+    products: "Quản Lý Sản Phẩm",
+    accounts: "Quản Lý Tài Khoản",
+    backup: "Sao Lưu & Phục Hồi",
+  };
+  const pageTitle = document.getElementById("page-title");
+  if (pageTitle) {
+    pageTitle.textContent = titles[tabName] || "Admin";
+  }
 }
 
 // Setup Event Listeners
 function setupEventListeners() {
-    // Products
-    document.getElementById("product-search").addEventListener("input", filterProducts);
-    
-    // Accounts
-    document.getElementById("account-search").addEventListener("input", filterAccounts);
-    
-    // Backup
-    document.getElementById("btn-backup").addEventListener("click", handleBackup);
-    document.getElementById("btn-execute-restore").addEventListener("click", executeRestore);
-    
-    // Modal
-    document.getElementById("modal-form").addEventListener("submit", handleFormSubmit);
+  // Products
+  document
+    .getElementById("product-search")
+    .addEventListener("input", filterProducts);
+
+  // Accounts
+  document
+    .getElementById("account-search")
+    .addEventListener("input", filterAccounts);
+
+  // Backup
+  document.getElementById("btn-backup").addEventListener("click", handleBackup);
+  document
+    .getElementById("btn-execute-restore")
+    .addEventListener("click", executeRestore);
+
+  // Modal
+  document
+    .getElementById("modal-form")
+    .addEventListener("submit", handleFormSubmit);
 }
 
 // ==================== PRODUCTS ====================
 
 async function loadProducts() {
-    try {
-        const response = await fetch(`${API_URL}/sanpham`);
-        const data = await response.json();
-        allProducts = data.danhSachSanPham?.[0] || [];
-        renderProductsTable(allProducts);
-    } catch (error) {
-        console.error("Error loading products:", error);
-        document.getElementById("products-table").innerHTML = 
-            '<tr><td colspan="6" style="text-align: center;">Lỗi tải dữ liệu</td></tr>';
-    }
+  try {
+    const response = await fetch(`${API_URL}/sanpham`);
+    const data = await response.json();
+    allProducts = data.danhSachSanPham?.[0] || [];
+    renderProductsTable(allProducts);
+  } catch (error) {
+    console.error("Error loading products:", error);
+    document.getElementById("products-table").innerHTML =
+      '<tr><td colspan="6" style="text-align: center;">Lỗi tải dữ liệu</td></tr>';
+  }
 }
 
 function renderProductsTable(products) {
-    const tbody = document.getElementById("products-table");
-    if (products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Không có sản phẩm</td></tr>';
-        return;
-    }
-    
-    tbody.innerHTML = products.map(product => `
+  const tbody = document.getElementById("products-table");
+  if (products.length === 0) {
+    tbody.innerHTML =
+      '<tr><td colspan="6" style="text-align: center; padding: 20px;">Không có sản phẩm</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = products
+    .map(
+      (product) => `
         <tr>
-            <td>${product.TenShop || 'Shop ' + (product.IDShop || '1')}</td>
+            <td>${product.TenShop || "Shop " + (product.IDShop || "1")}</td>
             <td>${product.TenSanPham}</td>
             <td>₫${Number(product.Gia || 0).toLocaleString("vi-VN")}</td>
-            <td><img src="${product.HinhAnh || 'https://via.placeholder.com/50'}" alt="Product"></td>
-            <td>${product.TonKho !== undefined ? product.TonKho : (product.SoLuongTon || 0)}</td>
+            <td><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
+            <td>${product.TonKho !== undefined ? product.TonKho : product.SoLuongTon || 0}</td>
             <td><span class="status-active" style="color: #28a745; font-weight: 500;">Đang bán</span></td>
         </tr>
-    `).join("");
+    `,
+    )
+    .join("");
 }
 
 function filterProducts() {
-    const search = document.getElementById("product-search").value.toLowerCase();
-    const filtered = allProducts.filter(p => 
-        p.TenSanPham.toLowerCase().includes(search)
-    );
-    renderProductsTable(filtered);
+  const search = document.getElementById("product-search").value.toLowerCase();
+  const filtered = allProducts.filter((p) =>
+    p.TenSanPham.toLowerCase().includes(search),
+  );
+  renderProductsTable(filtered);
 }
 
-
-
 function editProduct(id) {
-    const product = allProducts.find(p => p.IDSanPham === id);
-    if (product) {
-        openModal("Chỉnh Sửa Sản Phẩm", [
-            { id: "product-name", label: "Tên Sản Phẩm", type: "text", value: product.TenSanPham, required: true },
-            { id: "product-price", label: "Giá", type: "number", value: product.Gia, required: true },
-            { id: "product-image", label: "Đường dẫn hình ảnh", type: "text", value: product.HinhAnh, required: true },
-            { id: "product-description", label: "Mô tả", type: "textarea", value: product.MoTa || "", required: false }
-        ], "edit-product", id);
-    }
+  const product = allProducts.find((p) => p.IDSanPham === id);
+  if (product) {
+    openModal(
+      "Chỉnh Sửa Sản Phẩm",
+      [
+        {
+          id: "product-name",
+          label: "Tên Sản Phẩm",
+          type: "text",
+          value: product.TenSanPham,
+          required: true,
+        },
+        {
+          id: "product-price",
+          label: "Giá",
+          type: "number",
+          value: product.Gia,
+          required: true,
+        },
+        {
+          id: "product-image",
+          label: "Đường dẫn hình ảnh",
+          type: "text",
+          value: product.HinhAnh,
+          required: true,
+        },
+        {
+          id: "product-description",
+          label: "Mô tả",
+          type: "textarea",
+          value: product.MoTa || "",
+          required: false,
+        },
+      ],
+      "edit-product",
+      id,
+    );
+  }
 }
 
 async function deleteProduct(id) {
-    if (confirm("Bạn chắc chắn muốn xóa sản phẩm này?")) {
-        try {
-            const response = await fetch(`${API_URL}/admin/products/${id}`, {
-                method: "DELETE"
-            });
-            if (response.ok) {
-                alert("Xóa sản phẩm thành công!");
-                loadProducts();
-            }
-        } catch (error) {
-            alert("Lỗi xóa sản phẩm!");
-        }
+  if (confirm("Bạn chắc chắn muốn xóa sản phẩm này?")) {
+    try {
+      const response = await fetch(`${API_URL}/admin/products/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Xóa sản phẩm thành công!");
+        loadProducts();
+      }
+    } catch (error) {
+      alert("Lỗi xóa sản phẩm!");
     }
+  }
 }
 
 // ==================== ACCOUNTS ====================
 
 async function loadAccounts() {
-    try {
-        const response = await fetch(`${API_URL}/admin/users`);
-        const data = await response.json();
-        allAccounts = data.users || [];
-        renderAccountsTable(allAccounts);
-    } catch (error) {
-        console.error("Error loading accounts:", error);
-        document.getElementById("accounts-table").innerHTML = 
-            '<tr><td colspan="6" style="text-align: center;">Lỗi tải dữ liệu</td></tr>';
-    }
+  try {
+    const response = await fetch(`${API_URL}/admin`);
+    const data = await response.json();
+    console.log("danh sách tài khoản: ", data);
+
+    allAccounts = data.danhsachTK || [];
+    renderAccountsTable(allAccounts);
+  } catch (error) {
+    console.error("Error loading accounts:", error);
+    document.getElementById("accounts-table").innerHTML =
+      '<tr><td colspan="6" style="text-align: center;">Lỗi tải dữ liệu</td></tr>';
+  }
 }
 
 function renderAccountsTable(accounts) {
-    const tbody = document.getElementById("accounts-table");
-    if (accounts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Không có tài khoản</td></tr>';
-        return;
-    }
-    
-    tbody.innerHTML = accounts.map(account => `
+  const tbody = document.getElementById("accounts-table");
+  if (accounts.length === 0) {
+    tbody.innerHTML =
+      '<tr><td colspan="6" style="text-align: center; padding: 20px;">Không có tài khoản</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = accounts
+    .map(
+      (account) => `
         <tr>
-            <td>${account.IDNguoiDung}</td>
+            <td>${account.IDTaiKhoan}</td>
             <td>${account.TenDangNhap}</td>
             <td>${account.Ten}</td>
             <td>${account.Email}</td>
-            <td>${account.Loai === 1 ? '👤 Người Dùng' : '🏪 Người Bán'}</td>
+            <td>${account.VaiTro}</td>
             <td>
-                <button class="btn btn-edit" onclick="editAccount(${account.IDNguoiDung})">Sửa</button>
-                <button class="btn btn-danger" onclick="deleteAccount(${account.IDNguoiDung})">Xóa</button>
+                <button class="btn btn-edit" onclick="editAccount(${account.IDTaiKhoan})">Sửa</button>
+                <button class="btn btn-danger" onclick="lockAccount(${account.IDTaiKhoan})">Xóa</button>
             </td>
         </tr>
-    `).join("");
+    `,
+    )
+    .join("");
 }
 
 function filterAccounts() {
-    const search = document.getElementById("account-search").value.toLowerCase();
-    const filtered = allAccounts.filter(a => 
-        a.TenDangNhap.toLowerCase().includes(search) ||
-        a.Ten.toLowerCase().includes(search) ||
-        a.Email.toLowerCase().includes(search)
-    );
-    renderAccountsTable(filtered);
+  const search = document.getElementById("account-search").value.toLowerCase();
+  const filtered = allAccounts.filter(
+    (a) =>
+      a.TenDangNhap.toLowerCase().includes(search) ||
+      a.Ten.toLowerCase().includes(search) ||
+      a.Email.toLowerCase().includes(search),
+  );
+  renderAccountsTable(filtered);
 }
-
-
 
 function editAccount(id) {
-    const account = allAccounts.find(a => a.IDNguoiDung === id);
-    if (account) {
-        openModal("Chỉnh Sửa Tài Khoản", [
-            { id: "account-username", label: "Tên Đăng Nhập", type: "text", value: account.TenDangNhap, required: true },
-            { id: "account-name", label: "Tên Người Dùng", type: "text", value: account.Ten, required: true },
-            { id: "account-email", label: "Email", type: "email", value: account.Email, required: true },
-            { id: "account-phone", label: "Số Điện Thoại", type: "text", value: account.SDT, required: true },
-            { id: "account-role", label: "Vai Trò", type: "select", value: account.Loai, options: [
-                { value: 1, text: "Người Dùng" },
-                { value: 2, text: "Người Bán" }
-            ], required: true }
-        ], "edit-account", id);
-    }
+  const account = allAccounts.find((a) => a.IDTaiKhoan === id);
+  if (account) {
+    openModal(
+      "Chỉnh Sửa Tài Khoản",
+      [
+        {
+          id: "account-username",
+          label: "Tên Đăng Nhập",
+          type: "text",
+          value: account.TenDangNhap,
+          required: true,
+        },
+        {
+          id: "account-name",
+          label: "Tên Người Dùng",
+          type: "text",
+          value: account.Ten,
+          required: true,
+        },
+        {
+          id: "account-email",
+          label: "Email",
+          type: "email",
+          value: account.Email,
+          required: true,
+        },
+        {
+          id: "account-phone",
+          label: "Số Điện Thoại",
+          type: "text",
+          value: account.SDT,
+          required: true,
+        },
+      ],
+      "edit-account",
+      id,
+    );
+  }
+  console.log("Tai Khoan: ", account);
 }
 
-async function deleteAccount(id) {
-    if (confirm("Bạn chắc chắn muốn xóa tài khoản này?")) {
-        try {
-            const response = await fetch(`${API_URL}/admin/users/${id}`, {
-                method: "DELETE"
-            });
-            if (response.ok) {
-                alert("Xóa tài khoản thành công!");
-                loadAccounts();
-            }
-        } catch (error) {
-            alert("Lỗi xóa tài khoản!");
-        }
+async function lockAccount(id) {
+  if (confirm("Bạn chắc chắn muốn xóa tài khoản này?")) {
+    try {
+      const response = await fetch(`${API_URL}/admin/users/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Xóa tài khoản thành công!");
+        loadAccounts();
+      }
+    } catch (error) {
+      alert("Lỗi xóa tài khoản!");
     }
+  }
 }
 
 // ==================== BACKUP & RESTORE ====================
 
 async function handleBackup() {
-    try {
-        // Collect all data
-        const backupData = {
-            timestamp: new Date().toISOString(),
-            products: allProducts,
-            accounts: allAccounts
-        };
-        
-        // Create download link
-        const dataStr = JSON.stringify(backupData, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
-        link.click();
-        
-        // Update backup info
-        document.getElementById("last-backup").textContent = new Date().toLocaleString("vi-VN");
-        document.getElementById("backup-size").textContent = (blob.size / 1024).toFixed(2) + " KB";
-        
-        alert("Sao lưu thành công!");
-    } catch (error) {
-        alert("Lỗi sao lưu: " + error.message);
-    }
+  try {
+    // Collect all data
+    const backupData = {
+      timestamp: new Date().toISOString(),
+      products: allProducts,
+      accounts: allAccounts,
+    };
+
+    // Create download link
+    const dataStr = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `backup_${new Date().toISOString().split("T")[0]}.json`;
+    link.click();
+
+    // Update backup info
+    document.getElementById("last-backup").textContent =
+      new Date().toLocaleString("vi-VN");
+    document.getElementById("backup-size").textContent =
+      (blob.size / 1024).toFixed(2) + " KB";
+
+    alert("Sao lưu thành công!");
+  } catch (error) {
+    alert("Lỗi sao lưu: " + error.message);
+  }
 }
 
 async function executeRestore() {
-    const restoreType = document.getElementById("restore-type").value;
-    const filePath = document.getElementById("restore-file-path").value;
-    const statusDiv = document.getElementById("restore-status");
-    
-    if (!filePath.trim()) {
-        statusDiv.innerHTML = '<p style="color: red;"><i class="fas fa-exclamation-triangle"></i> Vui lòng nhập đường dẫn file .bak!</p>';
-        return;
+  const restoreType = document.getElementById("restore-type").value;
+  const filePath = document.getElementById("restore-file-path").value;
+  const statusDiv = document.getElementById("restore-status");
+
+  if (!filePath.trim()) {
+    statusDiv.innerHTML =
+      '<p style="color: red;"><i class="fas fa-exclamation-triangle"></i> Vui lòng nhập đường dẫn file .bak!</p>';
+    return;
+  }
+
+  if (
+    confirm(
+      `Bạn chắc chắn muốn phục hồi dữ liệu từ file: ${filePath}?\nDữ liệu hiện tại sẽ bị ghi đè!`,
+    )
+  ) {
+    try {
+      // Giả lập gọi API phục hồi
+      statusDiv.innerHTML =
+        '<p style="color: blue;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý phục hồi dữ liệu...</p>';
+
+      // Xây dựng câu lệnh SQL tương ứng để log ra cho khớp với bài giảng
+      let sqlCmd = `RESTORE DATABASE [Tên_Database] FROM DISK = '${filePath}' WITH REPLACE`;
+      console.log(`Thực thi lệnh: ${sqlCmd}`);
+
+      // Giả lập delay
+      setTimeout(() => {
+        statusDiv.innerHTML =
+          '<p style="color: green;"><i class="fas fa-check-circle"></i> Phục hồi dữ liệu thành công!</p>';
+
+        // Tải lại dữ liệu sau khi phục hồi
+        loadAllData();
+
+        setTimeout(() => {
+          statusDiv.innerHTML = "";
+        }, 3000);
+      }, 1500);
+    } catch (error) {
+      statusDiv.innerHTML =
+        '<p style="color: red;"><i class="fas fa-times-circle"></i> Lỗi phục hồi: ' +
+        error.message +
+        "</p>";
     }
-    
-    if (confirm(`Bạn chắc chắn muốn phục hồi dữ liệu từ file: ${filePath}?\nDữ liệu hiện tại sẽ bị ghi đè!`)) {
-        try {
-            // Giả lập gọi API phục hồi
-            statusDiv.innerHTML = '<p style="color: blue;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý phục hồi dữ liệu...</p>';
-            
-            // Xây dựng câu lệnh SQL tương ứng để log ra cho khớp với bài giảng
-            let sqlCmd = `RESTORE DATABASE [Tên_Database] FROM DISK = '${filePath}' WITH REPLACE`;
-            console.log(`Thực thi lệnh: ${sqlCmd}`);
-            
-            // Giả lập delay
-            setTimeout(() => {
-                statusDiv.innerHTML = 
-                    '<p style="color: green;"><i class="fas fa-check-circle"></i> Phục hồi dữ liệu thành công!</p>';
-                
-                // Tải lại dữ liệu sau khi phục hồi
-                loadAllData();
-                
-                setTimeout(() => {
-                    statusDiv.innerHTML = "";
-                }, 3000);
-            }, 1500);
-            
-        } catch (error) {
-            statusDiv.innerHTML = 
-                '<p style="color: red;"><i class="fas fa-times-circle"></i> Lỗi phục hồi: ' + error.message + '</p>';
-        }
-    }
+  }
 }
 
 function updateBackupStats() {
-    document.getElementById("stat-products").textContent = allProducts.length;
-    document.getElementById("stat-accounts").textContent = allAccounts.length;
-    // Orders and shops would be loaded from API
+  document.getElementById("stat-products").textContent = allProducts.length;
+  document.getElementById("stat-accounts").textContent = allAccounts.length;
+  // Orders and shops would be loaded from API
 }
 
 // ==================== MODAL ====================
 
 function openModal(title, fields, action, id = null) {
-    document.getElementById("modal-title").textContent = title;
-    
-    const formFields = document.getElementById("form-fields");
-    formFields.innerHTML = fields.map(field => {
-        if (field.type === "select") {
-            return `
+  document.getElementById("modal-title").textContent = title;
+
+  const formFields = document.getElementById("form-fields");
+  formFields.innerHTML = fields
+    .map((field) => {
+      if (field.type === "select") {
+        return `
                 <div class="form-group">
                     <label for="${field.id}">${field.label}</label>
                     <select id="${field.id}" ${field.required ? "required" : ""}>
                         <option value="">Chọn...</option>
-                        ${field.options.map(opt => 
-                            `<option value="${opt.value}" ${field.value === opt.value ? 'selected' : ''}>${opt.text}</option>`
-                        ).join("")}
+                        ${field.options
+                          .map(
+                            (opt) =>
+                              `<option value="${opt.value}" ${field.value === opt.value ? "selected" : ""}>${opt.text}</option>`,
+                          )
+                          .join("")}
                     </select>
                 </div>
             `;
-        } else if (field.type === "textarea") {
-            return `
+      } else if (field.type === "textarea") {
+        return `
                 <div class="form-group">
                     <label for="${field.id}">${field.label}</label>
                     <textarea id="${field.id}" ${field.required ? "required" : ""}>${field.value || ""}</textarea>
                 </div>
             `;
-        } else {
-            return `
+      } else {
+        return `
                 <div class="form-group">
                     <label for="${field.id}">${field.label}</label>
                     <input type="${field.type}" id="${field.id}" value="${field.value || ""}" ${field.required ? "required" : ""}>
                 </div>
             `;
-        }
-    }).join("");
-    
-    window.currentModalAction = { action, id };
-    document.getElementById("modal").classList.add("active");
+      }
+    })
+    .join("");
+
+  window.currentModalAction = { action, id };
+  document.getElementById("modal").classList.add("active");
 }
 
 function closeModal() {
-    document.getElementById("modal").classList.remove("active");
+  document.getElementById("modal").classList.remove("active");
 }
 
 function handleFormSubmit(e) {
-    e.preventDefault();
-    const { action, id } = window.currentModalAction || {};
-    
-    if (action === "edit-product") {
-        updateProduct(id);
-    } else if (action === "edit-account") {
-        updateAccount(id);
-    }
+  e.preventDefault();
+  const { action, id } = window.currentModalAction || {};
+
+  if (action === "edit-product") {
+    updateProduct(id);
+  } else if (action === "edit-account") {
+    updateAccount(id);
+  }
 }
-
-
 
 async function updateProduct(id) {
-    const name = document.getElementById("product-name").value;
-    const price = document.getElementById("product-price").value;
-    const image = document.getElementById("product-image").value;
-    const description = document.getElementById("product-description").value;
-    
-    try {
-        const response = await fetch(`${API_URL}/admin/products/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name,
-                price: parseFloat(price),
-                image,
-                description
-            })
-        });
-        
-        if (response.ok) {
-            alert("Cập nhật sản phẩm thành công!");
-            closeModal();
-            loadProducts();
-        }
-    } catch (error) {
-        alert("Lỗi cập nhật sản phẩm!");
+  const name = document.getElementById("product-name").value;
+  const price = document.getElementById("product-price").value;
+  const image = document.getElementById("product-image").value;
+  const description = document.getElementById("product-description").value;
+
+  try {
+    const response = await fetch(`${API_URL}/admin/products/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        price: parseFloat(price),
+        image,
+        description,
+      }),
+    });
+
+    if (response.ok) {
+      alert("Cập nhật sản phẩm thành công!");
+      closeModal();
+      loadProducts();
     }
+  } catch (error) {
+    alert("Lỗi cập nhật sản phẩm!");
+  }
 }
 
-
-
 async function updateAccount(id) {
-    alert("Chức năng cập nhật tài khoản sẽ được thêm vào API!");
+  alert("Chức năng cập nhật tài khoản sẽ được thêm vào API!");
 }
 
 // ==================== GENERAL ====================
 
 async function loadAllData() {
-    await loadProducts();
-    await loadAccounts();
-    updateBackupStats();
+  await loadProducts();
+  await loadAccounts();
+  updateBackupStats();
 }
 
 window.closeModal = closeModal;

@@ -9,9 +9,9 @@ CREATE PROCEDURE sp_NguoiMua_DangKi
 AS
     BEGIN
         SET NOCOUNT ON;
-        IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap)
+        IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap AND Email = @Email)
         BEGIN
-            RAISERROR(N'Tên đăng nhập đã tồn tại!!',16,1);
+            RAISERROR(N'Tên đăng nhập hoặc email đã tồn tại!!',16,1);
             RETURN;
         END
         

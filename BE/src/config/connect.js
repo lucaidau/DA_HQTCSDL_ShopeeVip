@@ -14,8 +14,8 @@ const sqlConfig = {
 };
 
 const adminSqlConfig = {
-  user: process.env.DB_USER_SHOP,
-  password: process.env.DB_PASS_SHOP,
+  user: process.env.DB_USER_ADMIN,
+  password: process.env.DB_PASS_ADMIN,
   database: process.env.DB_DATABASE,
   server: process.env.DB_SERVER,
   port: 1433,
@@ -26,8 +26,8 @@ const adminSqlConfig = {
 };
 
 const shopSqlConfig = {
-  user: process.env.DB_USER_ADMIN,
-  password: process.env.DB_PASS_ADMIN,
+  user: process.env.DB_USER_SHOP,
+  password: process.env.DB_PASS_SHOP,
   database: process.env.DB_DATABASE,
   server: process.env.DB_SERVER,
   port: 1433,

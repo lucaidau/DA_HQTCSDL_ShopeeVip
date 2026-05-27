@@ -1,0 +1,11 @@
+CREATE PROCEDURE sp_Admin_SuaTaiKhoan
+@IDTaiKhoan
+@userName VARCHAR(50),
+@name NVARCHAR(50),
+@email VARCHAR(255),
+@phone VARCHAR(10)
+AS
+BEGIN
+    UPDATE TAI_KHOAN
+
+END

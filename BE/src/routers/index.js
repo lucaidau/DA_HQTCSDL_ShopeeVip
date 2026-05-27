@@ -5,12 +5,16 @@ const paymentRouter = require("./user/payment.js");
 
 const shopRouter = require("./shop/shop.js");
 
+const adminRouter = require("./admin/admin.js")
+
 const route = (app) => {
   app.use("/sanpham", productRouter);
   app.use("/giohang", cartRouter);
   app.use("/thanhtoan", paymentRouter);
 
   app.use("/shop", shopRouter);
+
+  app.use("/admin", adminRouter)
   app.use("/", authRouter);
 };
 
