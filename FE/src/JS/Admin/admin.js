@@ -152,8 +152,10 @@ function renderProductsTable(products) {
 
 function filterProducts() {
   const search = document.getElementById("product-search").value.toLowerCase();
-  const filtered = allProducts.filter((p) =>
-    p.TenSanPham.toLowerCase().includes(search),
+  const filtered = allProducts.filter(
+    (p) =>
+      p.TenSP.toLowerCase().includes(search) ||
+      p.Ten.toLowerCase().includes(search),
   );
   renderProductsTable(filtered);
 }
@@ -418,38 +420,17 @@ function openModal(title, fields, action, id = null) {
   document.getElementById("modal-title").textContent = title;
 
   const formFields = document.getElementById("form-fields");
+
   formFields.innerHTML = fields
     .map((field) => {
-      if (field.type === "select") {
-        return `
-                <div class="form-group">
-                    <label for="${field.id}">${field.label}</label>
-                    <select id="${field.id}" ${field.required ? "required" : ""}>
-                        <option value="">Chọn...</option>
-                        ${field.options
-                          .map(
-                            (opt) =>
-                              `<option value="${opt.value}" ${field.value === opt.value ? "selected" : ""}>${opt.text}</option>`,
-                          )
-                          .join("")}
-                    </select>
-                </div>
-            `;
-      } else if (field.type === "textarea") {
-        return `
-                <div class="form-group">
-                    <label for="${field.id}">${field.label}</label>
-                    <textarea id="${field.id}" ${field.required ? "required" : ""}>${field.value || ""}</textarea>
-                </div>
-            `;
-      } else {
-        return `
+      console.log("field: ", field);
+
+      return `
                 <div class="form-group">
                     <label for="${field.id}">${field.label}</label>
                     <input type="${field.type}" id="${field.id}" value="${field.value || ""}" ${field.required ? "required" : ""}>
                 </div>
             `;
-      }
     })
     .join("");
 
@@ -501,7 +482,35 @@ async function updateProduct(id) {
 }
 
 async function updateAccount(id) {
-  alert("Chức năng cập nhật tài khoản sẽ được thêm vào API!");
+  const userName = document.getElementById("account-username").value;
+  const name = document.getElementById("account-name").value;
+  const email = document.getElementById("account-email").value;
+  const phone = document.getElementById("account-phone").value;
+
+  try {
+    const res = await fetch(`http://localhost:3000/admin/suataikhoan`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idAccount: id,
+        userName: userName,
+        name: name,
+        email: email,
+        phone: phone,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      alert("Cập nhật tài khoản thành công");
+      closeModal();
+      await loadAccounts();
+    } else {
+      alert("Lỗi: " + (data.message || "Cập nhật thất bại"));
+    }
+  } catch (error) {
+    console.error("Lỗi cập nhật tài khoản: ", error);
+    alert("Lỗi kết nối API");
+  }
 }
 
 // ==================== GENERAL ====================
