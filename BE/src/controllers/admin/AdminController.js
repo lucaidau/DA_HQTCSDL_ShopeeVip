@@ -41,7 +41,7 @@ class AdminController {
     }
   }
 
-  //[PATCH] /admin/khoataikhoan
+  //[PATCH] /admin/khoataikhoan/:id
   async khoaTaiKhoan(req, res) {
     try {
       const { id } = req.params;
@@ -81,6 +81,32 @@ class AdminController {
         message: "Lấy sản phẩm thành công",
         danhSachSP: result.recordset,
       });
+    } catch (error) {
+      console.log("Lỗi server: ", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server: " + error.message });
+    }
+  }
+
+  //[PATCH] /admin/khoasanpham/:id
+  async khoaSanPham(req, res) {
+    try {
+      const { id } = req.params;
+      const pool = await adminPoolPromise;
+      const result = await pool
+        .request()
+        .input("IDBanSao", sql.Int, id)
+        .execute("sp_Admin_KhoaSanPham");
+
+      const status = result.recordset[0];
+      if (status.Success) {
+        return res.status(200).json({ success: true, message: status.Message });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: status.Message });
+      }
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res

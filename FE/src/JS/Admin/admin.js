@@ -133,17 +133,21 @@ function renderProductsTable(products) {
   tbody.innerHTML = products
     .map((product) => {
       const status = product.TrangThaiBS;
-      const statusText = status ? "Còn hàng" : "Hết hàng";
+      const statusText = status ? "Đang hoạt động" : "Đã khóa";
       const statusColor = status ? "#28a745" : "#e74c3c";
-
+      const lockText = status ? "Khóa" : "Mở khóa";
+      const isDisable = product.SoLuongTonKho <= 0 ? true : false;
       return `
         <tr>
-            <td>${product.Ten}</td>
-            <td>${product.TenSP}</td>
-            <td>₫${Number(product.GiaBan || 0).toLocaleString("vi-VN")}</td>
-            <td><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
-            <td>${product.SoLuongTonKho || 0}</td>
-            <td><span class="status-active" style="color:${statusColor} ; font-weight: 500;">${statusText}</span></td>
+            <td style="color:#ee4d2d">${product.IDBanSao}</td>
+            <td style="">${product.Ten}</td>
+            <td style="font-weight:500">${product.TenSP}</td>
+            <td style="color:#ee4d2d">₫${Number(product.GiaBan || 0).toLocaleString("vi-VN")}</td>
+            <td style=""><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
+            <td style="color:#1890FF">${product.SoLuongTonKho || 0}</td>
+            <td style=""><span class="status-active" style="color:${statusColor} ; font-weight: 500;">${statusText}</span></td>
+            <td style=""><button class="btn btn-danger" disabled="${isDisable}" onclick="lockProduct(${product.IDBanSao})">${lockText}</button></td>
+
         </tr>
     `;
     })
@@ -160,59 +164,23 @@ function filterProducts() {
   renderProductsTable(filtered);
 }
 
-function editProduct(id) {
-  const product = allProducts.find((p) => p.IDSanPham === id);
-  if (product) {
-    openModal(
-      "Chỉnh Sửa Sản Phẩm",
-      [
-        {
-          id: "product-name",
-          label: "Tên Sản Phẩm",
-          type: "text",
-          value: product.TenSanPham,
-          required: true,
-        },
-        {
-          id: "product-price",
-          label: "Giá",
-          type: "number",
-          value: product.Gia,
-          required: true,
-        },
-        {
-          id: "product-image",
-          label: "Đường dẫn hình ảnh",
-          type: "text",
-          value: product.HinhAnh,
-          required: true,
-        },
-        {
-          id: "product-description",
-          label: "Mô tả",
-          type: "textarea",
-          value: product.MoTa || "",
-          required: false,
-        },
-      ],
-      "edit-product",
-      id,
-    );
-  }
-}
-
-async function deleteProduct(id) {
-  if (confirm("Bạn chắc chắn muốn xóa sản phẩm này?")) {
+async function lockProduct(id) {
+  if (confirm("Bạn chắc chắn muốn thao tác với sản phẩm này?")) {
     try {
-      const response = await fetch(`${API_URL}/admin/products/${id}`, {
-        method: "DELETE",
+      const response = await fetch(`${API_URL}/admin/khoasanpham/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
       });
-      if (response.ok) {
-        alert("Xóa sản phẩm thành công!");
+      const data = await response.json();
+      if (response.ok && data.success) {
+        alert(data.message);
         loadProducts();
+      } else {
+        alert("Lỗi: " + (data.message || "Không thể khóa sản phẩm"));
       }
     } catch (error) {
-      alert("Lỗi xóa sản phẩm!");
+      alert("Lỗi khóa sản phẩm!");
+      console.error("Lỗi kết nối API: ", error);
     }
   }
 }
@@ -252,9 +220,10 @@ function renderAccountsTable(accounts) {
       return `
         <tr>
             <td style="color:#ee4d2d">${account.IDTaiKhoan}</td>
-            <td style="font-weight:400">${account.TenDangNhap}</td>
+            <td style="font-weight:400; color:#4A4A4A">${account.TenDangNhap}</td>
             <td style="font-weight:500">${account.Ten}</td>
-            <td  style="font-weight:400">${account.Email}</td>
+            <td  style="font-weight:400; color:#1890FF">${account.Email}</td>
+            <td  style="font-weight:500">${account.SDT}</td>
             <td style="color:#ee4d2d;font-weight:500">${account.VaiTro}</td>
             <td style="color:${statusColor}; style="font-weight:400"">${status}</td>
             <td style="display:flex; gap:10px">
@@ -337,7 +306,7 @@ async function lockAccount(id) {
     } catch (error) {
       console.error("Lỗi kết nối API: ", error);
 
-      alert("Lỗi xóa tài khoản!");
+      alert("Lỗi khóa tài khoản!");
     }
   }
 }

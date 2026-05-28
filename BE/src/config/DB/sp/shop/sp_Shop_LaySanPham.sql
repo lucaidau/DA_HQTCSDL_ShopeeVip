@@ -15,6 +15,6 @@ AS
         BS.TrangThaiBS
         FROM SAN_PHAM SP
         LEFT JOIN BAN_SAO_SAN_PHAM BS ON SP.IDSanPham = BS.IDSanPham
-        WHERE SP.IDShop = @IDShop AND TrangThaiSP = 1;
+        WHERE SP.IDShop = @IDShop
         
     END

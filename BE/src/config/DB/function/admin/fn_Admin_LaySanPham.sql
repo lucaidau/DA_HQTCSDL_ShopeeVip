@@ -3,7 +3,8 @@ RETURNS TABLE
 RETURN
 (
     SELECT
-        TK.Ten, 
+        BS.IDBanSao,
+        TK.Ten,
         SP.TenSanPham + ' : ' + BS.BienThe AS TenSP,
         BS.GiaBan,
         BS.HinhAnh,
