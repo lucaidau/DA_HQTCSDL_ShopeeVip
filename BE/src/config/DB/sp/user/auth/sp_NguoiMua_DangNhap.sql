@@ -6,7 +6,12 @@ AS
     BEGIN
         SET NOCOUNT ON;
 
-        IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap AND @MatKhau = MatKhau)
+        IF EXISTS(SELECT 1 FROM TAI_KHOAN WHERE TrangThaiTaiKhoan = 0 AND @TenDangNhap = TenDangNhap AND @MatKhau = MatKhau)
+        BEGIN
+            RAISERROR(N'Tài khoản đã bị khóa, liên hệ Admin để mở khóa tài khoản', 16,1)
+        END
+
+        IF EXISTS (SELECT 1 FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap AND @MatKhau = MatKhau AND TrangThaiTaiKhoan = 1)
         BEGIN
             SELECT 
             tk.IDTaiKhoan,

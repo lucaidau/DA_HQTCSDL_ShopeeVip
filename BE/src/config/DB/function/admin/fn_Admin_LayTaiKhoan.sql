@@ -1,6 +1,4 @@
-USE ShopeeVipDB
 GO
-
 CREATE FUNCTION fn_Admin_LayTaiKhoan()
 RETURNS TABLE
 AS
@@ -12,6 +10,7 @@ RETURN
         TK.Ten,
         TK.Email,
         TK.SDT,
+        TK.TrangThaiTaiKhoan,
         CASE
             WHEN S.IDShop IS NOT NULL THEN 'Shop'
             WHEN NM.IDNguoiMua IS NOT NULL THEN 'Khách hàng'

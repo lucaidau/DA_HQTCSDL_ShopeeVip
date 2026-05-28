@@ -5,7 +5,7 @@ const adminController = require("../../controllers/admin/AdminController");
 
 router.get("/", adminController.layTaiKhoan);
 router.patch("/suataikhoan", adminController.suaTaiKhoan);
-router.patch("/khoataikhoan", adminController.khoaTaiKhoan);
+router.patch("/khoataikhoan/:id", adminController.khoaTaiKhoan);
 router.get("/sanpham", adminController.laySanPham);
 router.get("/thongke", adminController.layThongKe);
 

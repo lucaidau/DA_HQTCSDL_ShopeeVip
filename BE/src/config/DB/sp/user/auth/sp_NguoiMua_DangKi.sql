@@ -9,15 +9,21 @@ CREATE PROCEDURE sp_NguoiMua_DangKi
 AS
     BEGIN
         SET NOCOUNT ON;
-        IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap AND Email = @Email)
+        IF EXISTS (SELECT 1 FROM TAI_KHOAN WHERE @TenDangNhap = TenDangNhap)
         BEGIN
             RAISERROR(N'Tên đăng nhập hoặc email đã tồn tại!!',16,1);
             RETURN;
         END
         
-        IF EXISTS (SELECT * FROM TAI_KHOAN WHERE @SDT = SDT)
+        IF EXISTS (SELECT 1 FROM TAI_KHOAN WHERE @SDT = SDT)
         BEGIN
             RAISERROR(N'Số điện thoại đã được đăng ký',16,1);
+            RETURN;
+        END
+
+        IF EXISTS (SELECT 1 FROM TAI_KHOAN WHERE @Email = Email)
+        BEGIN
+            RAISERROR(N'Email đã được đăng kí', 16,1);
             RETURN;
         END
 
@@ -31,14 +37,12 @@ AS
 
             IF @Loai = 1
             BEGIN
-                INSERT INTO NGUOI_MUA( IDTaiKhoan, TrangThaiUser) VALUES(@IDTemp, 1);
+                INSERT INTO NGUOI_MUA( IDTaiKhoan) VALUES(@IDTemp);
             END
 
             ELSE IF @Loai = 2
             BEGIN
-                DECLARE @IDShopTemp INT;
-                INSERT INTO SHOP(IDTaiKhoan, TrangThaiShop) VALUES(@IDTemp,1);
-                
+                INSERT INTO SHOP(IDTaiKhoan) VALUES(@IDTemp);
             END
             COMMIT TRANSACTION;
         END TRY

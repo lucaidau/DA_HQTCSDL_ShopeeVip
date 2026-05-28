@@ -35,13 +35,13 @@ DBCC CHECKIDENT ('CHI_TIET_DON_HANG', RESEED, 0);
 GO
 -- Tài khoản
 INSERT INTO TAI_KHOAN VALUES
-('admin', N'Admin', 0123, N'', 'admin@gmail.com', NULL,'123'),
-('user1', N'Nguyễn Văn A', '09123', N'123 Đường Số 1, Quận 1, TP Hồ Chí Minh', 'user1@gmail.com', 1, '123'),
-('shop1', N'Cửa Hàng Thời Trang', '09888', N'123 Đường Số 2, Quận 2, Hà Nội', 'shop1@gmail.com', 1, '123');
+('admin', N'Admin', 0123, N'', 'admin@gmail.com', '','123',1),
+('user1', N'Nguyễn Văn A', '09123', N'123 Đường Số 1, Quận 1, TP Hồ Chí Minh', 'user1@gmail.com', 1, '123',1),
+('shop1', N'Cửa Hàng Thời Trang', '09888', N'123 Đường Số 2, Quận 2, Hà Nội', 'shop1@gmail.com', 1, '123',1);
 
 -- Vai trò
-INSERT INTO NGUOI_MUA (IDTaiKhoan, TrangThaiUser) VALUES (2, 1);
-INSERT INTO SHOP (IDTaiKhoan, TrangThaiShop) VALUES (3, 1);
+INSERT INTO NGUOI_MUA (IDTaiKhoan) VALUES (2);
+INSERT INTO SHOP (IDTaiKhoan) VALUES (3);
 
 -- Ngân hàng
 INSERT INTO VI (IDShop, NoiDung, SoTien,SoDu, NgayThucHien, LoaiGiaoDich) VALUES

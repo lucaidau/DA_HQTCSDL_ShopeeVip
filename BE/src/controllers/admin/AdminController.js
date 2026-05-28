@@ -44,8 +44,22 @@ class AdminController {
   //[PATCH] /admin/khoataikhoan
   async khoaTaiKhoan(req, res) {
     try {
+      const { id } = req.params;
+
       const pool = await adminPoolPromise;
-      const result = await pool.request();
+      const result = await pool
+        .request()
+        .input("IDTaiKhoan", sql.Int, id)
+        .execute("sp_Admin_KhoaTaiKhoan");
+
+      const status = result.recordset[0];
+      if (status.Success === 1) {
+        return res.status(200).json({ success: true, message: status.Message });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: status.Message });
+      }
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res

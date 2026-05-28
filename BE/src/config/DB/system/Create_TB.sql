@@ -9,21 +9,20 @@ CREATE TABLE TAI_KHOAN (
     DiaChi NVARCHAR(MAX),
     Email VARCHAR(255),
     GioiTinh INT,
-    MatKhau VARCHAR(100)
+    MatKhau VARCHAR(100),
+    TrangThaiTaiKhoan BIT DEFAULT 1
 );
 
 -- 2. Bảng Người Mua
 CREATE TABLE NGUOI_MUA (
     IDNguoiMua INT IDENTITY(1,1) PRIMARY KEY ,
     IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
-    TrangThaiUser TINYINT
 );
 
 -- 3. Bảng Shop
 CREATE TABLE SHOP (
     IDShop INT IDENTITY(1,1) PRIMARY KEY,
     IDTaiKhoan INT FOREIGN KEY REFERENCES TAI_KHOAN(IDTaiKhoan) UNIQUE,
-    TrangThaiShop TINYINT
 );
 
 
@@ -43,7 +42,7 @@ CREATE TABLE BAN_SAO_SAN_PHAM (
     IDSanPham INT FOREIGN KEY REFERENCES SAN_PHAM(IDSanPham),
     SoLuongTonKho INT,
     GiaBan DECIMAL(18,2),
-    BienThe NVARCHAR(50), -- Ví dụ: Màu Đỏ, Size L
+    BienThe NVARCHAR(50),
     HinhAnh VARCHAR(MAX),
     TrangThaiBS TINYINT DEFAULT 1
 );

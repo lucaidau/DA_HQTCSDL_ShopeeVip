@@ -243,21 +243,25 @@ function renderAccountsTable(accounts) {
   }
 
   tbody.innerHTML = accounts
-    .map(
-      (account) => `
+    .map((account) => {
+      const status = account.TrangThaiTaiKhoan ? "Đang hoạt động" : "Đã khóa";
+      const statusColor = account.TrangThaiTaiKhoan ? "#28a745" : "#e74c3c";
+      const lockText = account.TrangThaiTaiKhoan ? "Khóa" : "Mở khóa";
+      return `
         <tr>
             <td>${account.IDTaiKhoan}</td>
             <td>${account.TenDangNhap}</td>
             <td>${account.Ten}</td>
             <td>${account.Email}</td>
             <td>${account.VaiTro}</td>
+            <td style="color:${statusColor}">${status}</td>
             <td>
                 <button class="btn btn-edit" onclick="editAccount(${account.IDTaiKhoan})">Sửa</button>
-                <button class="btn btn-danger" onclick="lockAccount(${account.IDTaiKhoan})">Xóa</button>
+                <button class="btn btn-danger" onclick="lockAccount(${account.IDTaiKhoan})">${lockText}</button>
             </td>
         </tr>
-    `,
-    )
+    `;
+    })
     .join("");
 }
 
@@ -315,16 +319,22 @@ function editAccount(id) {
 }
 
 async function lockAccount(id) {
-  if (confirm("Bạn chắc chắn muốn xóa tài khoản này?")) {
+  if (confirm("Bạn chắc chắn muốn thao tác với tài khoản này?")) {
     try {
-      const response = await fetch(`${API_URL}/admin/users/${id}`, {
-        method: "DELETE",
+      const response = await fetch(`${API_URL}/admin/khoataikhoan/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
       });
-      if (response.ok) {
-        alert("Xóa tài khoản thành công!");
+      const data = await response.json();
+      if (response.ok && data.success) {
+        alert(data.message);
         loadAccounts();
+      } else {
+        alert("Lỗi: " + (data.message || "Không thể khóa tài khoản"));
       }
     } catch (error) {
+      console.error("Lỗi kết nối API: ", error);
+
       alert("Lỗi xóa tài khoản!");
     }
   }
