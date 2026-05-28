@@ -247,17 +247,19 @@ function renderAccountsTable(accounts) {
       const status = account.TrangThaiTaiKhoan ? "Đang hoạt động" : "Đã khóa";
       const statusColor = account.TrangThaiTaiKhoan ? "#28a745" : "#e74c3c";
       const lockText = account.TrangThaiTaiKhoan ? "Khóa" : "Mở khóa";
+      const isAdmin = account.VaiTro == "Admin" ? "none" : "block";
+
       return `
         <tr>
-            <td>${account.IDTaiKhoan}</td>
-            <td>${account.TenDangNhap}</td>
-            <td>${account.Ten}</td>
-            <td>${account.Email}</td>
-            <td>${account.VaiTro}</td>
-            <td style="color:${statusColor}">${status}</td>
-            <td>
-                <button class="btn btn-edit" onclick="editAccount(${account.IDTaiKhoan})">Sửa</button>
-                <button class="btn btn-danger" onclick="lockAccount(${account.IDTaiKhoan})">${lockText}</button>
+            <td style="color:#ee4d2d">${account.IDTaiKhoan}</td>
+            <td style="font-weight:400">${account.TenDangNhap}</td>
+            <td style="font-weight:500">${account.Ten}</td>
+            <td  style="font-weight:400">${account.Email}</td>
+            <td style="color:#ee4d2d;font-weight:500">${account.VaiTro}</td>
+            <td style="color:${statusColor}; style="font-weight:400"">${status}</td>
+            <td style="display:flex; gap:10px">
+                <button style="display:${isAdmin}" class="btn btn-edit" onclick="editAccount(${account.IDTaiKhoan})">Sửa</button>
+                <button style="display:${isAdmin}" class="btn btn-danger" onclick="lockAccount(${account.IDTaiKhoan})">${lockText}</button>
             </td>
         </tr>
     `;
@@ -496,6 +498,15 @@ async function updateAccount(id) {
   const name = document.getElementById("account-name").value;
   const email = document.getElementById("account-email").value;
   const phone = document.getElementById("account-phone").value;
+
+  const phoneRegex = /^0[0-9]{9}$/;
+  if (!phoneRegex.test(phone.trim())) {
+    return alert("Số điện thoại không hợp lệ");
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return alert("Email không hợp lệ!");
+  }
 
   try {
     const res = await fetch(`http://localhost:3000/admin/suataikhoan`, {
