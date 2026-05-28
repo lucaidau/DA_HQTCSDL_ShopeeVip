@@ -347,7 +347,7 @@ document.querySelector(".user-name").innerText = shopName;
 
     let newRowHtml = "";
 
-    const fullVariantName = `${groupTitle}: ${itemValue}`;
+    const fullVariantName = `${groupTitle} - ${itemValue}`;
 
     newRowHtml += `
       <tr class="variant-row-item">

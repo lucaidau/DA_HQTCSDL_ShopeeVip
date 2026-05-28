@@ -38,9 +38,7 @@ AS
             BEGIN
                 DECLARE @IDShopTemp INT;
                 INSERT INTO SHOP(IDTaiKhoan, TrangThaiShop) VALUES(@IDTemp,1);
-                SET @IDShopTemp = SCOPE_IDENTITY();
-                INSERT INTO VI (IDShop, NoiDung, SoTien, SoDu, NgayThucHien) VALUES 
-                (@IDShopTemp, NULL, 0, 0, GETDATE());
+                
             END
             COMMIT TRANSACTION;
         END TRY

@@ -109,9 +109,11 @@ function setupEventListeners() {
 
 async function loadProducts() {
   try {
-    const response = await fetch(`${API_URL}/sanpham`);
+    const response = await fetch(`${API_URL}/admin/sanpham`);
     const data = await response.json();
-    allProducts = data.danhSachSanPham?.[0] || [];
+    allProducts = data.danhSachSP;
+    console.log(allProducts);
+
     renderProductsTable(allProducts);
   } catch (error) {
     console.error("Error loading products:", error);
@@ -129,18 +131,22 @@ function renderProductsTable(products) {
   }
 
   tbody.innerHTML = products
-    .map(
-      (product) => `
+    .map((product) => {
+      const status = product.TrangThaiBS;
+      const statusText = status ? "Còn hàng" : "Hết hàng";
+      const statusColor = status ? "#28a745" : "#e74c3c";
+
+      return `
         <tr>
-            <td>${product.TenShop || "Shop " + (product.IDShop || "1")}</td>
-            <td>${product.TenSanPham}</td>
-            <td>₫${Number(product.Gia || 0).toLocaleString("vi-VN")}</td>
+            <td>${product.Ten}</td>
+            <td>${product.TenSP}</td>
+            <td>₫${Number(product.GiaBan || 0).toLocaleString("vi-VN")}</td>
             <td><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
-            <td>${product.TonKho !== undefined ? product.TonKho : product.SoLuongTon || 0}</td>
-            <td><span class="status-active" style="color: #28a745; font-weight: 500;">Đang bán</span></td>
+            <td>${product.SoLuongTonKho || 0}</td>
+            <td><span class="status-active" style="color:${statusColor} ; font-weight: 500;">${statusText}</span></td>
         </tr>
-    `,
-    )
+    `;
+    })
     .join("");
 }
 

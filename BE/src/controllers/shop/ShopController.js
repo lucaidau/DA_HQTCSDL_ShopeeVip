@@ -140,13 +140,13 @@ class ShopController {
         .request()
         .input("IDShop", sql.Int, IDShop)
         .query(
-          "SELECT TOP 1 SoDu FROM VI WHERE IDShop = @IDShop ORDER BY NgayThucHien DESC",
+          `SELECT TOP 1 SoDu FROM VI WHERE IDShop =${IDShop} ORDER BY NgayThucHien DESC`,
         );
 
       const resultLichSu = await pool
         .request()
         .input("IDShop", sql.Int, IDShop)
-        .query("SELECT * FROM dbo.fn_Shop_LayLichSuVi(@IDShop)");
+        .query(`SELECT * FROM dbo.fn_Shop_LayLichSuVi(${IDShop})`);
 
       return res.status(200).json({
         success: true,

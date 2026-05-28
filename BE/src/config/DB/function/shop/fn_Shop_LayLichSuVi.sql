@@ -12,5 +12,5 @@ RETURN
         SoTien,
         SoDu
     FROM VI
-    WHERE IDShop = 1
+    WHERE IDShop = @IDShop
 )

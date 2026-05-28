@@ -23,7 +23,16 @@ class AdminController {
     try {
       const { idAccount, userName, name, email, phone } = req.body;
       const pool = await adminPoolPromise;
-      const result = await pool.request();
+      const result = await pool
+        .request()
+        .input("IDTaiKhoan", sql.Int, idAccount)
+        .input("userName", sql.VarChar(50), userName)
+        .input("name", sql.NVarChar(50), name)
+        .input("email", sql.VarChar(255), email)
+        .input("phone", sql.VarChar(10), phone)
+        .execute("sp_Admin_SuaTaiKhoan");
+
+      return res.status(200).json({ success: true, message: result.recordset });
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res
@@ -49,7 +58,15 @@ class AdminController {
   async laySanPham(req, res) {
     try {
       const pool = await adminPoolPromise;
-      const result = await pool.request();
+      const result = await pool
+        .request()
+        .query("SELECT * FROM dbo.fn_Admin_LaySanPham()");
+
+      return res.status(200).json({
+        success: true,
+        message: "Lấy sản phẩm thành công",
+        danhSachSP: result.recordset,
+      });
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res
