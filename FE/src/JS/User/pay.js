@@ -83,8 +83,6 @@ window.onload = async () => {
 
   document.getElementById("display-name").innerText =
     `${buyList[0].Ten} (+84) ${buyList[0].SDT}`;
-  document.getElementById("display-address").innerHTML =
-    `${buyList[0].DiaChi} ${buyList[0].DiaChi ? '<span class="badge">Mặc định</span>' : ""}`;
 
   console.log(userID);
   console.log(buyList);

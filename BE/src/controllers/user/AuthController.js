@@ -18,7 +18,7 @@ class AuthController {
       const user = result.recordset[0];
 
       return res
-        .status(201)
+        .status(200)
         .json({ message: "Đăng nhập thành công!", user: user });
     } catch (err) {
       console.log("Error: ", err.message);

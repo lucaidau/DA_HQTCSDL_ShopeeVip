@@ -6,7 +6,6 @@ CREATE TABLE TAI_KHOAN (
     TenDangNhap VARCHAR(30) UNIQUE,
     Ten NVARCHAR(50),
     SDT VARCHAR(10),
-    DiaChi NVARCHAR(MAX),
     Email VARCHAR(255),
     GioiTinh INT,
     MatKhau VARCHAR(100),

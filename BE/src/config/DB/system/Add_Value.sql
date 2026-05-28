@@ -35,9 +35,9 @@ DBCC CHECKIDENT ('CHI_TIET_DON_HANG', RESEED, 0);
 GO
 -- Tài khoản
 INSERT INTO TAI_KHOAN VALUES
-('admin', N'Admin', 0123, N'', 'admin@gmail.com', '','123',1),
-('user1', N'Nguyễn Văn A', '09123', N'123 Đường Số 1, Quận 1, TP Hồ Chí Minh', 'user1@gmail.com', 1, '123',1),
-('shop1', N'Cửa Hàng Thời Trang', '09888', N'123 Đường Số 2, Quận 2, Hà Nội', 'shop1@gmail.com', 1, '123',1);
+('admin', N'Admin', '0901112220', 'admin@gmail.com',NULL,'123',1),
+('user1', N'Nguyễn Văn A', '0901112223', 'user1@gmail.com', 1, '123',1),
+('shop1', N'Cửa Hàng Thời Trang', '0901112224', 'shop1@gmail.com', 1, '123',1);
 
 -- Vai trò
 INSERT INTO NGUOI_MUA (IDTaiKhoan) VALUES (2);

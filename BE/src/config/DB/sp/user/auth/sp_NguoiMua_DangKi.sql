@@ -30,8 +30,8 @@ AS
         BEGIN TRANSACTION;
         BEGIN TRY
             DECLARE @IDTemp INT;
-            INSERT INTO TAI_KHOAN(TenDangNhap, Ten, SDT, Email, GioiTinh, MatKhau)
-            VALUES(@TenDangNhap, @Ten, @SDT, @Email, @GioiTinh, @MatKhau);
+            INSERT INTO TAI_KHOAN(TenDangNhap, Ten, SDT, Email, GioiTinh, MatKhau,TrangThaiTaiKhoan)
+            VALUES(@TenDangNhap, @Ten, @SDT, @Email, @GioiTinh, @MatKhau,1);
 
             SET @IDTemp = SCOPE_IDENTITY();
 

@@ -15,8 +15,7 @@ AS
             gh.SoLuongMua,
             (gh.SoLuongMua * bs.GiaBan) AS ThanhTien,
             Ten,
-            SDT,
-            DiaChi
+            SDT
         FROM GIO_HANG gh
         JOIN BAN_SAO_SAN_PHAM bs ON gh.IDBanSao = bs.IDBanSao
         JOIN SAN_PHAM sp ON sp.IDSanPham = bs.IDSanPham

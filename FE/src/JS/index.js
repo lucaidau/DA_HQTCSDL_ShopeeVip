@@ -27,13 +27,22 @@ const registerMethod = async (e) => {
 
   const validate = inputs.some((input) => input.value.trim() === "");
 
+  const phoneRegex = /^0[0-9]{9}$/;
+
+  const regErr = document.getElementById("reg-err-text");
   if (validate) {
     inputs.forEach((input) => {
       if (input.value.trim() === "") input.style.borderColor = "red";
     });
-    throw new Error("Đăng kí không hợp lệ!");
+    regErr.innerText = "Đăng kí không hợp lệ!";
     return;
   }
+
+  if (!phoneRegex.test(phone.value.trim())) {
+    regErr.innerText = "Số điện thoại không hợp lệ!";
+    return;
+  }
+
   const regData = {
     name: fullName.value,
     username: userName.value,
@@ -55,8 +64,8 @@ const registerMethod = async (e) => {
     const data = await res.json();
     if (!res.ok) {
       inputs.forEach((input) => (input.style.borderColor = "red"));
-
-      throw new Error(data.message || "Đăng kí thất bại!");
+      regErr.innerText = data.message;
+      return;
     }
 
     console.log("Đăng kí thành công!", data);
@@ -86,14 +95,16 @@ const loginMethod = async () => {
       },
       body: JSON.stringify(loginData),
     });
+    const data = await res.json();
 
     if (!res.ok) {
+      const errTxt = document.getElementById("login-err-text");
+      errTxt.innerText = data.message;
       userName.style.borderColor = "red";
       pass.style.borderColor = "red";
       throw new Error("Sai tài khoản hoặc mật khẩu");
     }
 
-    const data = await res.json();
     console.log("Đăng nhập thành công: ", data);
     localStorage.setItem("user", JSON.stringify(data.user));
 

@@ -449,6 +449,8 @@ document.querySelector(".user-name").innerText = shopName;
       const res = await fetch(`http://localhost:3000/shop/donhang/${shopID}`);
       const data = await res.json();
 
+      console.log("Đơn hàng của shop: ", data);
+
       if (res.ok && data.success) {
         shippingOrders = data.orders;
       } else {
