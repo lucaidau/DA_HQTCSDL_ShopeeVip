@@ -373,7 +373,33 @@ async function saveAutomationConfig() {
   }
 }
 
-async function handleSystemBackupClick() {}
+async function thucThiSaoLuuThuCong(type) {
+  let endpoint = "";
+  if (type === "full") endpoint = "/admin/saoluu/backup-full";
+  else if (type === "diff") endpoint = "/admin/saoluu/backup-diff";
+  else if (type === "log") endpoint = "/admin/saoluu/backup-log";
+  else return;
+
+  alert(`Đang yêu cầu hệ thống thực thi lệnh ${type.toUpperCase()} Backup`);
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      alert(`Thành công: \n${data.message}`);
+    } else {
+      alert(
+        `Lỗi thực thi:\n${data.message || "Không thể thực hiện sao lưu lúc này"}`,
+      );
+    }
+  } catch (error) {
+    console.error(`Lỗi kết nối khi gửi lệnh backup ${type}: `, error);
+    alert("Lỗi kết nối API");
+  }
+}
 
 async function executeRestore() {
   const restoreType = document.getElementById("restore-type").value;
