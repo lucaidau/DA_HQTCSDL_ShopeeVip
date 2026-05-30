@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "fullTime": "00:00",
+  "diffIntervalHours": "6",
+  "logIntervalMinutes": "30"
+}

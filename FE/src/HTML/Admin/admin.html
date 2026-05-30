@@ -42,9 +42,15 @@
         </nav>
 
         <section id="accounts" class="tab-content active">
-          <div class="section-header">
-            <h2>Quản Lý Tài Khoản</h2>
+          <div class="content-header">
+            <h2><i class="fas fa-users"></i> Quản Lý Tài Khoản</h2>
+            <br />
+            <p class="subtitle" style="color: #666; margin-top: 5px">
+              Admin quản lý việc lưu trữ an toàn thông tin tài khoản và xử lí
+              tài khoản vi phạm
+            </p>
           </div>
+          <br />
 
           <div class="search-bar">
             <input
@@ -80,9 +86,15 @@
         </section>
 
         <section id="products" class="tab-content">
-          <div class="section-header">
-            <h2>Quản Lý Sản Phẩm</h2>
+          <div class="content-header">
+            <h2><i class="fas fa-box"></i> Quản Lý Sản Phẩm</h2>
+            <br />
+            <p class="subtitle" style="color: #666; margin-top: 5px">
+              Admin quản lý việc lưu trữ thông tin sản phẩm và xử lí sản phẩm
+              không hợp lệ
+            </p>
           </div>
+          <br />
 
           <div class="search-bar">
             <input
@@ -118,193 +130,313 @@
         </section>
 
         <section id="backup" class="tab-content">
-          <div class="section-header">
-            <h2>Sao Lưu & Phục Hồi Dữ Liệu</h2>
+          <div class="content-header">
+            <h2><i class="fas fa-server"></i> Quản Trị Hệ Thống & Dữ Liệu</h2>
+            <p class="subtitle" style="color: #666; margin-top: 5px">
+              Admin chủ động quản lý lưu trữ an toàn thông tin sàn ShopeeVip
+              hoặc thiết lập lịch chạy tự động.
+            </p>
           </div>
 
-          <div class="backup-container">
-            <div class="backup-box">
-              <h3><i class="fas fa-save"></i> Sao Lưu Dữ Liệu</h3>
-              <p>Tạo bản sao lưu toàn bộ dữ liệu hệ thống</p>
-              <button class="btn btn-success" id="btn-backup">
-                <i class="fas fa-cloud-download-alt"></i> Sao Lưu Ngay
-              </button>
-              <div class="backup-info">
-                <p>
-                  <strong>Lần sao lưu cuối:</strong>
-                  <span id="last-backup">Chưa có</span>
-                </p>
-                <p>
-                  <strong>Dung lượng:</strong>
-                  <span id="backup-size">0 MB</span>
-                </p>
-              </div>
+          <div
+            class="alert-system-warning"
+            style="
+              background-color: #fffbe6;
+              border: 1px solid #ffe58f;
+              color: #d46b08;
+              padding: 15px;
+              border-radius: 6px;
+              margin: 20px 0;
+              font-size: 14px;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <i class="fas fa-exclamation-triangle" style="font-size: 18px"></i>
+            <div>
+              <strong>CẢNH BÁO:</strong> Tiến trình
+              <strong>Phục hồi dữ liệu</strong> sẽ đóng băng toàn bộ kết nối và
+              ghi đè dữ liệu cũ. Vui lòng cân nhắc kỹ trước khi thực hiện.
             </div>
+          </div>
 
-            <div class="backup-box">
-              <h3><i class="fas fa-clock"></i> Sao Lưu Tự Động</h3>
-              <p>Lập lịch sao lưu định kỳ</p>
+          <div
+            class="system-grid"
+            style="
+              display: grid;
+              grid-template-columns: 2fr 1fr;
+              gap: 20px;
+              margin-bottom: 30px;
+            "
+          >
+            <div
+              class="backup-box"
+              style="
+                background: #fff;
+                border: 1px solid #e8e8e8;
+                padding: 25px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+              "
+            >
+              <h3 style="font-size: 16px; margin-bottom: 15px; color: #333">
+                <i class="fas fa-sliders-h"></i> Cấu Hình Phương Thức Sao Lưu
+              </h3>
 
-              <div style="margin-top: 15px; margin-bottom: 10px">
-                <label
-                  style="
-                    font-size: 13px;
-                    color: #666;
-                    margin-bottom: 5px;
-                    display: block;
-                    font-weight: bold;
-                  "
-                  >Mô hình phục hồi:</label
-                >
-                <select
-                  id="recovery-model"
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #ddd;
-                    font-size: 13px;
-                  "
-                >
-                  <option value="full">Full Recovery Model</option>
-                  <option value="bulk_logged">
-                    Bulk-Logged Recovery Model
-                  </option>
-                  <option value="simple">Simple Recovery Model</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom: 10px">
-                <label
-                  style="
-                    font-size: 13px;
-                    color: #666;
-                    margin-bottom: 5px;
-                    display: block;
-                    font-weight: bold;
-                  "
-                  >Loại sao lưu:</label
-                >
-                <select
-                  id="backup-type"
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #ddd;
-                    font-size: 13px;
-                  "
-                >
-                  <option value="full">Full Backup (Toàn phần)</option>
-                  <option value="diff">Differential Backup (Một phần)</option>
-                  <option value="log">Transaction Log Backup (Lưu vết)</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom: 15px">
-                <label
-                  style="
-                    font-size: 13px;
-                    color: #666;
-                    margin-bottom: 5px;
-                    display: block;
-                    font-weight: bold;
-                  "
-                  >Tần suất chạy:</label
-                >
-                <select
-                  id="backup-freq"
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #ddd;
-                    font-size: 13px;
-                  "
-                >
-                  <option value="daily">Hằng ngày (Daily)</option>
-                  <option value="weekly">Hằng tuần (Weekly)</option>
-                  <option value="monthly">Hằng tháng (Monthly)</option>
-                  <option value="hourly">Mỗi giờ (Hourly)</option>
-                </select>
-              </div>
-
-              <button
-                class="btn btn-primary"
-                id="btn-save-schedule"
-                style="width: 100%; justify-content: center"
+              <div
+                style="
+                  display: flex;
+                  background: #f1f2f6;
+                  padding: 4px;
+                  border-radius: 6px;
+                  margin-bottom: 20px;
+                "
               >
-                <i class="fas fa-save"></i> Lưu Lịch Trình
-              </button>
-            </div>
-
-            <div class="backup-box">
-              <h3><i class="fas fa-undo-alt"></i> Phục Hồi Dữ Liệu</h3>
-              <p>Khôi phục CSDL từ các bản sao lưu (.bak)</p>
-
-              <div style="margin-top: 15px; margin-bottom: 10px">
-                <label
+                <button
+                  type="button"
+                  id="btn-mode-manual"
+                  onclick="switchBackupMode('manual')"
                   style="
-                    font-size: 13px;
-                    color: #666;
-                    margin-bottom: 5px;
-                    display: block;
-                    font-weight: bold;
-                  "
-                  >Loại phục hồi:</label
-                >
-                <select
-                  id="restore-type"
-                  style="
-                    width: 100%;
+                    flex: 1;
                     padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #ddd;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: 600;
                     font-size: 13px;
+                    background: #ee4d2d;
+                    color: white;
+                    transition: all 0.2s;
                   "
                 >
-                  <option value="full">Phục hồi Full Backup</option>
-                  <option value="diff">Phục hồi Differential Backup</option>
-                  <option value="log">Phục hồi Transaction Log Backup</option>
-                </select>
+                  <i class="fas fa-hand-paper"></i> Thủ công (Manual)
+                </button>
+                <button
+                  type="button"
+                  id="btn-mode-auto"
+                  onclick="switchBackupMode('auto')"
+                  style="
+                    flex: 1;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 13px;
+                    background: transparent;
+                    color: #555;
+                    transition: all 0.2s;
+                  "
+                >
+                  <i class="fas fa-robot"></i> Tự động hóa (Automation)
+                </button>
               </div>
 
-              <div style="margin-bottom: 15px">
-                <label
+              <div id="wrapper-manual-mode">
+                <p
                   style="
                     font-size: 13px;
-                    color: #666;
-                    margin-bottom: 5px;
-                    display: block;
-                    font-weight: bold;
+                    color: #777;
+                    margin-bottom: 15px;
+                    line-height: 1.4;
                   "
-                  >Đường dẫn file (.bak):</label
                 >
-                <input
-                  type="text"
-                  id="restore-file-path"
-                  placeholder="VD: D:\Backup\ShopeeVip_Full.bak"
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    border-radius: 5px;
-                    border: 1px solid #ddd;
-                    font-size: 13px;
-                  "
-                />
+                  Trích xuất file dữ liệu dự phòng ngay lập tức lên máy chủ theo
+                  nhu cầu.
+                </p>
+                <div style="display: flex; gap: 10px">
+                  <select
+                    id="backup-type-select"
+                    style="
+                      flex: 1;
+                      padding: 10px;
+                      border: 1px solid #ddd;
+                      border-radius: 6px;
+                      font-size: 14px;
+                      background: #fafafa;
+                      outline: none;
+                    "
+                  >
+                    <option value="full">Toàn bộ hệ thống (Full Backup)</option>
+                    <option value="diff">
+                      Phần thay đổi (Differential Backup)
+                    </option>
+                    <option value="log">Nhật ký giao dịch (Log Backup)</option>
+                  </select>
+                  <button
+                    onclick="handleSystemBackupClick()"
+                    style="
+                      padding: 10px 20px;
+                      background: #ee4d2d;
+                      color: white;
+                      border: none;
+                      border-radius: 6px;
+                      cursor: pointer;
+                      font-weight: 600;
+                      white-space: nowrap;
+                    "
+                  >
+                    <i class="fas fa-play"></i> Thực Thi Ngay
+                  </button>
+                </div>
               </div>
 
-              <button
-                class="btn btn-warning"
-                id="btn-execute-restore"
-                style="width: 100%; justify-content: center"
-              >
-                <i class="fas fa-database"></i> Phục Hồi Dữ Liệu
-              </button>
-              <div id="restore-status" style="margin-top: 10px"></div>
+              <div id="wrapper-auto-mode" style="display: none">
+                <p
+                  style="
+                    font-size: 13px;
+                    color: #777;
+                    margin-bottom: 15px;
+                    line-height: 1.4;
+                  "
+                >
+                  Thiết lập khung giờ cố định để máy chủ tự động thực hiện tiến
+                  trình sao lưu định kỳ ngầm.
+                </p>
+
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    margin-bottom: 20px;
+                  "
+                >
+                  <label
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      font-size: 14px;
+                      font-weight: 500;
+                      cursor: pointer;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      id="auto-backup-enable"
+                      checked
+                      style="width: 16px; height: 16px; accent-color: #ee4d2d"
+                    />
+                    Kích hoạt lịch sao lưu tự động
+                  </label>
+
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 13.5px;
+                    "
+                  >
+                    <span style="color: #555"
+                      >Giờ quét full hệ thống định kỳ:</span
+                    >
+                    <input
+                      type="time"
+                      id="auto-full-backup-time"
+                      value="00:00"
+                      style="
+                        padding: 6px 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        outline: none;
+                        background: #fafafa;
+                      "
+                    />
+                  </div>
+
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 13.5px;
+                    "
+                  >
+                    <span style="color: #555"
+                      >Giờ quét diff hệ thống định kỳ:</span
+                    >
+                    <input
+                      type="number"
+                      id="auto-diff-backup-time"
+                      value="6"
+                      min="1"
+                      max="24"
+                      style="
+                        padding: 6px 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        outline: none;
+                        background: #fafafa;
+                      "
+                    />
+                    <span style="color: #555">Giờ / lần</span>
+                  </div>
+
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      font-size: 13.5px;
+                    "
+                  >
+                    <span style="color: #555"
+                      >Giờ quét log hệ thống định kỳ:</span
+                    >
+                    <input
+                      id="auto-log-backup-time"
+                      type="number"
+                      value="30"
+                      min="5"
+                      max="60"
+                      style="
+                        padding: 6px 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        outline: none;
+                        background: #fafafa;
+                      "
+                    />
+                    <span style="color: #555">phút / lần</span>
+                  </div>
+                </div>
+
+                <button
+                  onclick="saveAutomationConfig()"
+                  style="
+                    padding: 11px 20px;
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    width: 100%;
+                  "
+                >
+                  <i class="fas fa-save"></i> Lưu & Áp Dụng Lịch Cấu Hình
+                </button>
+              </div>
+
+              <div
+                id="restore-status"
+                style="font-size: 13px; margin-top: 15px; min-height: 20px"
+              ></div>
             </div>
 
-            <div class="backup-box">
+            <div
+              class="backup-box"
+              style="
+                background: #fff;
+                border: 1px solid #e8e8e8;
+                padding: 25px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+              "
+            >
               <h3><i class="fas fa-chart-bar"></i> Thống Kê Cơ Sở Dữ Liệu</h3>
               <ul class="stats-list">
                 <li>Tổng Sản Phẩm: <strong id="stat-products">0</strong></li>
@@ -313,6 +445,178 @@
                 <li>Tổng Cửa Hàng: <strong id="stat-shops">0</strong></li>
               </ul>
             </div>
+          </div>
+
+          <!-- PHỤC HỒI DỮ LIỆU -->
+          <div
+            style="
+              background: #fff;
+              border: 1px solid #e8e8e8;
+              padding: 25px;
+              border-radius: 8px;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+              margin-bottom: 20px;
+            "
+          >
+            <h3 style="font-size: 16px; margin-bottom: 15px; color: #333">
+              <i class="fas fa-undo-alt"></i> Phục Hồi Dữ Liệu
+            </h3>
+
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <!-- Loại phục hồi -->
+              <div style="display: flex; align-items: center; gap: 10px">
+                <label style="width: 160px; font-size: 13.5px; color: #555"
+                  >Loại phục hồi:</label
+                >
+                <select
+                  id="restore-type"
+                  style="
+                    flex: 1;
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    background: #fafafa;
+                    outline: none;
+                  "
+                >
+                  <option value="full">Toàn bộ hệ thống (Full)</option>
+                  <option value="diff">Phần thay đổi (Differential)</option>
+                  <option value="log">Nhật ký giao dịch (Log)</option>
+                </select>
+              </div>
+
+              <!-- Đường dẫn file -->
+              <div style="display: flex; align-items: center; gap: 10px">
+                <label style="width: 160px; font-size: 13.5px; color: #555"
+                  >Đường dẫn file:</label
+                >
+                <input
+                  type="text"
+                  id="restore-file-path"
+                  placeholder="VD: C:\Backup\Full\ShopeeVipDB_FULL_xxx.bak"
+                  style="
+                    flex: 1;
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                    font-size: 13.5px;
+                    background: #fafafa;
+                    outline: none;
+                  "
+                />
+              </div>
+
+              <!-- Nút thực thi -->
+              <button
+                onclick="executeRestore()"
+                style="
+                  padding: 11px 20px;
+                  background: #e74c3c;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-weight: 600;
+                  width: 100%;
+                  margin-top: 5px;
+                "
+              >
+                <i class="fas fa-exclamation-triangle"></i> Thực Thi Phục Hồi
+              </button>
+
+              <!-- Trạng thái -->
+              <div
+                id="restore-status"
+                style="font-size: 13px; min-height: 20px"
+              ></div>
+            </div>
+          </div>
+
+          <div
+            class="backup-history-section"
+            style="
+              background: #fff;
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid #e8e8e8;
+            "
+          >
+            <h3 style="font-size: 15px; margin-bottom: 15px; color: #333">
+              <i class="fas fa-list-alt"></i> Lịch Sử Các Bản Sao Lưu Trên Máy
+              Chủ
+            </h3>
+            <table class="account-table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Mã Bản Vá</th>
+                  <th>Thời Gian Tạo</th>
+                  <th>Đường Dẫn File (.bak/.trn)</th>
+                  <th>Dung Lượng</th>
+                  <th>Loại Hình</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#BK-002</td>
+                  <td>30/05/2026 00:00</td>
+                  <td>
+                    <code
+                      style="
+                        background: #f5f5f5;
+                        padding: 3px 6px;
+                        border-radius: 3px;
+                        font-family: monospace;
+                      "
+                      >C:\BackupSQL\ShopeeVip_FULL_Auto.bak</code
+                    >
+                  </td>
+                  <td>45.2 MB</td>
+                  <td>
+                    <span
+                      style="
+                        background: #e6f7ff;
+                        color: #1890ff;
+                        padding: 3px 8px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        font-weight: 500;
+                      "
+                      >Automation</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>#BK-001</td>
+                  <td>29/05/2026 14:22</td>
+                  <td>
+                    <code
+                      style="
+                        background: #f5f5f5;
+                        padding: 3px 6px;
+                        border-radius: 3px;
+                        font-family: monospace;
+                      "
+                      >C:\BackupSQL\ShopeeVip_Manual.bak</code
+                    >
+                  </td>
+                  <td>12.5 MB</td>
+                  <td>
+                    <span
+                      style="
+                        background: #f5f5f5;
+                        color: #666;
+                        padding: 3px 8px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        font-weight: 500;
+                      "
+                      >Manual</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </main>

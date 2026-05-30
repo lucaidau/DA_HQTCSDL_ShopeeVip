@@ -93,12 +93,6 @@ function setupEventListeners() {
     .getElementById("account-search")
     .addEventListener("input", filterAccounts);
 
-  // Backup
-  document.getElementById("btn-backup").addEventListener("click", handleBackup);
-  document
-    .getElementById("btn-execute-restore")
-    .addEventListener("click", executeRestore);
-
   // Modal
   document
     .getElementById("modal-form")
@@ -137,6 +131,8 @@ function renderProductsTable(products) {
       const statusColor = status ? "#28a745" : "#e74c3c";
       const lockText = status ? "Khóa" : "Mở khóa";
       const isDisable = product.SoLuongTonKho <= 0 ? true : false;
+      console.log(isDisable);
+
       return `
         <tr>
             <td style="color:#ee4d2d">${product.IDBanSao}</td>
@@ -146,7 +142,7 @@ function renderProductsTable(products) {
             <td style=""><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
             <td style="color:#1890FF">${product.SoLuongTonKho || 0}</td>
             <td style=""><span class="status-active" style="color:${statusColor} ; font-weight: 500;">${statusText}</span></td>
-            <td style=""><button class="btn btn-danger" disabled="${isDisable}" onclick="lockProduct(${product.IDBanSao})">${lockText}</button></td>
+            <td style=""><button class="btn btn-danger" ${isDisable ? "disabled" : ""} onclick="lockProduct(${product.IDBanSao})">${lockText}</button></td>
 
         </tr>
     `;
@@ -313,35 +309,71 @@ async function lockAccount(id) {
 
 // ==================== BACKUP & RESTORE ====================
 
-async function handleBackup() {
-  try {
-    // Collect all data
-    const backupData = {
-      timestamp: new Date().toISOString(),
-      products: allProducts,
-      accounts: allAccounts,
-    };
+function switchBackupMode(mode) {
+  const btnManual = document.getElementById("btn-mode-manual");
+  const btnAuto = document.getElementById("btn-mode-auto");
+  const viewManual = document.getElementById("wrapper-manual-mode");
+  const viewAuto = document.getElementById("wrapper-auto-mode");
+  const statusEl = document.getElementById("restore-status");
 
-    // Create download link
-    const dataStr = JSON.stringify(backupData, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `backup_${new Date().toISOString().split("T")[0]}.json`;
-    link.click();
+  if (statusEl) statusEl.innerHTML = "";
 
-    // Update backup info
-    document.getElementById("last-backup").textContent =
-      new Date().toLocaleString("vi-VN");
-    document.getElementById("backup-size").textContent =
-      (blob.size / 1024).toFixed(2) + " KB";
+  if (mode === "manual") {
+    btnManual.style.background = "#ee4d2d";
+    btnManual.style.color = "white";
+    btnAuto.style.background = "transparent";
+    btnAuto.style.color = "#555";
 
-    alert("Sao lưu thành công!");
-  } catch (error) {
-    alert("Lỗi sao lưu: " + error.message);
+    viewManual.style.display = "block";
+    viewAuto.style.display = "none";
+  } else {
+    btnAuto.style.background = "#ee4d2d";
+    btnAuto.style.color = "white";
+    btnManual.style.background = "transparent";
+    btnManual.style.color = "#555";
+
+    viewManual.style.display = "none";
+    viewAuto.style.display = "block";
   }
 }
+
+async function saveAutomationConfig() {
+  const isEnabled = document.getElementById("auto-backup-enable").checked;
+  const fullTiemValue = document.getElementById("auto-full-backup-time").value;
+  const diffTimeValue = document.getElementById("auto-diff-backup-time").value;
+  const logTimeValue = document.getElementById("auto-log-backup-time").value;
+
+  if (!fullTiemValue) {
+    return alert("Vui lòng chọn khung giờ cụ thể cho Full backup");
+  }
+
+  const bodyData = {
+    enabled: isEnabled,
+    fullTime: fullTiemValue,
+    diffTime: diffTimeValue,
+    logTime: logTimeValue,
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/admin/saoluu/cauhinhtudong`, {
+      method: "POST",
+      headers: { "Content-Type": "Application/json" },
+      body: JSON.stringify(bodyData),
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      alert(data.message);
+    } else {
+      console.log("Thất bại: " + data.message);
+    }
+  } catch (error) {
+    console.log("Lỗi kết nối API: ", error);
+    alert("Lỗi kết nối API");
+  }
+}
+
+async function handleSystemBackupClick() {}
 
 async function executeRestore() {
   const restoreType = document.getElementById("restore-type").value;

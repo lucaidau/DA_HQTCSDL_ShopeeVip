@@ -295,9 +295,14 @@ document.querySelector(".user-name").innerText = shopName;
               </div>
             </td>
             <td style="color:#ee4d2d; font-weight:500;">${formatPrice(currPrice)}</td>
-            <td>${currStock}</td>
+            <td style="color:#1890FF; font-weight:500">${currStock}</td>
             <td><span class="status-pill ${p.TrangThaiBS == 1 ? "status-sell" : "status-out"}">${currStatus}</span></td>
-            
+            <td>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <button style="background-color:#3498db; color:white" class="btn" onclick="editProduct()">Sửa</button>
+                    <button style="background-color:#e74c3c; color:white" class="btn" onclick="deleteProduct()">Xóa</button>
+                </div>
+            </td>
           </tr>
         `;
       })
