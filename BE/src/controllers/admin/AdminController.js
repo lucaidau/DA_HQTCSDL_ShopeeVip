@@ -10,6 +10,8 @@ const configPath = path.join(
   "backupConfig.json",
 );
 
+const backUpFolder = "C:/Backup_ShopeeVip";
+
 function docCauHinh() {
   try {
     if (fs.existsSync(configPath)) {
@@ -53,7 +55,6 @@ function capNhatLichTrinhGiaoViec() {
     return;
   }
 
-  const backUpFolder = "C:\Users\Lucaidau\Learning\DoAn\Ki4\HQT_CSDL\Backup";
   if (!fs.existsSync(backUpFolder))
     fs.mkdirSync(backUpFolder, { recursive: true });
 
@@ -67,7 +68,7 @@ function capNhatLichTrinhGiaoViec() {
       const ts = new Date().toISOString().replace(/[:.]/g, "-");
       await pool.request().query(`
         BACKUP DATABASE ShopeeVipDB
-        TO DISK = 'C:\Users\Lucaidau\Learning\DoAn\Ki4\HQT_CSDL\Backup\Full\ShopeeVipDB_AUTO_FULL_${ts}.bak' WITH INIT;
+        TO DISK = 'C:/Backup_ShopeeVip/Full/ShopeeVipDB_AUTO_FULL_${ts}.bak' WITH INIT;
       `);
       console.log("[Automated Full] Sao lưu thành công.");
     } catch (err) {
@@ -84,7 +85,7 @@ function capNhatLichTrinhGiaoViec() {
       const ts = new Date().toISOString().replace(/[:.]/g, "-");
       await pool.request().query(`
         BACKUP DATABASE ShopeeVipDB
-        TO DISK = 'C:\Users\Lucaidau\Learning\DoAn\Ki4\HQT_CSDL\Backup\Diff\ShopeeVipDB_AUTO_DIFF_${ts}.bak' WITH DIFFERENTIAL, INIT;
+        TO DISK = 'C:/Backup_ShopeeVip/Diff/ShopeeVipDB_AUTO_DIFF_${ts}.bak' WITH DIFFERENTIAL, INIT;
       `);
       console.log("[Automated Diff] Sao lưu thành công.");
     } catch (err) {
@@ -101,7 +102,7 @@ function capNhatLichTrinhGiaoViec() {
       const ts = new Date().toISOString().replace(/[:.]/g, "-");
       await pool.request().query(`
         BACKUP LOG ShopeeVipDB
-        TO DISK = 'C:\Users\Lucaidau\Learning\DoAn\Ki4\HQT_CSDL\Backup\Log\ShopeeVip_AUTO_LOG_${ts}.trn' WITH INIT;
+        TO DISK = 'C:/Backup_ShopeeVip/Log/ShopeeVip_AUTO_LOG_${ts}.trn' WITH INIT;
       `);
       console.log("[Automated Log] Trích xuất nhật ký giao dịch thành công.");
     } catch (err) {
@@ -288,11 +289,89 @@ class AdminController {
     }
   }
 
-  async fullBackup(req, res) {}
+  async fullBackup(req, res) {
+    try {
+      const pool = await adminPoolPromise;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 
-  async diffBackup(req, res) {}
+      const targetPath = path.join(backUpFolder, "Full");
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
 
-  async logBackup(req, res) {}
+      const filePath = path.join(
+        targetPath,
+        `ShopeeVip_MANUAL_FULL_${timestamp}.bak`,
+      );
+
+      const result = await pool
+        .request()
+        .query(`BACKUP DATABASE ShopeeVipDB TO DISK = '${filePath}' WITH INIT`);
+      return res.status(200).json({
+        success: true,
+        message: `Tạo file FULL BACKUP thành công: ${filePath}`,
+      });
+    } catch (error) {
+      console.log("Lỗi Full backup: ", error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  async diffBackup(req, res) {
+    try {
+      const pool = await adminPoolPromise;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+      const targetPath = path.join(backUpFolder, "Diff");
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
+
+      const filePath = path.join(
+        targetPath,
+        `ShopeeVip_MANUAL_DIFF_${timestamp}.bak`,
+      );
+      const result = await pool
+        .request()
+        .query(
+          `BACKUP DATABASE ShopeeVipDB TO DISK = '${filePath}' WITH DIFFERENTIAL, INIT`,
+        );
+      return res.status(200).json({
+        success: true,
+        message: `Tạo file DIFF BACKUP thành công: ${filePath}`,
+      });
+    } catch (error) {
+      console.log("Lỗi Diff backup: ", error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  async logBackup(req, res) {
+    try {
+      const pool = await adminPoolPromise;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+      const targetPath = path.join(backUpFolder, "Log");
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
+
+      const filePath = path.join(
+        targetPath,
+        `ShopeeVip_MANUAL_LOG_${timestamp}.trn`,
+      );
+      const result = await pool
+        .request()
+        .query(`BACKUP LOG ShopeeVipDB TO DISK = '${filePath}' WITH INIT`);
+      return res.status(200).json({
+        success: true,
+        message: `Trích xuất TRANSACTION LOG thành công: ${filePath}`,
+      });
+    } catch (error) {
+      console.log("Lỗi Log backup: ", error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
 
   async phucHoi(req, res) {}
 }

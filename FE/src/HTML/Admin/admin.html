@@ -234,51 +234,57 @@
               </div>
 
               <div id="wrapper-manual-mode">
-                <p
+                <div
+                  class="manual-backup-box"
                   style="
-                    font-size: 13px;
-                    color: #777;
-                    margin-bottom: 15px;
-                    line-height: 1.4;
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                    margin-bottom: 25px;
                   "
                 >
-                  Trích xuất file dữ liệu dự phòng ngay lập tức lên máy chủ theo
-                  nhu cầu.
-                </p>
-                <div style="display: flex; gap: 10px">
-                  <select
-                    id="backup-type-select"
-                    style="
-                      flex: 1;
-                      padding: 10px;
-                      border: 1px solid #ddd;
-                      border-radius: 6px;
-                      font-size: 14px;
-                      background: #fafafa;
-                      outline: none;
-                    "
+                  <h3 style="margin-bottom: 15px; color: #333">
+                    <i class="fas fa-hand-paper"></i> Thực thi sao lưu thủ công
+                  </h3>
+                  <p style="font-size: 14px; color: #666; margin-bottom: 15px">
+                    Chọn loại hình sao lưu bạn muốn thực hiện ngay lập tức trên
+                    máy chủ:
+                  </p>
+
+                  <div
+                    class="backup-actions"
+                    style="display: flex; gap: 10px; flex-wrap: wrap"
                   >
-                    <option value="full">Toàn bộ hệ thống (Full Backup)</option>
-                    <option value="diff">
-                      Phần thay đổi (Differential Backup)
-                    </option>
-                    <option value="log">Nhật ký giao dịch (Log Backup)</option>
-                  </select>
-                  <button
-                    onclick="handleSystemBackupClick()"
-                    style="
-                      padding: 10px 20px;
-                      background: #ee4d2d;
-                      color: white;
-                      border: none;
-                      border-radius: 6px;
-                      cursor: pointer;
-                      font-weight: 600;
-                      white-space: nowrap;
-                    "
-                  >
-                    <i class="fas fa-play"></i> Thực Thi Ngay
-                  </button>
+                    <button
+                      type="button"
+                      class="btn"
+                      style="background: #ee4d2d; color: white"
+                      onclick="thucThiSaoLuuThuCong('full')"
+                    >
+                      <i class="fas fa-database"></i> Full Backup (Toàn bộ)
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn"
+                      style="background: #007bff; color: white"
+                      onclick="thucThiSaoLuuThuCong('diff')"
+                    >
+                      <i class="fas fa-file-medical"></i> Differential Backup
+                      (Phần thay đổi)
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn"
+                      style="background: #28a745; color: white"
+                      onclick="thucThiSaoLuuThuCong('log')"
+                    >
+                      <i class="fas fa-history"></i> Transaction Log Backup
+                      (Nhật ký)
+                    </button>
+                  </div>
                 </div>
               </div>
 
