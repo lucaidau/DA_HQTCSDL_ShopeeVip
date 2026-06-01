@@ -1,7 +1,8 @@
-const { sql, adminPoolPromise } = require("../../config/connect");
+const { sql, adminPoolPromise, poolPromise } = require("../../config/connect");
 const fs = require("fs");
 const path = require("path");
 const cron = require("node-cron");
+
 const configPath = path.join(
   __dirname,
   "..",
@@ -232,7 +233,7 @@ class AdminController {
     }
   }
 
-  // [GET] /admin/thongke
+  // [GET] /admin/thongke (Chưa xong)
   async layThongKe(req, res) {
     try {
       const pool = await adminPoolPromise;
@@ -373,7 +374,138 @@ class AdminController {
     }
   }
 
-  async phucHoi(req, res) {}
+  async phucHoi(req, res) {
+    try {
+      const pool = await poolPromise;
+
+      const fullPath = path.join(backUpFolder, "Full");
+      const diffPath = path.join(backUpFolder, "Diff");
+      const logPath = path.join(backUpFolder, "Log");
+
+      const getLatestFile = (folderPath, ex) => {
+        if (!fs.existsSync(folderPath)) return;
+        const files = fs
+          .readdirSync(folderPath)
+          .filter((file) => file.toLowerCase().endsWith(ex))
+          .map((file) => ({
+            name: file,
+            path: path.join(folderPath, file).replace(/\\/g, "/"),
+            time: fs.statSync(path.join(folderPath, file)).mtime.getTime(),
+          }));
+
+        if (files.length === 0) return null;
+        files.sort((a, b) => b.time - a.time);
+        return files[0];
+      };
+
+      const latestFull = getLatestFile(fullPath, ".bak");
+      if (!latestFull)
+        return res
+          .status(404)
+          .json({ success: false, message: "Không tìm thấy file FULL BACKUP" });
+
+      const latestDiff = getLatestFile(diffPath, ".bak");
+      const logStartTime = latestDiff ? latestDiff.time : latestFull.time;
+
+      let logFiles = [];
+      if (fs.existsSync(logPath)) {
+        logFiles = fs
+          .readdirSync(logPath)
+          .filter((file) => file.toLowerCase().endsWith(".trn"))
+          .map((file) => ({
+            name: file,
+            path: path.join(logPath, file).replace(/\\/g, "/"),
+            time: fs.statSync(path.join(logPath, file)).mtime.getTime(),
+          }))
+          .filter((file) => file.time > logStartTime)
+          .sort((a, b) => a.time - b.time);
+      }
+
+      console.log("[Auto Restore] Đang backup Tail-Log Backup...");
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const tailLogFilePath = path
+        .join(logPath, `ShopeeVip_TailLog_${timestamp}.trn`)
+        .replace(/\\/g, "/");
+
+      const tailLogQuery = `
+        USE master;
+        BACKUP LOG ShopeeVipDB TO DISK = '${tailLogFilePath}' WITH NORECOVERY, NO_TRUNCATE, INIT;`;
+
+      let hasTailLog = false;
+      try {
+        await pool.request().query(tailLogQuery);
+        hasTailLog = true;
+      } catch (error) {
+        console.log("Warning: Không thể tạo file Tail-Log");
+      }
+
+      const restoreChain = [];
+      restoreChain.push(latestFull.path);
+      if (latestDiff) restoreChain.push(latestDiff.path);
+      logFiles.forEach((log) => restoreChain.push(log.path));
+      if (fs.existsSync(tailLogFilePath)) restoreChain.push(tailLogFilePath);
+
+      console.log(`[Auto Restore] Chuỗi file tự động tìm được: `, restoreChain);
+      console.log("[Auto Restore] Đang ngắt kết nối máy chủ để phục hồi!!");
+
+      if (!hasTailLog) {
+        console.log(
+          "[Auto Restore] Backup Tail-Log thất bại, ngắt kết nối Database bằng SINGLE_USER",
+        );
+
+        try {
+          await pool.request().query(`
+      USE master;
+      ALTER DATABASE ShopeeVipDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    `);
+        } catch (error) {
+          console.log(
+            "Bỏ qua lỗi SINGLE_USER nếu kết nối bị kẹt: ",
+            error.message,
+          );
+        }
+      }
+
+      for (let i = 0; i < restoreChain.length; i++) {
+        const filePath = restoreChain[i];
+        const isLast = i === restoreChain.length - 1;
+        const recoveryOption = isLast ? "RECOVERY" : "NORECOVERY";
+
+        let sqlQuery = "";
+        if (filePath.toLocaleLowerCase().endsWith(".bak")) {
+          const replaceOption = i === 0 ? ", REPLACE" : "";
+          sqlQuery = `RESTORE DATABASE ShopeeVipDB FROM DISK = '${filePath}' WITH ${recoveryOption}${replaceOption}`;
+        } else if (filePath.toLocaleLowerCase().endsWith(".trn")) {
+          sqlQuery = `RESTORE LOG ShopeeVipDB FROM DISK = '${filePath}' WITH ${recoveryOption}`;
+        }
+
+        console.log(
+          `[Auto Restore] [Bước ${i + 1}/${restoreChain.length}] Thực thi: ${sqlQuery}`,
+        );
+        await pool.request().query(sqlQuery);
+      }
+      await pool.request().query("ALTER DATABASE ShopeeVipDB SET MULTI_USER;");
+      return res.status(200).json({
+        success: true,
+        message: "Phục hồi thành công!!",
+        details: restoreChain,
+      });
+    } catch (error) {
+      console.log("Lỗi phục hổi: ", error);
+
+      try {
+        const pool = await poolPromise;
+        pool
+          .request()
+          .query("USE master; ALTER DATABASE ShopeeVipDB SET MULTI_USER");
+      } catch (error) {
+        console.log("Không thể mở database: ", error.message);
+      }
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi Server: " + error.message });
+    }
+  }
 }
 
 module.exports = new AdminController();

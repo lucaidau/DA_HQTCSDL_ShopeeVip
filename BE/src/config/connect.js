@@ -4,7 +4,7 @@ require("dotenv").config();
 const sqlConfig = {
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  database: process.env.DB_SERVER_SYSTEM,
   server: process.env.DB_SERVER,
   port: 1433,
   options: {
@@ -49,15 +49,15 @@ const customerSqlConfig = {
   },
 };
 
-// const poolPromise = new sql.ConnectionPool(sqlConfig)
-//   .connect()
-//   .then((pool) => {
-//     console.log("Kết nối thành công");
-//     return pool;
-//   })
-//   .catch((err) => {
-//     console.log("Kết nối thất bại: ", err);
-//   });
+const poolPromise = new sql.ConnectionPool(sqlConfig)
+  .connect()
+  .then((pool) => {
+    console.log("Kết nối thành công");
+    return pool;
+  })
+  .catch((err) => {
+    console.log("Kết nối thất bại: ", err);
+  });
 
 const adminPoolPromise = new sql.ConnectionPool(adminSqlConfig)
   .connect()
@@ -91,6 +91,7 @@ const customerPoolPromise = new sql.ConnectionPool(customerSqlConfig)
 
 module.exports = {
   sql,
+  poolPromise,
   adminPoolPromise,
   shopPoolPromise,
   customerPoolPromise,

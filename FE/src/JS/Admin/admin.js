@@ -402,48 +402,49 @@ async function thucThiSaoLuuThuCong(type) {
 }
 
 async function executeRestore() {
-  const restoreType = document.getElementById("restore-type").value;
-  const filePath = document.getElementById("restore-file-path").value;
   const statusDiv = document.getElementById("restore-status");
 
-  if (!filePath.trim()) {
+  const confirmAction = confirm(
+    "CẢNH BÁO AN TOÀN:\n" +
+      "Hành động này sẽ ngắt toàn bộ kết nối hiện tại để tiến hành đè chuỗi khôi phục tự động.\n" +
+      "Bạn có chắc chắn muốn thực hiện khôi phục không?",
+  );
+
+  if (!confirmAction) return;
+
+  try {
     statusDiv.innerHTML =
-      '<p style="color: red;"><i class="fas fa-exclamation-triangle"></i> Vui lòng nhập đường dẫn file .bak!</p>';
-    return;
-  }
+      '<p style="color: #1890ff;"><i class="fas fa-spinner fa-spin"></i> Hệ thống đang quét thư mục backup và khôi phục chuỗi dữ liệu. Vui lòng đợi...</p>';
 
-  if (
-    confirm(
-      `Bạn chắc chắn muốn phục hồi dữ liệu từ file: ${filePath}?\nDữ liệu hiện tại sẽ bị ghi đè!`,
-    )
-  ) {
-    try {
-      // Giả lập gọi API phục hồi
-      statusDiv.innerHTML =
-        '<p style="color: blue;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý phục hồi dữ liệu...</p>';
+    const res = await fetch(`${API_URL}/admin/saoluu/phuchoi`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
 
-      // Xây dựng câu lệnh SQL tương ứng để log ra cho khớp với bài giảng
-      let sqlCmd = `RESTORE DATABASE [Tên_Database] FROM DISK = '${filePath}' WITH REPLACE`;
-      console.log(`Thực thi lệnh: ${sqlCmd}`);
+    if (res.ok && data.success) {
+      let fileListHtml = "<ol style='margin-left: 20px; color: #333;'>";
+      data.details.forEach((filePath) => {
+        fileListHtml += `<li>${filePath.split("/").pop()}</li>`;
+      });
+      fileListHtml += "</ol>";
 
-      // Giả lập delay
-      setTimeout(() => {
-        statusDiv.innerHTML =
-          '<p style="color: green;"><i class="fas fa-check-circle"></i> Phục hồi dữ liệu thành công!</p>';
+      statusDiv.innerHTML = `
+        <div style="background: #f6ffed; border: 1px solid #b7eb8f; padding: 12px; border-radius: 4px; color: #52c41a;">
+          <p style="font-weight: bold; margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Khôi phục thành công!</p>
+          <p style="color: #666; font-size: 12px;">Các file đã được áp dụng theo thứ tự:</p>
+          ${fileListHtml}
+        </div>
+      `;
 
-        // Tải lại dữ liệu sau khi phục hồi
-        loadAllData();
-
-        setTimeout(() => {
-          statusDiv.innerHTML = "";
-        }, 3000);
-      }, 1500);
-    } catch (error) {
-      statusDiv.innerHTML =
-        '<p style="color: red;"><i class="fas fa-times-circle"></i> Lỗi phục hồi: ' +
-        error.message +
-        "</p>";
+      loadAllData();
+    } else {
+      statusDiv.innerHTML = `<p style="color: #ff4d4f;"><i class="fas fa-times-circle"></i> <strong>Thất bại:</strong> ${data.message}</p>`;
     }
+  } catch (error) {
+    console.error("Lỗi kết nối API: ", error);
+    statusDiv.innerHTML =
+      '<p style="color: #ff4d4f;"><i class="fas fa-times-circle"></i> Lỗi kết nối API</p>';
   }
 }
 
