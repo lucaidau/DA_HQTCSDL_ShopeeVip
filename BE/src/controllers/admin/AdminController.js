@@ -238,6 +238,13 @@ class AdminController {
     try {
       const pool = await adminPoolPromise;
       const result = await pool.request().execute("sp_Admin_LayThongKe");
+      const thongKe = result.recordset[0];
+
+      return res.status(200).json({
+        success: true,
+        message: "Lấy thống kê thành công",
+        data: thongKe,
+      });
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res

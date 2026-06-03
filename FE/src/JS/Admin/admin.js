@@ -466,9 +466,20 @@ async function executeRestore() {
 }
 
 async function updateBackupStats() {
-  document.getElementById("stat-products").textContent = allProducts.length;
-  document.getElementById("stat-accounts").textContent = allAccounts.length;
-  // Orders and shops would be loaded from API
+  try {
+    const res = await fetch("http://localhost:3000/admin/thongke");
+    const json = await res.json();
+
+    if (res.ok && json.success) {
+      const data = json.data;
+      console.log("Thống kê: ", data);
+
+      document.getElementById("stat-products").innerText = data.TongSP;
+      document.getElementById("stat-accounts").innerText = data.TongTK;
+      document.getElementById("stat-orders").innerText = data.TongDH;
+      document.getElementById("stat-shops").innerText = data.TongShop;
+    }
+  } catch (error) {}
 }
 
 // ==================== MODAL ====================
