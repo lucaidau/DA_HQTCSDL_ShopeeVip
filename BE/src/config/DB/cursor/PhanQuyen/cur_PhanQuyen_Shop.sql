@@ -5,15 +5,9 @@ DECLARE @Quyen VARCHAR(50);
 DECLARE @SQLPhanQuyen NVARCHAR(MAX);
 
 DECLARE Cur_PhanQuyen_Shop CURSOR FOR
-    SELECT CAST(name AS NVARCHAR(255)), CAST('EXEC' AS VARCHAR(50))
-    FROM sys.procedures 
-    WHERE name LIKE 'sp_Shop_%'
-    
+    SELECT name, 'EXEC' AS Quyen FROM sys.procedures WHERE name LIKE 'sp_Shop_%'
     UNION ALL 
-    
-    SELECT CAST(name AS NVARCHAR(255)), CAST('SELECT' AS VARCHAR(50))
-    FROM sys.objects 
-    WHERE type = 'IF' AND name LIKE 'fn_Shop_%';
+    SELECT name, 'SELECT' AS Quyen FROM sys.objects WHERE type = 'IF' AND name LIKE 'fn_Shop_%';
 
 OPEN Cur_PhanQuyen_Shop;
 FETCH NEXT FROM Cur_PhanQuyen_Shop INTO @SPName, @Quyen;
