@@ -34,7 +34,7 @@ class ShopController {
       typeTable.columns.add("SoLuongTonKho", sql.Int);
       typeTable.columns.add("GiaBan", sql.Decimal(18, 2));
       typeTable.columns.add("BienThe", sql.NVarChar(50));
-      typeTable.columns.add("HinhAnh", sql.VarChar(MAX));
+      typeTable.columns.add("HinhAnh", sql.VarChar(sql.MAX));
       typeTable.columns.add("TrangThaiBS", sql.Int);
 
       if (copyList && copyList.length > 0) {
