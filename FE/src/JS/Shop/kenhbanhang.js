@@ -299,15 +299,134 @@ document.querySelector(".user-name").innerText = shopName;
             <td><span class="status-pill ${p.TrangThaiBS == 1 ? "status-sell" : "status-out"}">${currStatus}</span></td>
             <td>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <button style="background-color:#3498db; color:white" class="btn" onclick="editProduct()">Sửa</button>
-                    <button style="background-color:#e74c3c; color:white" class="btn" onclick="deleteProduct()">Xóa</button>
+                    <button 
+                    data-id="${p.IDBanSao}"
+                    data-name="${p.BienThe}"
+                    data-price="${p.GiaBan}"
+                    data-stock="${p.SoLuongTonKho}"
+                    data-desc="${p.MoTa || ""}"
+                    data-img="${p.HinhAnh || ""}" style="background-color:#3498db; color:white" class="btn edit">Sửa</button>
+                    <button style="background-color:#e74c3c; color:white" class="btn delete" onclick="App.deleteProduct(${p.IDBanSao})">Xóa</button>
                 </div>
             </td>
           </tr>
         `;
       })
       .join("");
+
+    tableBody.addEventListener("click", function (e) {
+      const btn = e.target.closest(".btn.edit");
+      if (!btn) return;
+      console.log("Editting");
+
+      App.openEditProductModal(
+        btn.dataset.id,
+        btn.dataset.name,
+        btn.dataset.price,
+        btn.dataset.stock,
+        btn.dataset.desc,
+        btn.dataset.img,
+      );
+    });
   }
+
+  App.openEditProductModal = function (id, name, price, stock, desc, img) {
+    document.getElementById("edit-product-id").value = id;
+    document.getElementById("edit-product-name").value = name;
+    document.getElementById("edit-product-price").value = price;
+    document.getElementById("edit-product-stock").value = stock;
+    document.getElementById("edit-product-desc").value = desc;
+    document.getElementById("edit-product-img").value = img;
+
+    console.log("Mở modal");
+
+    const modal = document.getElementById("editProductModal");
+    if (modal) {
+      modal.classList.add("show");
+    } else {
+      console.error("Không tìm thấy thẻ HTML của editProductModal!");
+    }
+  };
+
+  App.deleteProduct = async function (id) {
+    confirm("Bạn có chắc muốn xóa sản phẩm này?");
+    if (!confirm) return;
+
+    try {
+      const res = await fetch("http://localhost:3000/shop/xoasanpham", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productID: id }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(data.message);
+        if (typeof App.loadProducts === "function") {
+          await App.loadProducts();
+        } else if (typeof App.reloadProducts === "function") {
+          await App.reloadProducts();
+        }
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log("Lỗi kết nối API: ", error.message);
+    }
+  };
+
+  // 2. Hàm đóng Modal
+  App.closeEditProductModal = function () {
+    const modal = document.getElementById("editProductModal");
+    if (modal) modal.classList.remove("show");
+  };
+
+  App.submitEditProduct = async function () {
+    const id = document.getElementById("edit-product-id").value;
+    const name = document.getElementById("edit-product-name").value.trim();
+    const price = document.getElementById("edit-product-price").value;
+    const stock = document.getElementById("edit-product-stock").value;
+    const desc = document.getElementById("edit-product-desc").value.trim();
+    const img = document.getElementById("edit-product-img").value.trim();
+
+    console.log(
+      `Data: {id: ${id}, name: ${name}, price: ${price}, stock: ${stock}, desc: ${desc}, img: ${img}`,
+    );
+
+    try {
+      const res = await fetch(`http://localhost:3000/shop/suasp`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productID: id,
+          name: name,
+          price: price,
+          stock: stock,
+          desc: desc,
+          linkImg: img,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok) {
+        alert("Cập nhật sản phẩm thành công");
+        const modal = document.getElementById("editProductModal");
+        if (modal) {
+          modal.classList.remove("show");
+        }
+        if (typeof App.loadProducts === "function") {
+          await App.loadProducts();
+        } else if (typeof App.reloadProducts === "function") {
+          await App.reloadProducts();
+        }
+      } else {
+        alert("Lỗi cập nhật: " + data.message);
+      }
+    } catch (error) {
+      console.log("Lỗi kết nối API: ", error);
+      alert("Lỗi kết nối API: ", error);
+    }
+  };
 
   document.addEventListener("DOMContentLoaded", () => {
     document
@@ -454,14 +573,12 @@ document.querySelector(".user-name").innerText = shopName;
       const res = await fetch(`http://localhost:3000/shop/donhang/${shopID}`);
       const data = await res.json();
 
-      console.log("Đơn hàng của shop: ", data);
-
       if (res.ok && data.success) {
         shippingOrders = data.orders;
       } else {
         shippingOrders = [];
       }
-      console.log("Đơn hàng của shop: ", data);
+
       console.log("Đơn hàng lấy được: ", shippingOrders);
     } catch (error) {
       console.error("Lỗi kết nối API đơn hàng: ", error);

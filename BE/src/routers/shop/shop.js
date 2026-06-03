@@ -9,6 +9,8 @@ router.get("/vi/:id", shopController.layVi);
 router.post("/vi/rutien", shopController.rutTien);
 
 router.post("/themsp", shopController.themSanPham);
+router.patch("/suasp", shopController.suaSanPham);
+router.patch("/xoasanpham", shopController.xoaSanPham);
 router.get("/:id", shopController.laySanPham);
 
 module.exports = router;

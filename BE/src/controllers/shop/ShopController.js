@@ -1,4 +1,3 @@
-const { MAX } = require("mssql");
 const { sql, shopPoolPromise } = require("../../config/connect.js");
 
 class ShopController {
@@ -55,8 +54,8 @@ class ShopController {
         .request()
         .input("IDShop", sql.Int, shopID)
         .input("TenSP", sql.NVarChar(255), productName)
-        .input("HinhAnhSP", sql.VarChar(MAX), imgLink)
-        .input("MoTa", sql.NVarChar(MAX), desc)
+        .input("HinhAnhSP", sql.VarChar(sql.MAX), imgLink)
+        .input("MoTa", sql.NVarChar(sql.MAX), desc)
         .input("ListBienThe", typeTable)
         .execute("sp_Shop_ThemSanPham");
 
@@ -72,6 +71,59 @@ class ShopController {
       return res
         .status(500)
         .json({ success: false, message: "Lỗi server: " + error });
+    }
+  }
+
+  //[PATCH] /shop/suasanpham
+  async suaSanPham(req, res) {
+    try {
+      const { productID, name, price, stock, desc, linkImg } = req.body;
+
+      const pool = await shopPoolPromise;
+      const result = await pool
+        .request()
+        .input("IDBanSao", sql.Int, productID)
+        .input("TenBienThe", sql.NVarChar(50), name)
+        .input("GiaBan", sql.Decimal(18, 2), price)
+        .input("TonKho", sql.Int, stock)
+        .input("MoTa", sql.NVarChar(sql.MAX), desc)
+        .input("LinkHinhAnh", sql.VarChar(sql.MAX), linkImg)
+        .execute("sp_Shop_SuaSanPham");
+
+      const status = result.recordset[0];
+
+      return res.status(200).json({ success: true, message: status.Message });
+    } catch (error) {
+      console.log("Lỗi server: ", error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  //[PATCH] /shop/xoasanpham
+  async xoaSanPham(req, res) {
+    try {
+      const { productID } = req.body;
+
+      const pool = await shopPoolPromise;
+      const result = await pool
+        .request()
+        .input("IDBanSao", sql.Int, productID)
+        .execute("sp_Shop_XoaSanPham");
+
+      const status = result.recordset[0];
+      if (status.Success === 1 && status) {
+        return res.status(200).json({ success: true, message: status.Message });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: status.Message });
+      }
+    } catch (error) {
+      console.log("Lỗi server: ", error);
+      return res.json({
+        success: false,
+        message: "Lỗi server: " + error.message,
+      });
     }
   }
 

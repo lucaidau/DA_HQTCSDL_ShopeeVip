@@ -237,7 +237,7 @@ class AdminController {
   async layThongKe(req, res) {
     try {
       const pool = await adminPoolPromise;
-      const result = await pool.request();
+      const result = await pool.request().execute("sp_Admin_LayThongKe");
     } catch (error) {
       console.log("Lỗi server: ", error);
       return res

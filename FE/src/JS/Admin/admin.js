@@ -127,20 +127,37 @@ function renderProductsTable(products) {
   tbody.innerHTML = products
     .map((product) => {
       const status = product.TrangThaiBS;
-      const statusText = status ? "Đang hoạt động" : "Đã khóa";
-      const statusColor = status ? "#28a745" : "#e74c3c";
-      const lockText = status ? "Khóa" : "Mở khóa";
-      const isDisable = product.SoLuongTonKho <= 0 ? true : false;
-      console.log(isDisable);
-
+      let statusText = "";
+      let statusColor = "";
+      let lockText = "";
+      let isDisable = false;
+      let deletedCount = false;
+      //const statusColor = status ? "#28a745" : "#e74c3c";
+      //const lockText = status ? "Khóa" : "Mở khóa";
+      //const isDisable = product.SoLuongTonKho <= 0 ? true : false;
+      if (status === 1) {
+        statusText = "Đang hoạt động";
+        statusColor = "#28a745";
+        lockText = "Khóa";
+      } else if (status === 0) {
+        statusText = "Đã khóa";
+        statusColor = "#ff9f43";
+        lockText = "Mở khóa";
+      } else if (status === 2) {
+        statusText = "Đã xóa";
+        statusColor = "#6c757d";
+        lockText = "Khóa";
+        isDisable = true;
+        deletedCount = true;
+      }
       return `
         <tr>
             <td style="color:#ee4d2d">${product.IDBanSao}</td>
             <td style="">${product.Ten}</td>
             <td style="font-weight:500">${product.TenSP}</td>
-            <td style="color:#ee4d2d">₫${Number(product.GiaBan || 0).toLocaleString("vi-VN")}</td>
+            <td style="color:#ee4d2d">₫${!deletedCount ? Number(product.GiaBan || 0).toLocaleString("vi-VN") : 0}</td>
             <td style=""><img src="${product.HinhAnh || "https://via.placeholder.com/50"}" alt="Product"></td>
-            <td style="color:#1890FF">${product.SoLuongTonKho || 0}</td>
+            <td style="color:#1890FF">${!deletedCount ? product.SoLuongTonKho || 0 : 0}</td>
             <td style=""><span class="status-active" style="color:${statusColor} ; font-weight: 500;">${statusText}</span></td>
             <td style=""><button class="btn btn-danger" ${isDisable ? "disabled" : ""} onclick="lockProduct(${product.IDBanSao})">${lockText}</button></td>
 
@@ -448,7 +465,7 @@ async function executeRestore() {
   }
 }
 
-function updateBackupStats() {
+async function updateBackupStats() {
   document.getElementById("stat-products").textContent = allProducts.length;
   document.getElementById("stat-accounts").textContent = allAccounts.length;
   // Orders and shops would be loaded from API

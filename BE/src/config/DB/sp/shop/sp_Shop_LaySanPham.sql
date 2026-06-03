@@ -12,9 +12,10 @@ AS
         BS.BienThe ,
         BS.GiaBan, 
         BS.SoLuongTonKho, 
+        SP.MoTa,
         BS.TrangThaiBS
         FROM SAN_PHAM SP
-        LEFT JOIN BAN_SAO_SAN_PHAM BS ON SP.IDSanPham = BS.IDSanPham
-        WHERE SP.IDShop = @IDShop
+        LEFT JOIN BAN_SAO_SAN_PHAM BS ON SP.IDSanPham = BS.IDSanPham  AND BS.TrangThaiBS != 2
+        WHERE SP.IDShop = @IDShop;
         
     END
