@@ -15,9 +15,19 @@ BEGIN
 
             DECLARE @IDShopTemp INT = SCOPE_IDENTITY();
 
+            
+
             INSERT INTO BAN_SAO_SAN_PHAM(IDSanPham,SoLuongTonKho,GiaBan,BienThe,HinhAnh, TrangThaiBS)
             SELECT @IDShopTemp, SoLuongTonKho,GiaBan,BienThe,HinhAnh,TrangThaiBS
             FROM @ListBienThe;
+
+            UPDATE SAN_PHAM 
+            SET GiaThapNhat = (
+                SELECT MIN(GiaBan)
+                FROM BAN_SAO_SAN_PHAM
+                WHERE IDSanPham = @IDShopTemp AND TrangThaiBS = 1
+            )
+            WHERE IDSanPham = @IDShopTemp;
 
             COMMIT TRANSACTION;
 

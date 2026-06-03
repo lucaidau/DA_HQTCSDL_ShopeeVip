@@ -32,6 +32,7 @@ CREATE TABLE SAN_PHAM (
     TenSanPham NVARCHAR(50),
     MoTa NVARCHAR(MAX),
     HinhAnh VARCHAR(MAX),
+    GiaThapNhat DECIMAL(18,2),
     TrangThaiSP BIT
 );
 

@@ -12,6 +12,12 @@ BEGIN
     BEGIN TRY
         IF EXISTS(SELECT 1 FROM BAN_SAO_SAN_PHAM WHERE IDBanSao = @IDBanSao)
         BEGIN
+            DECLARE @IDSanPham INT;
+
+            SELECT @IDSanPham = IDSanPham
+            FROM BAN_SAO_SAN_PHAM
+            WHERE IDBanSao = @IDBanSao
+
             UPDATE BAN_SAO_SAN_PHAM
             SET 
                 SoLuongTonKho = @TonKho,
@@ -25,7 +31,16 @@ BEGIN
             UPDATE SP
             SET SP.MoTa = @MoTa
             FROM SAN_PHAM SP
-            JOIN BAN_SAO_SAN_PHAM BS ON BS.IDSanPham = SP.IDSanPham
+            WHERE SP.IDSanPham = @IDSanPham;
+
+            UPDATE SAN_PHAM 
+            SET GiaThapNhat = (
+                SELECT MIN(GiaBan)
+                FROM BAN_SAO_SAN_PHAM
+                WHERE IDSanPham = @IDSanPham AND TrangThaiBS = 1
+            )
+            WHERE IDSanPham = @IDSanPham;
+
 
             COMMIT TRANSACTION;
             
